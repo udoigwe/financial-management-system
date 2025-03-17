@@ -1,7 +1,12 @@
 <?php
 
-// php mailer
-require_once('PHPMailer/phpmailer/class.phpmailer.php');
+// Include PHPMailer classes
+require_once 'PHPMailer/src/Exception.php';
+require_once 'PHPMailer/src/PHPMailer.php';
+require_once 'PHPMailer/src/SMTP.php';
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
 //function to base64UrlEncode data
 function base64UrlEncode($data)
@@ -1624,40 +1629,43 @@ function fetchStudentTotalExpectedPayment($studentUsername, $campusID)
     }
 }
 
-function sendMail($to, $message, $subject)
+function sendMail($to, $message, $subject, $attachments = [])
 {
-    $mail = new PHPmailer();
-    //set Host
-    $mail->Host = 'smtp.gmail.com';
-    //enable SMTP
-    //$mail->isSMTP();
-    //set authentication
-    $mail->SMTPAuth = true;
-    //set login details of GMAIL account
-    $mail->Username = GMAIL_USER;
-    $mail->Password = GMAIL_PASSWORD;
-    //set type of protection
-    $mail->SMTPSecure = "ssl"; //or TLS
-    //set a port
-    $mail->Port = 465; //or 587 if TLS
-    //set subject
-    $mail->Subject = $subject;
-    //set html
-    $mail->isHTML(true);
-    //set body
-    $mail->Body = preg_replace("/\\\\/", '', $message);
-    //set Alternative to HTML
-    $mail->AltBody = "To view the message, please use an HTML compatible email viewer!"; // optional, comment out and test
-    //set sender
-    $mail->SetFrom('no-reply@noreply.com', 'No Reply');
-    //set recipient
-    $mail->AddAddress($to);
-    //set reply to
-    //$mail->AddReplyTo(email, $name);
+    $mail = new PHPMailer(true);
 
-    if (!$mail->Send()) {
-        return false;
-    } else {
+    try {
+        // SMTP Configuration
+        $mail->isSMTP();
+        $mail->Host       = 'smtp.gmail.com';
+        $mail->SMTPAuth   = true;
+        $mail->Username   = GMAIL_USER;  // Replace with your email
+        $mail->Password   = GMAIL_PASSWORD;   // Use an App Password, NOT your actual password
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;      // Use SSL
+        $mail->Port       = 465;
+
+        // Sender & Recipient
+        $mail->setFrom('no-reply@noreply.com', 'No Reply');
+        $mail->addAddress($to);
+
+        // Attachments (if any)
+        if (!empty($attachments)) {
+            foreach ($attachments as $filePath) {
+                $mail->addAttachment($filePath);
+            }
+        }
+
+        // Email Content
+        $mail->isHTML(true);
+        $mail->Subject = $subject;
+        $mail->Body    = $message;
+        $mail->AltBody = strip_tags($message); // Plain text fallback
+        $mail->Debugoutput = 'html'; // Debug output in HTML
+        $mail->SMTPDebug = 2; // Enable debugging (1 = errors, 2 = full output)
+
+        // Send Email
+        $mail->send();
         return true;
+    } catch (Exception $e) {
+        return "Mailer Error: " . $mail->ErrorInfo;
     }
 }
