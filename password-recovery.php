@@ -3,10 +3,7 @@
 
 <head>
     <?php include('includes/head.php'); ?>
-    <title>Finovate | Sign In</title>
-
-    <style>
-    </style>
+    <title>Finovate | Password Recovery</title>
 
 </head>
 
@@ -22,27 +19,24 @@
                                     <div class="text-center mb-3">
                                         <img src="images/finovate-logo.png" width="150" height="150" alt="">
                                     </div>
-                                    <h4 class="text-center mb-4">Sign into your account</h4>
-                                    <form action="#" id="login-form">
+                                    <h4 class="text-center mb-4 mt-4">Reset Password</h4>
+                                    <form action="#" id="password-reset-form">
                                         <div class="form-group">
-                                            <label class="mb-1"><strong>Email</strong></label>
-                                            <input type="email" class="form-control required" id="email" name="email">
+                                            <label class="mb-1"><strong>New Password</strong></label>
+                                            <input type="password" class="form-control required" id="new-pass" name="new_pass">
                                         </div>
                                         <div class="form-group">
-                                            <label class="mb-1"><strong>Password</strong></label>
-                                            <input type="password" class="form-control required" id="password" name="password">
+                                            <label class="mb-1"><strong>Confirm Password</strong></label>
+                                            <input type="password" class="form-control required" id="re-pass" name="re_pass">
                                         </div>
-                                        <div class="row d-flex justify-content-between mt-4 mb-2">
-                                            <div class="form-group">
-                                                <a href="forgot-password">Forgot Password?</a>
-                                            </div>
-                                        </div>
+                                        <input type="hidden" id="email" name="email" class="required" />
+                                        <input type="hidden" id="salt" name="salt" class="required" />
                                         <div class="text-center">
-                                            <button type="submit" class="btn btn-primary btn-block">Sign Me In</button>
+                                            <button type="submit" class="btn btn-primary btn-block">Reset Password</button>
                                         </div>
                                     </form>
                                     <div class="new-account mt-3">
-                                        <p>Don't have an account? <a class="text-primary" href="sign-up">Sign up</a></p>
+                                        <p>I have my password? <a class="text-primary" href="index">Sign In</a></p>
                                     </div>
                                 </div>
                             </div>
@@ -59,7 +53,7 @@
     ***********************************-->
     <!-- Required vendors -->
     <?php include('includes/scripts.php'); ?>
-    <script src="js/pages/auth.js"></script>
+    <script src="js/pages/password-recovery.js"></script>
 
 </body>
 

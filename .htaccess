@@ -1,13 +1,15 @@
 Options +FollowSymLinks -MultiViews
-# Enable RewriteEngine
 RewriteEngine On
 
-# Remove .php extension
+# Ensure index.php is loaded by default
+DirectoryIndex index.php index.html
+
+# Remove .php extension and allow internal linking
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}\.php -f
 RewriteRule ^([^/.]+)$ $1.php [L]
 
-# Remove .html extension
+# Remove .html extension and allow internal linking
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}\.html -f
 RewriteRule ^([^/.]+)$ $1.html [L]
@@ -15,3 +17,9 @@ RewriteRule ^([^/.]+)$ $1.html [L]
 # Redirect requests with .php or .html to extensionless URLs (Optional)
 RewriteCond %{THE_REQUEST} \s([^.]+)\.(php|html)\s [NC]
 RewriteRule ^ %1 [R=301,L]
+
+# Allow internal linking to work properly
+RewriteCond %{REQUEST_URI} !\.(css|js|jpg|jpeg|png|gif|ico|svg|woff|woff2|ttf|eot|otf|mp4|webm|pdf|txt|json|xml)$ [NC]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.+)$ $1.php [L]

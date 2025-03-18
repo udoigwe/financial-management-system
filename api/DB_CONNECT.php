@@ -6,11 +6,11 @@ const DB_USER = 'root';
 const DB_PASS = '';
 const DB_NAME = 'fms';
 const TOKEN_SECRET = 'ilovephp';
-const API_ROOT_URL = 'http://localhost:8080/finovate-bank/api/';
-const BASE_URL = 'http://localhost:8080/finovate-bank';
+const API_ROOT_URL = 'http://localhost/finovate-bank/api/';
+const BASE_URL = 'http://localhost/finovate-bank';
 const EMAIL_LOGO_ALT = 'Finovate';
 const EMAIL_HEADER = 'FINOVATE UPDATE';
-const APP_NAME = 'FINOVATE';
+const APP_NAME = 'FINOVATE BANK';
 const GMAIL_USER = 'immigrationevaluator@gmail.com';
 const GMAIL_PASSWORD = 'gtrwlryzsvtqblaw';
 

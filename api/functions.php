@@ -1659,8 +1659,15 @@ function sendMail($to, $message, $subject, $attachments = [])
         $mail->Subject = $subject;
         $mail->Body    = $message;
         $mail->AltBody = strip_tags($message); // Plain text fallback
-        $mail->Debugoutput = 'html'; // Debug output in HTML
-        $mail->SMTPDebug = 2; // Enable debugging (1 = errors, 2 = full output)
+        /* $mail->Debugoutput = 'html'; // Debug output in HTML
+        $mail->SMTPDebug = 4; // Enable debugging (1 = errors, 2 = full output) */
+        $mail->SMTPOptions = [
+            'ssl' => [
+                'verify_peer' => false,
+                'verify_peer_name' => false,
+                'allow_self_signed' => true,
+            ],
+        ];
 
         // Send Email
         $mail->send();

@@ -83,6 +83,12 @@ function showSimpleMessage(title, text, type) {
 		icon: type,
 		confirmButtonText: "Close",
 		showLoaderOnConfirm: false,
+		didOpen: () => {
+			const swalContainer = document.querySelector(".swal2-container");
+			if (swalContainer) {
+				swalContainer.style.overflowY = "hidden"; // Disable vertical scrolling
+			}
+		},
 	});
 }
 
