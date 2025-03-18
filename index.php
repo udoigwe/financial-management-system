@@ -6,6 +6,10 @@
     <title>Finovate | Sign In</title>
 
     <style>
+        body {
+            margin-right: 0 !important;
+            overflow-y: scroll; /* Always show scrollbar */
+        }
     </style>
 
 </head>

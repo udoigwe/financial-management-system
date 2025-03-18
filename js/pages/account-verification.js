@@ -1,49 +1,50 @@
 $(function () {
-	("use strict");
+  ("use strict");
 
-	$(document).ready(function ($) {
-		accountVerification();
-	});
+  $(document).ready(function ($) {
+    accountVerification();
+  });
 
-	const params = new URLSearchParams(window.location.search);
+  const params = new URLSearchParams(window.location.search);
 
-	function accountVerification() {
-		const email = params.get("email"); // Retrieves the value of 'name'
-		const salt = params.get("salt"); // Retrieves the value of 'name'
+  function accountVerification() {
+    const email = params.get("email"); // Retrieves the value of 'name'
+    const salt = params.get("salt"); // Retrieves the value of 'name'
 
-		blockUI();
+    blockUI();
 
-		if (!email) {
-			unblockUI();
-			$(".verification-message").text("Email is required");
-			$(".nav-btn").css({ display: "block" });
+    if (!email) {
+      unblockUI();
+      $(".verification-message").text("Email is required");
+      $(".nav-btn").css({ display: "block" });
 
-			return false;
-		}
+      return false;
+    }
 
-		if (!salt) {
-			unblockUI();
-			$(".verification-message").text("Salt is required");
-			$(".nav-btn").css({ display: "block" });
+    if (!salt) {
+      unblockUI();
+      $(".verification-message").text("Salt is required");
+      $(".nav-btn").css({ display: "block" });
 
-			return false;
-		}
+      return false;
+    }
 
-		$.ajax({
-			type: "POST",
-			url: `${API_URL_ROOT}/auth?call=account_verification`,
-			data: { email, salt },
-			dataType: "json",
-			/* contentType: "application/json", */
-			success: function (response) {
-				unblockUI();
-				$(".verification-message").text(response.message);
-				$(".nav-btn").css({ display: "block" });
-			},
-			error: function (req, status, err) {
-				showSimpleMessage("Attention", req.statusText, "error");
-				unblockUI();
-			},
-		});
-	}
+    $.ajax({
+      type: "POST",
+      url: `${API_URL_ROOT}/auth?call=account_verification`,
+      data: { email, salt },
+      dataType: "json",
+      /* contentType: "application/json", */
+      success: function (response) {
+        unblockUI();
+        $(".verification-message").text(response.message);
+        $(".nav-btn").css({ display: "block" });
+      },
+      error: function (req, status, err) {
+        //showSimpleMessage("Attention", req.statusText, "error");
+        alert(req.statusText);
+        unblockUI();
+      },
+    });
+  }
 });
