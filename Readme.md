@@ -62,4 +62,4 @@ This project is licensed under the MIT License.
 
 Author
 
-Developed by Udo Igwe.
+Developed by DBMS team 2025.
