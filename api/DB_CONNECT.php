@@ -6,13 +6,15 @@ const DB_USER = 'root';
 const DB_PASS = '';
 const DB_NAME = 'fms';
 const TOKEN_SECRET = 'ilovephp';
-const API_ROOT_URL = 'http://localhost/finovate-bank/api/';
-const BASE_URL = 'http://localhost/finovate-bank';
+const API_ROOT_URL = 'http://localhost/finhive/api/';
+const BASE_URL = 'http://localhost/finhive';
 const EMAIL_LOGO_ALT = 'Finovate';
-const EMAIL_HEADER = 'FINOVATE UPDATE';
-const APP_NAME = 'FINOVATE BANK';
-const GMAIL_USER = 'immigrationevaluator@gmail.com';
-const GMAIL_PASSWORD = 'gtrwlryzsvtqblaw';
+const EMAIL_HEADER = 'FINHIVE UPDATE';
+const APP_NAME = 'FINHIVE';
+//const GMAIL_USER = 'immigrationevaluator@gmail.com';
+const GMAIL_USER = 'finhive247@gmail.com';
+//const GMAIL_PASSWORD = 'gtrwlryzsvtqblaw';
+const GMAIL_PASSWORD = 'grlrtjmmzumjhtxv';
 
 define('ROOT_PATH', realpath(dirname(__FILE__)));
 

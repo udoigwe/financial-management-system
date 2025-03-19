@@ -3,7 +3,7 @@
 
 <head>
     <?php include('includes/head.php'); ?>
-    <title>Finovate | Sign Up</title>
+    <title>FinHive | Sign Up</title>
 
 </head>
 

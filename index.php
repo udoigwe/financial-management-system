@@ -3,12 +3,13 @@
 
 <head>
     <?php include('includes/head.php'); ?>
-    <title>Finovate | Sign In</title>
+    <title>FinHive | Sign In</title>
 
     <style>
         body {
             margin-right: 0 !important;
-            overflow-y: scroll; /* Always show scrollbar */
+            overflow-y: scroll;
+            /* Always show scrollbar */
         }
     </style>
 

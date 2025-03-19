@@ -93,8 +93,8 @@ function accountVerificationHTML($recipient, $salt)
                         <p style="font-weight: 400; font-size: 10px; font-style: normal; margin-bottom: 10px !important; text-transform: uppercase;">
                             FOR MORE INFORMATION, CLICK BELOW
                         </p>
-                        <a href="https://www.uscis.gov/" style="font-weight: 400; font-size: 12px; font-style: normal; text-decoration: none;">
-                            https://www.uscis.gov/
+                        <a href="https://www.finhive.com/" style="font-weight: 400; font-size: 12px; font-style: normal; text-decoration: none;">
+                            https://www.finhive.com/
                         </a>
                     </td>
                 </tr>
@@ -106,8 +106,8 @@ function accountVerificationHTML($recipient, $salt)
                         <h5 style="font-weight: 400; font-size: 12px; font-style: normal; margin-top: 0 !important; margin-bottom: 5px !important; text-decoration: none;">
                             Please send feedback or bug info to
                         </h5>
-                        <a href="mailto:info@engis.en.gov.ng" style="font-weight: 400; font-size: 12px; font-style: normal; text-decoration: none;">
-                            info@uscis.gov
+                        <a href="mailto:info@finhive.com" style="font-weight: 400; font-size: 12px; font-style: normal; text-decoration: none;">
+                            info@finhive.com
                         </a>
                     </td>
                 </tr>
@@ -213,8 +213,8 @@ function resetPasswordLink($recipient, $salt)
                         <p style="font-weight: 400; font-size: 10px; font-style: normal; margin-bottom: 10px !important; text-transform: uppercase;">
                             FOR MORE INFORMATION, CLICK BELOW
                         </p>
-                        <a href="https://www.uscis.gov/" style="font-weight: 400; font-size: 12px; font-style: normal; text-decoration: none;">
-                            https://www.uscis.gov/
+                        <a href="https://www.finhive.com/" style="font-weight: 400; font-size: 12px; font-style: normal; text-decoration: none;">
+                            https://www.finhive.com/
                         </a>
                     </td>
                 </tr>
@@ -226,8 +226,8 @@ function resetPasswordLink($recipient, $salt)
                         <h5 style="font-weight: 400; font-size: 12px; font-style: normal; margin-top: 0 !important; margin-bottom: 5px !important; text-decoration: none;">
                             Please send feedback or bug info to
                         </h5>
-                        <a href="mailto:info@engis.en.gov.ng" style="font-weight: 400; font-size: 12px; font-style: normal; text-decoration: none;">
-                            info@uscis.gov
+                        <a href="mailto:info@finhive.com" style="font-weight: 400; font-size: 12px; font-style: normal; text-decoration: none;">
+                            info@finhive.com
                         </a>
                     </td>
                 </tr>
