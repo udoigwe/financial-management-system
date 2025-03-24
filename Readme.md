@@ -20,7 +20,7 @@ Copy this repository link:
 
 https://github.com/udoigwe/financial-management-system.git
 
-Create a folder in a preferred location on your PC and name it finhive.
+Create a folder in the htdocs folder of your XAMPP and name it finhive.
 
 Open finhive in Visual Studio Code (VS Code).
 
