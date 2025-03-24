@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 17, 2025 at 07:26 AM
+-- Generation Time: Mar 24, 2025 at 05:50 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -37,6 +37,34 @@ CREATE TABLE `account` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
+-- Dumping data for table `account`
+--
+
+INSERT INTO `account` (`account_id`, `user_id`, `account_type`, `pin`, `balance`, `created_at`) VALUES
+(1000000001, NULL, 'Savings', 1234, 0, '2025-03-17 19:11:57'),
+(1000000002, NULL, 'Savings', 1234, 0, '2025-03-17 19:14:20'),
+(1000000003, NULL, 'Savings', 1234, 0, '2025-03-17 19:44:11'),
+(1000000004, NULL, 'Savings', 1234, 0, '2025-03-17 19:45:23'),
+(1000000005, NULL, 'Savings', 1234, 0, '2025-03-17 19:50:11'),
+(1000000006, NULL, 'Savings', 1234, 0, '2025-03-17 19:51:17'),
+(1000000007, NULL, 'Savings', 1234, 0, '2025-03-17 19:52:54'),
+(1000000008, NULL, 'Savings', 1234, 0, '2025-03-17 20:08:51'),
+(1000000009, NULL, 'Savings', 1234, 0, '2025-03-17 20:15:05'),
+(1000000010, NULL, 'Savings', 1234, 0, '2025-03-17 20:16:08'),
+(1000000011, NULL, 'Savings', 1234, 0, '2025-03-17 20:17:47'),
+(1000000012, NULL, 'Savings', 1234, 0, '2025-03-17 20:18:27'),
+(1000000013, NULL, 'Savings', 1234, 0, '2025-03-17 20:21:22'),
+(1000000014, NULL, 'Savings', 1234, 0, '2025-03-17 20:23:34'),
+(1000000015, NULL, 'Savings', 1234, 0, '2025-03-17 20:26:16'),
+(1000000016, NULL, 'Savings', 1234, 0, '2025-03-17 20:27:39'),
+(1000000017, NULL, 'Savings', 1234, 0, '2025-03-17 20:29:20'),
+(1000000018, NULL, 'Savings', 1234, 0, '2025-03-17 20:31:16'),
+(1000000019, NULL, 'Savings', 1234, 0, '2025-03-17 20:32:38'),
+(1000000020, NULL, 'Savings', 1234, 0, '2025-03-17 20:40:49'),
+(1000000021, 22, 'Savings', 1234, 0, '2025-03-17 23:22:15'),
+(1000000022, 23, 'Savings', 1234, 0, '2025-03-19 00:15:14');
+
+--
 -- Triggers `account`
 --
 DELIMITER $$
@@ -65,12 +93,31 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `branch`
+--
+
+CREATE TABLE `branch` (
+  `branch_id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `address` varchar(255) NOT NULL,
+  `zip_code` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `phone` varchar(255) NOT NULL,
+  `branch_status` enum('Active','Inactive') NOT NULL DEFAULT 'Active',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `budget_categories`
 --
 
 CREATE TABLE `budget_categories` (
   `category_id` int(11) NOT NULL,
-  `category_name` varchar(255) NOT NULL
+  `category_name` varchar(255) NOT NULL,
+  `category_description` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -82,11 +129,39 @@ CREATE TABLE `budget_categories` (
 CREATE TABLE `cards` (
   `card_id` int(11) NOT NULL,
   `account_id` int(11) DEFAULT NULL,
-  `card_number` int(20) NOT NULL,
+  `card_number` varchar(255) NOT NULL,
   `expiry_date` date NOT NULL,
   `card_type` enum('CREDIT','DEBIT') NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `issue_date` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `cards`
+--
+
+INSERT INTO `cards` (`card_id`, `account_id`, `card_number`, `expiry_date`, `card_type`, `issue_date`) VALUES
+(2, 1000000001, '2147483647', '2029-03-17', 'DEBIT', '2025-03-17 19:11:57'),
+(3, 1000000002, '2147483647', '2029-03-17', 'DEBIT', '2025-03-17 19:14:20'),
+(4, 1000000003, '2147483647', '2029-03-17', 'DEBIT', '2025-03-17 19:44:11'),
+(5, 1000000004, '2147483647', '2029-03-17', 'DEBIT', '2025-03-17 19:45:23'),
+(6, 1000000005, '2147483647', '2029-03-17', 'DEBIT', '2025-03-17 19:50:11'),
+(7, 1000000006, '2147483647', '2029-03-17', 'DEBIT', '2025-03-17 19:51:17'),
+(8, 1000000007, '2147483647', '2029-03-17', 'DEBIT', '2025-03-17 19:52:54'),
+(9, 1000000008, '2147483647', '2029-03-17', 'DEBIT', '2025-03-17 20:08:51'),
+(10, 1000000009, '2147483647', '2029-03-17', 'DEBIT', '2025-03-17 20:15:05'),
+(11, 1000000010, '2147483647', '2029-03-17', 'DEBIT', '2025-03-17 20:16:08'),
+(12, 1000000011, '2147483647', '2029-03-17', 'DEBIT', '2025-03-17 20:17:47'),
+(13, 1000000012, '2147483647', '2029-03-17', 'DEBIT', '2025-03-17 20:18:27'),
+(14, 1000000013, '2147483647', '2029-03-17', 'DEBIT', '2025-03-17 20:21:22'),
+(15, 1000000014, '2147483647', '2029-03-17', 'DEBIT', '2025-03-17 20:23:34'),
+(16, 1000000015, '2147483647', '2029-03-17', 'DEBIT', '2025-03-17 20:26:16'),
+(17, 1000000016, '2147483647', '2029-03-17', 'DEBIT', '2025-03-17 20:27:39'),
+(18, 1000000017, '2147483647', '2029-03-17', 'DEBIT', '2025-03-17 20:29:20'),
+(19, 1000000018, '2147483647', '2029-03-17', 'DEBIT', '2025-03-17 20:31:16'),
+(20, 1000000019, '2147483647', '2029-03-17', 'DEBIT', '2025-03-17 20:32:38'),
+(21, 1000000020, '2147483647', '2029-03-17', 'DEBIT', '2025-03-17 20:40:49'),
+(22, 1000000021, '2147483647', '2029-03-18', 'DEBIT', '2025-03-17 23:22:15'),
+(23, 1000000022, '2147483647', '2029-03-19', 'DEBIT', '2025-03-19 00:15:14');
 
 -- --------------------------------------------------------
 
@@ -122,18 +197,33 @@ CREATE TABLE `spending_limit` (
 
 CREATE TABLE `users` (
   `user_id` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL,
+  `first_name` varchar(255) NOT NULL,
+  `last_name` varchar(255) NOT NULL,
+  `gender` enum('Male','Female','Others') NOT NULL,
   `dob` date NOT NULL,
   `address` varchar(255) NOT NULL,
+  `zip_code` varchar(255) NOT NULL,
   `phone` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
+  `identification` enum('Drivers License','SSN') NOT NULL,
+  `identification_number` varchar(255) NOT NULL,
   `role` enum('Admin','Account Office','Customer') NOT NULL DEFAULT 'Customer',
   `password` varchar(255) NOT NULL,
   `hash` varchar(255) DEFAULT NULL,
   `hash_time` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `account_status` enum('Active','Inactive') NOT NULL DEFAULT 'Active',
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `last_seen` timestamp NULL DEFAULT NULL,
+  `account_status` enum('Active','Inactive') NOT NULL DEFAULT 'Inactive',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`user_id`, `first_name`, `last_name`, `gender`, `dob`, `address`, `zip_code`, `phone`, `email`, `identification`, `identification_number`, `role`, `password`, `hash`, `hash_time`, `last_seen`, `account_status`, `created_at`, `updated_at`) VALUES
+(22, 'Uchechukwu Udo', '', 'Male', '2025-03-22', 'Texas ', '', '09089098789', 'udoigweuchechukwu1@gmail.com', 'Drivers License', '', 'Customer', 'finovate', 'd707329bece455a462b58ce00d1194c9', '2025-03-19 00:12:40', NULL, 'Active', '2025-03-17 23:22:15', NULL),
+(23, 'Uchechukwu Udo', '', 'Male', '2025-03-02', 'Texas', '', '09089098788', 'udoigweuchechukwu@gmail.com', 'Drivers License', '', 'Customer', 'finhive', '647bba344396e7c8170902bcf2e15551', '2025-03-19 00:18:33', NULL, 'Active', '2025-03-19 00:15:14', NULL);
 
 --
 -- Triggers `users`
@@ -164,6 +254,12 @@ DELIMITER ;
 ALTER TABLE `account`
   ADD PRIMARY KEY (`account_id`),
   ADD KEY `user_id` (`user_id`);
+
+--
+-- Indexes for table `branch`
+--
+ALTER TABLE `branch`
+  ADD PRIMARY KEY (`branch_id`);
 
 --
 -- Indexes for table `budget_categories`
@@ -207,7 +303,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `account`
 --
 ALTER TABLE `account`
-  MODIFY `account_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1000000001;
+  MODIFY `account_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1000000023;
+
+--
+-- AUTO_INCREMENT for table `branch`
+--
+ALTER TABLE `branch`
+  MODIFY `branch_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `budget_categories`
@@ -219,7 +321,7 @@ ALTER TABLE `budget_categories`
 -- AUTO_INCREMENT for table `cards`
 --
 ALTER TABLE `cards`
-  MODIFY `card_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `card_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `otp`
@@ -237,7 +339,7 @@ ALTER TABLE `spending_limit`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- Constraints for dumped tables
