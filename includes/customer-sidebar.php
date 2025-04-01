@@ -8,9 +8,9 @@
                 </a>
             </li>
             <li>
-                <a class="ai-icon" href="javascript:void()">
+                <a class="ai-icon" href="budget-categories">
                     <i class="flaticon-041-graph"></i>
-                    <span class="nav-text">Budgets & Expenses</span>
+                    <span class="nav-text">Budgets Categories</span>
                 </a>
             </li>
             <li>
@@ -26,13 +26,13 @@
                 </a>
             </li>
             <li>
-                <a class="ai-icon" href="javascript:void()">
+                <a class="ai-icon" href="support">
                     <i class="flaticon-381-help"></i>
                     <span class="nav-text">Support</span>
                 </a>
             </li>
             <li>
-                <a class="ai-icon" href="javascript:void()">
+                <a class="ai-icon" href="settings">
                     <i class="flaticon-381-settings"></i>
                     <span class="nav-text">Security & Settings</span>
                 </a>

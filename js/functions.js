@@ -83,7 +83,7 @@ function showSimpleMessage(title, text, type) {
 		icon: type,
 		confirmButtonText: "Close",
 		showLoaderOnConfirm: false,
-		backdrop: true,
+		backdrop: false,
 		position: "center",
 	});
 }
@@ -141,11 +141,11 @@ function displayProfile() {
 	var token = sessionStorage.getItem("token"); //access token
 
 	if (token !== null && token !== "") {
-		var name = payloadClaim(token, "name");
+		var firstname = payloadClaim(token, "first_name");
 		var lastname = payloadClaim(token, "last_name");
 		var role = payloadClaim(token, "role");
 
-		$(".logged-user-name").text(name);
+		$(".logged-user-name").text(`${firstname} ${lastname}`);
 		$(".logged-user-role").text(role);
 	}
 }
@@ -162,13 +162,34 @@ function updateProfilePopUp() {
 	}
 }
 
-async function showSignOutMessage() {
+/* async function showSignOutMessage() {
 	var token = sessionStorage.getItem("token"); //access token
 	var name = payloadClaim(token, "name");
 
 	if (window.confirm(`Are you sure you want to sign ${name} out?`)) {
 		signOut();
 	}
+} */
+
+function showSignOutMessage() {
+	var token = sessionStorage.getItem("token"); //access token
+	var name = payloadClaim(token, "first_name");
+
+	Swal.fire({
+		title: "Sign Out?",
+		text: `Are you sure you want to sign ${name} out?`,
+		type: "warning",
+		showCancelButton: true,
+		padding: "2em",
+		backdrop: false,
+		position: "center",
+		//closeOnConfirm: false,
+		//showLoaderOnConfirm: true,
+	}).then(function (result) {
+		if (result.value) {
+			signOut();
+		}
+	});
 }
 
 function signOut() {
@@ -189,4 +210,95 @@ function getQueryParam(paramName) {
 	const currentUrl = new URL(window.location.href);
 	const urlParams = new URLSearchParams(currentUrl.search);
 	return urlParams.get(paramName);
+}
+
+function loadUnreadMessages() {
+	var token = sessionStorage.getItem("token");
+
+	blockUI();
+
+	if (token) {
+		$.ajax({
+			type: "GET",
+			url: `${API_URL_ROOT}/resources?call=notifications&token=${token}`,
+			dataType: "json",
+			success: function (response) {
+				if (response.error === false) {
+					unblockUI();
+
+					const data = response.data;
+					const count = data.count;
+					const notifications = data.notifications;
+					let html = "";
+
+					$(".unread-messages-count").text(count);
+
+					for (let i = 0; i < notifications.length; i++) {
+						const notification = notifications[i];
+
+						html += `
+							<li style="cursor:pointer" data-bs-toggle="modal" data-bs-target="#messageModal" onclick="loadNotification(${
+								notification.notification_id
+							})">
+								<div class="timeline-panel">
+									<div class="media me-2 media-success">
+										<i class="fa fa-envelope"></i>
+									</div>
+									<div class="media-body">
+										<h6 class="mb-1">${notification.title}</h6>
+										<small class="d-block">${moment(notification.created_at).format(
+											"DD MMMM YYYY - hh:mm A"
+										)}</small>
+									</div>
+								</div>
+							</li>
+						`;
+					}
+					$(".unread-messages-list").html(html);
+				} else {
+					unblockUI();
+					console.log(response);
+				}
+			},
+			error: function (req, status, err) {
+				showSimpleMessage("Attention", req.statusText, "error");
+				unblockUI();
+			},
+		});
+	}
+}
+
+function loadNotification(notificationID) {
+	var token = sessionStorage.getItem("token");
+
+	blockUI();
+
+	if (token) {
+		$.ajax({
+			type: "GET",
+			url: `${API_URL_ROOT}/resources?call=notifications&notification_id=${notificationID}&token=${token}`,
+			dataType: "json",
+			success: function (response) {
+				if (response.error === false) {
+					unblockUI();
+
+					const data = response.data;
+					const notification = data.notifications[0];
+					var messageModal = $("#messageModal");
+
+					messageModal.find(".modal-title").text(notification.title);
+					messageModal.find(".modal-body").text(notification.message);
+
+					loadUnreadMessages();
+				} else {
+					unblockUI();
+					console.log(response);
+				}
+			},
+			error: function (req, status, err) {
+				showSimpleMessage("Attention", req.statusText, "error");
+				unblockUI();
+			},
+		});
+	}
 }

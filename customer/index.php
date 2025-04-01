@@ -6,7 +6,7 @@
     <title>FinHive | Customer | Dashboard</title>
 </head>
 
-<body onload="isAuthenticated(); displayProfile();">
+<body onload="isAuthenticated(); displayProfile(); loadUnreadMessages();">
 
     <!--*******************
         Preloader start
@@ -689,6 +689,16 @@
 
         <!--**********************************
            Support ticket button end
+        ***********************************-->
+
+        <!--**********************************
+           Unread message modal start
+        ***********************************-->
+
+        <?php include('../includes/unread-message-modal.php'); ?>
+
+        <!--**********************************
+           Unread message modal end
         ***********************************-->
 
     </div>

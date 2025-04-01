@@ -7,11 +7,16 @@ $(function () {
 		//login
 		login();
 		//register
-		register();
 		//load countries
 		//loadCountries();
 		//recover password
 		recoverPassword();
+
+		//register
+		$("#sign-up-form").on("submit", function (e) {
+			e.preventDefault(); //prevent default form submission event
+			register(); //Internal function for form submission
+		});
 	});
 
 	function login() {
@@ -28,12 +33,12 @@ $(function () {
 				if (fields[i].value === "") {
 					/*alert(fields[i].id)*/
 					unblockUI();
-					/* showSimpleMessage(
+					showSimpleMessage(
 						"Attention",
 						`${fields[i].name} is required`,
 						"error"
-					); */
-					alert(`${fields[i].name} is required`);
+					);
+					//alert(`${fields[i].name} is required`);
 					$("#" + fields[i].id).focus();
 					return false;
 				}
@@ -41,12 +46,12 @@ $(function () {
 
 			if (!validateEmail(email)) {
 				//alert("All fields are required");
-				/* showSimpleMessage(
-          "Attention",
-          "Please provide a valid email address",
-          "error"
-        ); */
-				alert("Please provide a valid email address");
+				showSimpleMessage(
+					"Attention",
+					"Please provide a valid email address",
+					"error"
+				);
+				//alert("Please provide a valid email address");
 				unblockUI();
 				return false;
 			} else {
@@ -67,13 +72,17 @@ $(function () {
 							//alert(response.message);
 						} else {
 							unblockUI();
-							alert(response.message);
-							//showSimpleMessage("Attention", response.message, "error");
+							//alert(response.message);
+							showSimpleMessage(
+								"Attention",
+								response.message,
+								"error"
+							);
 						}
 					},
 					error: function (req, status, err) {
-						//showSimpleMessage("Attention", req.statusText, "error");
-						alert(req.statusText);
+						showSimpleMessage("Attention", req.statusText, "error");
+						//alert(req.statusText);
 						unblockUI();
 					},
 				});
@@ -82,75 +91,98 @@ $(function () {
 	}
 
 	function register() {
-		$("#sign-up-form").on("submit", function (e) {
-			e.preventDefault();
-			var form = $(this);
-			var email = form.find("#email").val();
-			var password = form.find("#password").val();
-			var repassword = form.find("#confirm-password").val();
-			var fields = form.find(
-				"input.required, select.required, textarea.required"
-			);
+		Swal.fire({
+			title: "Attention",
+			text: "Are you sure all details provided are accurate?",
+			type: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#DD6B55",
+			confirmButtonText: "Yes!",
+			cancelButtonText: "No!",
+		}).then(function (result) {
+			if (result.value) {
+				var form = $("#sign-up-form");
+				var email = form.find("#email").val();
+				var password = form.find("#password").val();
+				var repassword = form.find("#confirm-password").val();
+				var fields = form.find(
+					"input.required, select.required, textarea.required"
+				);
 
-			blockUI();
+				blockUI();
 
-			for (var i = 0; i < fields.length; i++) {
-				if (fields[i].value == "") {
-					/*alert(fields[i].id)*/
+				for (var i = 0; i < fields.length; i++) {
+					if (fields[i].value == "") {
+						/*alert(fields[i].id)*/
+						unblockUI();
+						form.find("#" + fields[i].id).focus();
+						showSimpleMessage(
+							"Attention",
+							`${fields[i].name} is required`,
+							"error"
+						);
+						//alert(`${fields[i].name} is required`);
+						return false;
+					}
+				}
+
+				if (!validateEmail(email)) {
+					//alert("All fields are required");
 					unblockUI();
-					form.find("#" + fields[i].id).focus();
-					/* showSimpleMessage(
-            "Attention",
-            `${fields[i].name} is required`,
-            "error"
-          ); */
-					alert(`${fields[i].name} is required`);
+					showSimpleMessage(
+						"Attention",
+						"Please provide a valid email address",
+						"error"
+					);
+					//alert("Please provide a valid email address");
 					return false;
 				}
-			}
 
-			if (!validateEmail(email)) {
-				//alert("All fields are required");
-				unblockUI();
-				/* showSimpleMessage(
-          "Attention",
-          "Please provide a valid email address",
-          "error"
-        ); */
-				alert("Please provide a valid email address");
-				return false;
-			}
-
-			if (password !== repassword) {
-				unblockUI();
-				//showSimpleMessage("Attention", "Passwords don't match", "error");
-				alert("Passwords don't match");
-				return false;
-			}
-
-			$.ajax({
-				type: "POST",
-				url: `${API_URL_ROOT}/auth?call=sign_up`,
-				data: form.serialize(),
-				dataType: "json",
-				success: function (response) {
-					if (response.error === false) {
-						unblockUI();
-						alert(response.message);
-						//showSimpleMessage("Success", response.message, "success");
-						form.get(0).reset();
-					} else {
-						unblockUI();
-						alert(response.message);
-						//showSimpleMessage("Attention", response.message, "error");
-					}
-				},
-				error: function (req, status, err) {
-					//showSimpleMessage("Attention", req.statusText, "error");
-					alert(req.statusText);
+				if (password !== repassword) {
 					unblockUI();
-				},
-			});
+					showSimpleMessage(
+						"Attention",
+						"Passwords don't match",
+						"error"
+					);
+					//alert("Passwords don't match");
+					return false;
+				}
+
+				$.ajax({
+					type: "POST",
+					url: `${API_URL_ROOT}/auth?call=sign_up`,
+					data: form.serialize(),
+					dataType: "json",
+					success: function (response) {
+						if (response.error === false) {
+							unblockUI();
+							//alert(response.message);
+							showSimpleMessage(
+								"Success",
+								response.message,
+								"success"
+							);
+							form.get(0).reset();
+						} else {
+							unblockUI();
+							//alert(response.message);
+							showSimpleMessage(
+								"Attention",
+								response.message,
+								"error"
+							);
+						}
+					},
+					error: function (req, status, err) {
+						showSimpleMessage("Attention", req.statusText, "error");
+						//alert(req.statusText);
+						unblockUI();
+					},
+				});
+			} else {
+				showSimpleMessage("Canceled", "Process Abborted", "error");
+			}
 		});
 	}
 

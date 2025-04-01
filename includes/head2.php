@@ -18,4 +18,5 @@
 <link rel="stylesheet" href="../vendor/chartist/css/chartist.min.css">
 <link href="../vendor/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet">
 <link href="../vendor/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+<link href="../vendor/sweetalert2/sweetalert2.min.css" rel="stylesheet">
 <link href="../css/style.css" rel="stylesheet">

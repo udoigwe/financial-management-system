@@ -5,11 +5,43 @@
     <?php include('includes/head.php'); ?>
     <title>FinHive | Sign In</title>
 
-    <style>
+    <style type="text/css">
         body {
-            margin-right: 0 !important;
-            overflow-y: scroll;
-            /* Always show scrollbar */
+            min-height: 100%;
+            /* overflow-y: hidden; */
+        }
+
+        /* Hide the scrollbar by default */
+        .scroll-container {
+            scrollbar-width: none;
+            /* For Firefox */
+            transition: scrollbar-width 0.7s ease-in-out, width 0.7s ease-in-out;
+            /* Add transition */
+        }
+
+        .scroll-container::-webkit-scrollbar {
+            width: 0px;
+            /* For Chrome, Safari, and Edge */
+            transition: width 0.7s ease-in-out;
+            /* Add transition */
+        }
+
+        /* Show scrollbar on hover */
+        .scroll-container:hover {
+            scrollbar-width: thin;
+            /* For Firefox */
+        }
+
+        .scroll-container:hover::-webkit-scrollbar {
+            width: 4px;
+            /* Adjust width as needed */
+        }
+
+        /* Optional: Customize scrollbar appearance */
+        .scroll-container:hover::-webkit-scrollbar-thumb {
+            background-color: rgba(0, 0, 0, 0.158);
+            /* Change color as needed */
+            border-radius: 20px;
         }
     </style>
 
@@ -25,7 +57,7 @@
                             <div class="col-xl-12">
                                 <div class="auth-form">
                                     <div class="text-center mb-3">
-                                        <img src="images/finovate-logo.png" width="150" height="150" alt="">
+                                        <img src="images/finhive-logo.png" width="150" alt="">
                                     </div>
                                     <h4 class="text-center mb-4">Sign into your account</h4>
                                     <form action="#" id="login-form">

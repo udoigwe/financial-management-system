@@ -32633,7 +32633,7 @@ table.dataTable.display tbody td {
 }
 
 .required {
-  color: #ff4c41;
+  /* color: #ff4c41; */
 }
 
 .form-group {

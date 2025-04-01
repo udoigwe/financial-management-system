@@ -1,5 +1,5 @@
 <?php
-function accountVerificationHTML($recipient, $salt)
+function accountVerificationHTML($recipient, $salt, $account)
 {
     $emailTemplate = '
         <html lang="en">
@@ -71,6 +71,16 @@ function accountVerificationHTML($recipient, $salt)
                             Verify your email address
                         </h3>
                         <p style="font-weight: 400; font-size: 12px; font-style: normal; padding-top: 30px; line-height: 18px;">
+                            Congratulations, <b>' . $account['first_name'] . '</b>!!! Your account has been created successfully with details as follows: <br/><br/>
+                            Account Number: <b>' . $account['account_id'] . '</b><br/>
+                            Account Name: <b>' . $account['first_name'] . ' ' . $account['last_name'] . '</b><br/>
+                            Account Type: <b>' . $account['account_type'] . '</b><br/>
+                            Account PIN: <b>' . $account['pin'] . '</b><br/>
+                            Account Officer: <b>' . $account['account_officer_first_name'] . ' ' . $account['account_officer_last_name'] . '</b><br/>
+                            Account Officer Phone Number: <b>' . $account['account_officer_phone'] . '</b><br/>
+                            Account Officer Email: <b>' . $account['account_officer_email'] . '</b><br/>
+                            Current Account Balance: <b>$' . $account['balance'] . '</b><br/><br/>
+                            It might also interest you to know that we have automatically created a <b>SAVINGS</b> budget category for you as this is required before any funds transfer happens. We want to help you achieve financial success with this approach. <br/><br/>
                             You’ve entered <b>' . $recipient . '</b> as the email address for your account. Please verify email address by clicking the link below
                         </p>
                     </td>
@@ -206,6 +216,121 @@ function resetPasswordLink($recipient, $salt)
                             </tr>
                         </table>
                         <!-- End Button --> 
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" style="text-align: center; padding-top: 45px; line-height: 18px; letter-spacing: 1px;">
+                        <p style="font-weight: 400; font-size: 10px; font-style: normal; margin-bottom: 10px !important; text-transform: uppercase;">
+                            FOR MORE INFORMATION, CLICK BELOW
+                        </p>
+                        <a href="https://www.finhive.com/" style="font-weight: 400; font-size: 12px; font-style: normal; text-decoration: none;">
+                            https://www.finhive.com/
+                        </a>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" style="text-align: center; padding-top: 70px; line-height: 30px; letter-spacing: 0.15px;">
+                        <h3 style="font-weight: 600; font-size: 20px; font-style: normal; margin-bottom: 5px !important; text-decoration: none;">
+                            Need Help?
+                        </h3>
+                        <h5 style="font-weight: 400; font-size: 12px; font-style: normal; margin-top: 0 !important; margin-bottom: 5px !important; text-decoration: none;">
+                            Please send feedback or bug info to
+                        </h5>
+                        <a href="mailto:info@finhive.com" style="font-weight: 400; font-size: 12px; font-style: normal; text-decoration: none;">
+                            info@finhive.com
+                        </a>
+                    </td>
+                </tr>
+            </table>
+        </body>
+        </html>
+    ';
+
+    return $emailTemplate;
+}
+
+function supportHTML($emailMeta, $subject, $message)
+{
+    $emailTemplate = '
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <link rel="icon" type="image/png" sizes="16x16" href="http://3.211.15.234:6001/assets/images/engis-logo1.png">
+            <link rel="preconnect" href="https://fonts.googleapis.com">
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+            <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+            <title>Support Email</title>
+            <style>
+                body {
+                    margin:0; 
+                    padding:0; 
+                    font-family: "Poppins", sans-serif; 
+                    display: flex; 
+                    justify-content: 
+                    center; align-items: 
+                    center; 
+                    height: 100vh;
+                }
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                }
+                td {
+                    border: 0 solid #ddd;
+                    padding: 8px;
+                }
+                header, footer {
+                    text-align: center;
+                }
+        
+                .otp {
+                    font-weight: 400; 
+                    font-size: 34px; 
+                    line-height: 51px; 
+                    letter-spacing: 0.25%; 
+                    color: #00B780; 
+                    box-shadow: -3px -3px 7px 0 rgba(144, 238, 216, 0.8); 
+                    border-radius: 10px; 
+                    background-color: white; 
+                    text-align: center; 
+                    vertical-align: middle;  
+                    width: 50px; 
+                    height: 50px;
+                }
+        
+                @media print {
+                    body {
+                        zoom: 0.67;
+                    }
+                }
+            </style>
+        </head>
+        <body style="">
+            <table style="width: 500px; margin-left: auto; margin-right: auto;">
+                <tr>
+                    <td colspan="3" style="text-align: center; padding-top: 100px;">
+                        <span style="font-size: 22px; display: inline-block; font-weight: 900; border: 1px solid grey; padding: 6px; border-radius:5px; width: auto; margin-top: 10px;">
+                            ' . APP_NAME . '
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" style="text-align: center; padding-top: 30px; letter-spacing: 1px;">
+                        <h3 style="font-weight: 600; font-size: 20px; font-style: normal; line-height: 30px;">
+                            Support & Enquiries
+                        </h3>
+                        <p style="font-weight: 400; font-size: 12px; font-style: normal; padding-top: 30px; line-height: 18px;">
+                            Hello, <b>' . $emailMeta['account_officer_first_name'] . '</b>!!! An account holder under you has requested for support. Below are details of his enquiries: <br/><br/>
+                            Account Number: <b>' . $emailMeta['account_number'] . '</b><br/>
+                            Account Name: <b>' . $emailMeta['first_name'] . ' ' . $emailMeta['last_name'] . '</b><br/>
+                            Account Type: <b>' . $emailMeta['account_type'] . '</b><br/><br/>
+                            Phone Number: <b>' . $emailMeta['phone'] . '</b><br/><br/>
+                            Email Address: <b>' . $emailMeta['email'] . '</b><br/><br/>
+                            Message Subject: <b>' . $subject . '</b><br/>
+                            Message:<br/> <b>' . $message . '</b><br/><br/><br/>
+                            Please endevor to reach out to the customer within 2 working days. The customer can be reached via <b>' . $emailMeta['email'] . '</b> OR <b>' . $emailMeta['phone'] . '</b>
+                        </p>
                     </td>
                 </tr>
                 <tr>
