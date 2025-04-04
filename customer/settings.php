@@ -253,7 +253,7 @@
                                                             <div class="row">
                                                                 <div class="form-group col-md-6">
                                                                     <label>DOB</label>
-                                                                    <input type="date" placeholder="Email" class="form-control required dob" name="dob">
+                                                                    <input type="date" placeholder="Email" class="form-control required dob" name="dob" disabled>
                                                                 </div>
                                                                 <div class="form-group col-md-6">
                                                                     <label>Gender</label>
