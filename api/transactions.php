@@ -22,15 +22,17 @@ try {
 
     switch ($call) {
         case 'funds_transfer':
+            //check for empty or undefined parameters
             if (!checkAvailability(array('token', 'destination_account_number', 'source', 'budget_category_id', 'amount', 'pin'))) {
                 throw new Exception('Invalid request: Token is required');
             }
 
+            //verify jwt token
             if (!verifyJWT('sha256', $_GET['token'], TOKEN_SECRET)) {
                 throw new Exception('Invalid authorization token provided');
             }
 
-            //token
+            //logged user details from token
             $token = $mysqli->real_escape_string($_GET['token']);
             $userID = payloadClaim($token, 'user_id');
             $accountID = payloadClaim($token, 'account_id');
@@ -38,9 +40,6 @@ try {
             $phone = payloadClaim($token, 'phone');
             $firstName = payloadClaim($token, 'first_name');
             $lastName = payloadClaim($token, 'last_name');
-            $accountType = payloadClaim($token, 'account_type');
-            $accountOfficerFirstName = payloadClaim($token, 'account_officer_first_name');
-            $accountOfficerLastName = payloadClaim($token, 'account_officer_last_name');
 
             // Get and sanitize user input
             $destinationAccountNumber = $mysqli->real_escape_string($_POST['destination_account_number']);
@@ -50,6 +49,24 @@ try {
 
             //check otp
             $otp = isset($_POST['otp']) ? $mysqli->real_escape_string($_POST['otp']) : null; // OTP input (if provided)
+
+            //check if transaction pin exists
+            $stmt = $mysqli->prepare("CALL validateTransactionPIN(?, ?)");
+            $stmt->bind_param("ii", $userID, $pin);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $row = $result->fetch_assoc();
+
+            if($row['result'] === "USER_NOT_FOUND")
+            {
+                throw new Exception('User not found');
+            }
+
+            if($row['result'] === "INVALID_PIN")
+            {
+                throw new Exception('Invalid transaction PIN');
+            }
+            $stmt->close();
 
             //get budget category details
             $stmt = $mysqli->prepare("SELECT * FROM budget_categories_view WHERE account_id = ? LIMIT 1");
@@ -78,7 +95,7 @@ try {
             $stmt->close();
 
             //Check if transaction exceeds budget
-            $stmt = $conn->prepare("CALL checkTransactionBudget(?, ?, ?, ?)");
+            $stmt = $mysqli->prepare("CALL checkTransactionBudget(?, ?, ?, ?)");
             $stmt->bind_param("iids", $accountID, $budgetCategoryID, $amount, $source);
             $stmt->execute();
             $result = $stmt->get_result();
@@ -88,6 +105,10 @@ try {
                 $transactionStatus = $row['transaction_budget_status'];
             }
             $stmt->close();
+
+            // Start database transaction
+            $mysqli->autocommit(false);
+            $mysqli->begin_transaction();
 
             // If the transaction exceeds budget, handle OTP verification
             if ($transactionStatus === "Exceeds Budget") {
@@ -101,37 +122,107 @@ try {
                     $stmt->execute();
                     $stmt->close();
 
+                    $emailMeta = [
+                        "first_name"                    => $firstName,
+                        "amount"                        => $amount,
+                        "destination_account_number"    => $destinationAccountNumber,
+                        "otp"                           => $otp
+                    ];
+
                     // Send OTP via Email
                     $subject = "Your OTP for Fund Transfer";
-                    $message = "Your OTP is: " . $generated_otp;
-                    mail($email, $subject, $message);
+                    $message = otpHTML($emailMeta, $subject);
+                    $successMessage = 'An OTP has been sent to '.$email.'. Please check your inbox.';
 
-                    echo json_encode(["status" => "OTP Required"]);
-                    exit;
+                    if (!sendMail($email, $message, $subject)) {
+                        $mysqli->rollback(); // Rollback transaction if email fails
+                        throw new Exception('An error occurred while sending the recovery email.');
+                    }
+
+                    //record this success message
+                    $stmt = $mysqli->prepare("CALL storeNotification($userID, 'Your OTP for Fund Transfer', $successMessage)");
+                    $stmt->execute();
+                    $stmt->close();
+
+                    // Commit transaction if everything is successful
+                    $mysqli->commit();
+
+                    //throw the success message in an exception
+                    throw new Exception($successMessage);
+                }
+                else
+                {
+                    //verify otp
+                    $stmt = $mysqli->prepare("CALL verifyOTP(?, ?)");
+                    $stmt->bind_param("ii", $accountID, $otp);
+                    $stmt->execute();
+                    $result = $stmt->get_result(); 
+                    $row = $result->fetch_assoc();
+
+                    if($row['status'] === "OTP_NOT_FOUND")
+                    {
+                        throw new Exception('OTP not found');
+                    }
+
+                    if($row['status'] === "OTP_EXPIRED")
+                    {
+                        throw new Exception('OTP expired');
+                    }
+
+                    $stmt->close();
                 }
             }
 
-            $emailMeta = [
-                "account_number"                => $accountID,
-                "email"                         => $email,
-                "phone"                         => $phone,
+            //Process the transaction
+            $stmt = $mysqli->prepare("CALL fundsTransfer(?, ?, ?, ?, ?)");
+            $stmt->bind_param("iidis", $accountID, $destinationAccountNumber, $amount, $budgetCategoryID, $source);
+            if (!$stmt->execute()) {
+                throw new Exception($stmt->error);
+            }
+            // Get the results (updated balances)
+            $result = $stmt->get_result();
+            $data = $result->fetch_assoc();
+            $stmt->close();
+
+            $debitEmailMeta = [
                 "first_name"                    => $firstName,
-                "last_name"                     => $lastName,
-                "account_type"                  => $accountType,
-                "account_officer_first_name"    => $accountOfficerFirstName,
-                "account_officer_last_name"     => $accountOfficerLastName
+                "amount"                        => $amount,
+                "originating_balance"           => $data['originating_balance'],
+                "source"                        => $source,
             ];
 
-            $message = supportHTML($emailMeta, $subject, $message);
-            $successMessage = 'A support email has been sent to ' . $to;
+            $creditEmailMeta = [
+                "first_name"                    => $destinationAccount['first_name'],
+                "amount"                        => $amount,
+                "destination_balance"           => $data['destination_balance']
+            ];
 
-            // Send support email
-            if (!sendMail($to, $message, $subject)) {
+            $debitSubject = 'Debit Alert';
+            $debitMessage = debitHTML($debitEmailMeta, $debitSubject);
+            $creditSubject = 'Credit Alert';
+            $creditMessage = creditHTML($creditEmailMeta, $creditSubject);
+            $debitSuccessMessage = 'Your account has been debited with $'.$amount;
+            $creditSuccessMessage = 'Your account has been credited with $'.$amount;
+
+            // Send debit email notification
+            if (!sendMail($email, $debitMessage, $debitSubject)) {
+                $mysqli->rollback(); // Rollback transaction if email fails
                 throw new Exception('An error occurred while sending the support email.');
             }
 
-            //record this success message
-            $stmt = $mysqli->prepare("CALL storeNotification($userID, 'Support Email Sent', '$successMessage')");
+            // Send credit email notification
+            if (!sendMail($destinationAccount['email'], $creditMessage, $creditMessage)) {
+                $mysqli->rollback(); // Rollback transaction if email fails
+                throw new Exception('An error occurred while sending the support email.');
+            }
+
+            //send in-app notifications to debited account holder
+            $stmt = $mysqli->prepare("CALL storeNotification($userID, '$debitSubject', '$debitSuccessMessage')");
+            $stmt->execute();
+            $stmt->close();
+
+            //send in-app notifications to credited account holder
+            $stmt = $mysqli->prepare("CALL storeNotification($destinationAccount['user_id], '$creditSubject', '$creditSuccessMessage')");
             $stmt->execute();
             $stmt->close();
 
@@ -139,7 +230,7 @@ try {
             $mysqli->commit();
 
             $response['error'] = false;
-            $response['message'] = $successMessage;
+            $response['message'] = $debitSuccessMessage;
 
             break;
 
