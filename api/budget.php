@@ -134,6 +134,17 @@ try {
             $stmt->execute();
             $stmt->close();
 
+            //update safe lock start and end times if budget category is SAVINGS
+            if ($categoryName === "Savings") {
+                $stmt = $mysqli->prepare("UPDATE safe_lock SET `lock_start_time` = ?, `lock_end_time` = ? WHERE account_id = ?");
+                if (!$stmt) {
+                    throw new Exception('Database error: ' . $mysqli->error);
+                }
+                $stmt->bind_param('ssi', $budgetLimitStartTime, $budgetLimitEndTime, $accountID);
+                $stmt->execute();
+                $stmt->close();
+            }
+
             $successMessage = 'Budget Category updated successfully';
 
             //record this success message

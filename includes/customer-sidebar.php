@@ -44,10 +44,10 @@
                 </a>
             </li>
         </ul>
-        <div class="drum-box">
+        <div class="drum-box" data-bs-toggle="modal" data-bs-target="#accountStatementGenerationModal" style="cursor: pointer;">
             <img src="images/ellipse5.png" alt="">
-            <p class="fs-18 font-w500 mb-4">Auto Generate Transaction Reports</p>
-            <a class="" href="#"><i class="fa fa-long-arrow-right"></i>
+            <p class="fs-18 font-w500 mb-4">Generate Account Statement</p>
+            <a class="" href="#" data-bs-toggle="modal" data-bs-target="#accountStatementGenerationModal"><i class="fa fa-long-arrow-right"></i>
             </a>
         </div>
         <div class="copyright">

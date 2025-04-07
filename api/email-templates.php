@@ -433,10 +433,10 @@ function otpHTML($emailMeta, $subject)
                 <tr>
                     <td colspan="3" style="text-align: center; padding-top: 30px; letter-spacing: 1px;">
                         <h3 style="font-weight: 600; font-size: 20px; font-style: normal; line-height: 30px;">
-                            '.$subject.'
+                            ' . $subject . '
                         </h3>
                         <p style="font-weight: 400; font-size: 12px; font-style: normal; padding-top: 30px; line-height: 18px;">
-                            Hello, <b>' . $emailMeta['first_name'] . '</b>!!! We have noticed an attempt to transfer funds of <b>$' . $emailMeta['amount'] . '</b> from your account to <b>' . $emailMeta['destination_account_number'] . '</b> This funds transfer will trigger an exceedance in the selected budget category.<br/><br/>
+                            Hello, <b>' . $emailMeta['first_name'] . '</b>!!! We have noticed an attempt to transfer funds of <b>$' . $emailMeta['amount'] . '</b> from your account to <b>' . $emailMeta['destination_account_number'] . '</b>. This funds transfer will trigger an exceedance in the selected budget category.<br/><br/>
                             Please enter the OTP below to proceed with this transaction: <br/><b>' . $emailMeta['otp'] . '</b><br/>
                             Please do not share this OTP with anyone.
                         </p>
@@ -542,10 +542,10 @@ function debitHTML($emailMeta, $subject)
                 <tr>
                     <td colspan="3" style="text-align: center; padding-top: 30px; letter-spacing: 1px;">
                         <h3 style="font-weight: 600; font-size: 20px; font-style: normal; line-height: 30px;">
-                            '.$subject.'
+                            ' . $subject . '
                         </h3>
                         <p style="font-weight: 400; font-size: 12px; font-style: normal; padding-top: 30px; line-height: 18px;">
-                            Hello, <b>' . $emailMeta['first_name'] . '</b>!!! <b>$' . $emailMeta['amount'] . '</b> has been debited from your <b>'.$emailMeta['source'].'</b>. Your current balance is <b>' . $emailMeta['originating_balance'] . '</b>.<br/><br/>
+                            Hello, <b>' . $emailMeta['first_name'] . '</b>!!! <b>$' . $emailMeta['amount'] . '</b> has been debited from your <b>' . $emailMeta['source'] . '</b>. Your current balance is <b>' . $emailMeta['originating_balance'] . '</b>.<br/><br/>
                         </p>
                     </td>
                 </tr>
@@ -649,10 +649,10 @@ function creditHTML($emailMeta, $subject)
                 <tr>
                     <td colspan="3" style="text-align: center; padding-top: 30px; letter-spacing: 1px;">
                         <h3 style="font-weight: 600; font-size: 20px; font-style: normal; line-height: 30px;">
-                            '.$subject.'
+                            ' . $subject . '
                         </h3>
                         <p style="font-weight: 400; font-size: 12px; font-style: normal; padding-top: 30px; line-height: 18px;">
-                            Hello, <b>' . $emailMeta['first_name'] . '</b>!!! <b>$' . $emailMeta['amount'] . '</b> has been credited from your account. Your current balance is <b>' . $emailMeta['destination_balance'] . '</b>.<br/><br/>
+                            Hello, <b>' . $emailMeta['first_name'] . '</b>!!! <b>$' . $emailMeta['amount'] . '</b> has been credited to your <b>' . $emailMeta['destination'] . '</b>. Your current <b>' . $emailMeta['destination'] . '</b> balance is <b>' . $emailMeta['destination_balance'] . '</b>.<br/><br/>
                         </p>
                     </td>
                 </tr>

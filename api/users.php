@@ -43,7 +43,7 @@ try {
             $accounts = array();
 
             // Initialize the query and filter array
-            $query = "SELECT * FROM accounts_view WHERE 1=1";  // '1=1' acts as a base filter
+            $query = "SELECT * FROM account_view WHERE 1=1";  // '1=1' acts as a base filter
             $params = [];
             $types = "";
 
@@ -59,19 +59,19 @@ try {
                 $params[] = $user_id;
                 $types .= "i"; // 'i' for integer type 's' for string type
             }
-            
+
             if (!is_null($accountOfficerID)) {
                 $query .= " AND account_officer_id = ?";
                 $params[] = $accountOfficerID;
                 $types .= "i"; // 'i' for integer type 's' for string type
             }
-            
+
             if (!is_null($gender)) {
                 $query .= " AND gender = ?";
                 $params[] = $gender;
                 $types .= "s"; // 'i' for integer type 's' for string type
             }
-            
+
             if (!is_null($identification)) {
                 $query .= " AND identification = ?";
                 $params[] = $identification;

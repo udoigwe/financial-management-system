@@ -194,7 +194,7 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive recentorderTable">
-                                <table class="table verticle-middle table-responsive-md my-budget-categories" id="my-budget-categories">
+                                <table class="table verticle-middle table-striped table-responsive-md my-budget-categories" id="my-budget-categories">
                                     <thead>
                                         <tr>
                                             <th scope="col">SNO</th>

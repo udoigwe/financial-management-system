@@ -32,6 +32,9 @@ BEGIN
     -- Determine if category is 'Savings'
     IF v_category_name = 'Savings' THEN
         SET v_transaction_budget_status = 'Within Budget';
+    -- If now is outside budget timeframe, consider it Within Budget
+    ELSEIF v_current_time NOT BETWEEN v_budget_start_time AND v_budget_end_time THEN
+        SET v_transaction_budget_status = 'Within Budget';
     ELSE
         -- Calculate total spent within budget time frame
         SELECT COALESCE(SUM(amount), 0)
@@ -88,27 +91,46 @@ BEGIN
     IF v_category_name = 'Savings' THEN
         SELECT balance INTO v_originating_balance FROM account WHERE account_id = p_originating_account_id;
         SELECT balance INTO v_destination_balance FROM safe_lock WHERE account_id = p_destination_account_id;
+    ELSEIF p_source = 'Safe Lock' THEN
+        SELECT balance INTO v_originating_balance FROM safe_lock WHERE account_id = p_originating_account_id;
+        SELECT balance INTO v_destination_balance FROM account WHERE account_id = p_destination_account_id;
     ELSE
         SELECT balance INTO v_originating_balance FROM account WHERE account_id = p_originating_account_id;
         SELECT balance INTO v_destination_balance FROM account WHERE account_id = p_destination_account_id;
     END IF;
     
     -- Insert transaction record
-    INSERT INTO transactions (
-        account_id, budget_category_id, transaction_type, amount, transaction_fee,
-        transaction_budget_status, transaction_description, transaction_source
-    ) VALUES (
-        p_originating_account_id, p_budget_category_id, 'Debit', p_amount, v_transaction_fee,
-        v_transaction_budget_status, 'Fund Transfer', p_source
-    );
-    
-    INSERT INTO transactions (
-        account_id, budget_category_id, transaction_type, amount, transaction_fee,
-        transaction_budget_status, transaction_description, transaction_source
-    ) VALUES (
-        p_destination_account_id, NULL, 'Credit', p_amount, 0,
-        'Within Budget', 'Fund Received', 'Main Account'
-    );
+    IF v_category_name = 'Savings' THEN
+        INSERT INTO transactions (
+            account_id, budget_category_id, transaction_type, amount, transaction_fee, balance_after_transaction,
+            transaction_budget_status, transaction_description, transaction_source, transaction_destination
+        ) VALUES (
+            p_originating_account_id, p_budget_category_id, 'Debit', p_amount, v_transaction_fee, v_originating_balance,
+            v_transaction_budget_status, 'Funds Transfer', p_source, 'Safe Lock'
+        );
+    ELSE
+        INSERT INTO transactions (
+            account_id, budget_category_id, transaction_type, amount, transaction_fee, balance_after_transaction,
+            transaction_budget_status, transaction_description, transaction_source, transaction_destination
+        ) VALUES (
+            p_originating_account_id, p_budget_category_id, 'Debit', p_amount, v_transaction_fee, v_originating_balance,
+            v_transaction_budget_status, 'Funds Transfer', p_source, 'Main Account'
+        );
+    END IF;
+
+    IF v_category_name = 'Savings' THEN
+        INSERT INTO transactions (
+            account_id, sender_account_id, transaction_type, amount, transaction_fee, balance_after_transaction, transaction_description, transaction_source, transaction_destination
+        ) VALUES (
+            p_destination_account_id, p_originating_account_id, 'Credit', p_amount, 0, v_destination_balance, 'Funds Received', p_source, 'Safe Lock'
+        );
+    ELSE
+        INSERT INTO transactions (
+            account_id, sender_account_id, transaction_type, amount, transaction_fee, balance_after_transaction, transaction_description, transaction_source, transaction_destination
+        ) VALUES (
+            p_destination_account_id, p_originating_account_id, 'Credit', p_amount, 0, v_destination_balance, 'Funds Received', p_source, p_source
+        );
+    END IF;
     
     -- Return updated balances
     SELECT v_originating_balance AS originating_balance, v_destination_balance AS destination_balance;

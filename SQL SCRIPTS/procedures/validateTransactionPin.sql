@@ -5,7 +5,7 @@ CREATE PROCEDURE validateTransactionPIN(
     IN p_entered_pin VARCHAR(255)
 )
 BEGIN
-    DECLARE stored_pin VARCHAR(255);
+    DECLARE stored_pin INT;
     DECLARE user_exists INT DEFAULT 0;
     
     -- Check if user exists
