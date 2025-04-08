@@ -370,8 +370,27 @@ try {
 
             $stmt->close();
 
+            //get statement summary
+            $stmt = $mysqli->prepare("CALL GenerateAccountStatementSummary(?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            if (!$stmt) {
+                throw new Exception('Database error: ' . $mysqli->error);
+            }
+            $stmt->bind_param('iiissssss', $transactionID, $accountID, $budgetCategoryID, $transactionType, $transactionBudgetStatus, $transactionSource, $transactionDestination, $fromCreatedAt, $toCreatedAt);
+
+            if (!$stmt->execute()) {
+                throw new Exception('An error occured: ' . $mysqli->error);
+            }
+            $result = $stmt->get_result();
+            $accountSummary = $result->fetch_assoc();
+            $stmt->close();
+
+            $meta = [
+                'transactions'  =>      $transactions,
+                'summary'       =>      $accountSummary,
+            ];
+
             $response['error'] = false;
-            $response['transactions'] = $transactions;
+            $response['transactions'] = $meta;
 
             break;
 

@@ -567,8 +567,7 @@ $(function () {
 					if (response.error === false) {
 						unblockUI();
 
-						const transactions = response.transactions;
-						console.log(transactions);
+						const transactions = response.transactions.transactions;
 						let html = "";
 
 						for (let i = 0; i < transactions.length; i++) {

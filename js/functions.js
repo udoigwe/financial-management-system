@@ -302,3 +302,138 @@ function loadNotification(notificationID) {
 		});
 	}
 }
+
+function generateAccountStatement() {
+	$("#account-statement-form").on("submit", function (e) {
+		e.preventDefault();
+		var form = $(this);
+
+		var startTime = form.find(".start_date_range").val();
+		var endTime = form.find(".end_date_range").val();
+		var fields = form.find(
+			"input.required, select.required, textarea.required"
+		);
+		var token = sessionStorage.getItem("token");
+		var accountID = payloadClaim(token, "account_id");
+
+		blockUI();
+
+		for (var i = 0; i < fields.length; i++) {
+			if (fields[i].value == "") {
+				/*alert(fields[i].id)*/
+				unblockUI();
+				form.find("#" + fields[i].id).focus();
+				showSimpleMessage(
+					"Attention",
+					`${fields[i].name} is required`,
+					"error"
+				);
+				//alert(`${fields[i].name} is required`);
+				return false;
+			}
+		}
+
+		const start = moment(startTime);
+		const end = moment(endTime);
+
+		if (start.isAfter(end)) {
+			unblockUI();
+			showSimpleMessage(
+				"Attention",
+				"Start date range cannot come after end date range",
+				"error"
+			);
+			return false;
+		}
+
+		if (end.isBefore(start)) {
+			unblockUI();
+			showSimpleMessage(
+				"Attention",
+				"End date range cannot come before start date range",
+				"error"
+			);
+			return false;
+		}
+
+		$.ajax({
+			type: "GET",
+			url: `${API_URL_ROOT}/transactions?call=get_transactions
+				&account_id=${accountID}
+				&token=${token}
+				&from_created_at=${startTime}
+				&to_created_at=${endTime}`,
+			dataType: "json",
+			success: function (response) {
+				if (response.error === false) {
+					unblockUI();
+
+					const transactions = response.transactions;
+					let html = "";
+
+					for (let i = 0; i < transactions.length; i++) {
+						const transaction = transactions[i];
+
+						html += `
+								<tr>
+										<td>${i + 1}</td>
+										<td>${moment(transaction.created_at).format("Do MMMM, YYYY HH:mm:ss")}</td>
+										<td><span class="badge badge-rounded ${
+											transaction.transaction_type ===
+											"Debit"
+												? "badge-warning"
+												: "badge-success"
+										}">${
+							transaction.transaction_type
+						}</span></td>
+										<td style="font-weight: bolder; color: black">$${transaction.amount}</td>
+										<td style="font-weight: bolder; color: black">$${
+											transaction.transaction_fee
+										}</td>
+										<td style="font-weight: bolder; color: black">$${
+											transaction.balance_after_transaction
+										}</td>
+										<td>${
+											transaction.transaction_type ===
+											"Credit"
+												? `${transaction.sender_first_name} ${transaction.sender_last_name}`
+												: "-"
+										} </td>
+										<td>${
+											transaction.transaction_type ===
+											"Credit"
+												? `${transaction.sender_phone}`
+												: "-"
+										} </td>
+										<td>${transaction.transaction_source}</td>
+										<td>${transaction.transaction_destination}</td>
+										<td>${
+											transaction.budget_category_id
+												? `<span class="badge badge-rounded" style="background-color: ${transaction.color_code}">${transaction.category_name}</span>`
+												: "-"
+										}</td>
+										<td>${
+											transaction.transaction_budget_status ===
+											"Within Budget"
+												? '<span class="badge badge-rounded badge-info">Within Budget</span>'
+												: transaction.transaction_budget_status ===
+												  "Exceeds Budget"
+												? '<span class="badge badge-rounded badge-danger">Exceeds Budget</span>'
+												: "-"
+										}</td>
+								</tr>
+							`;
+					}
+					$("#my-transactions tbody").html(html);
+				} else {
+					unblockUI();
+					console.log(response);
+				}
+			},
+			error: function (req, status, err) {
+				showSimpleMessage("Attention", req.statusText, "error");
+				unblockUI();
+			},
+		});
+	});
+}
