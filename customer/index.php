@@ -4,6 +4,7 @@
 <head>
     <?php include('../includes/head2.php'); ?>
     <title>FinHive | Customer | Dashboard</title>
+    <link rel="stylesheet" href="../vendor/chartist/css/chartist.min.css">
 </head>
 
 <body onload="isAuthenticated(); displayProfile(); loadUnreadMessages();">
@@ -669,6 +670,18 @@
                         </div>
                     </div>
                 </div> -->
+                <div class="col-xl-12">
+                    <div class="card">
+                        <div class="card-header d-sm-flex d-block pb-0 border-0">
+                            <div class="me-auto pe-3">
+                                <h4 class="text-black fs-24 font-w700">My Daily Transactions</h4>
+                            </div>
+                        </div>
+                        <div class="card-body pb-0">
+                            <div id="areaChart" class="area-theme"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <!--**********************************
@@ -711,6 +724,9 @@
     ***********************************-->
     <!-- Required vendors -->
     <?php include('../includes/scripts2.php'); ?>
+    <!-- Apex Chart -->
+    <script src="../vendor/apexchart/apexchart.js"></script>
+    <script src="../js/pages/customer/index.js"></script>
 
 
 </body>

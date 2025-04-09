@@ -52,7 +52,7 @@
         </div>
         <div class="copyright">
             <p><strong>FinHive FMS </strong> © 2025 All Rights Reserved</p>
-            <p class="fs-12">Made with <span class="heart"></span> by DBMS</p>
+            <p class="fs-12">Made with <span class="heart"></span> by Data Forge</p>
         </div>
     </div>
 </div>

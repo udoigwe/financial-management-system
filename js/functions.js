@@ -307,6 +307,10 @@ function generateAccountStatement() {
 	$("#account-statement-form").on("submit", function (e) {
 		e.preventDefault();
 		var form = $(this);
+		const accountStatementModal = $("#accountStatementModal");
+		const accountStatementGenerationModal = $(
+			"#accountStatementGenerationModal"
+		);
 
 		var startTime = form.find(".start_date_range").val();
 		var endTime = form.find(".end_date_range").val();
@@ -368,7 +372,9 @@ function generateAccountStatement() {
 				if (response.error === false) {
 					unblockUI();
 
-					const transactions = response.transactions;
+					const transactions = response.transactions.transactions;
+					const summary = response.transactions.summary;
+					console.log(summary);
 					let html = "";
 
 					for (let i = 0; i < transactions.length; i++) {
@@ -393,20 +399,7 @@ function generateAccountStatement() {
 										<td style="font-weight: bolder; color: black">$${
 											transaction.balance_after_transaction
 										}</td>
-										<td>${
-											transaction.transaction_type ===
-											"Credit"
-												? `${transaction.sender_first_name} ${transaction.sender_last_name}`
-												: "-"
-										} </td>
-										<td>${
-											transaction.transaction_type ===
-											"Credit"
-												? `${transaction.sender_phone}`
-												: "-"
-										} </td>
 										<td>${transaction.transaction_source}</td>
-										<td>${transaction.transaction_destination}</td>
 										<td>${
 											transaction.budget_category_id
 												? `<span class="badge badge-rounded" style="background-color: ${transaction.color_code}">${transaction.category_name}</span>`
@@ -424,7 +417,52 @@ function generateAccountStatement() {
 								</tr>
 							`;
 					}
-					$("#my-transactions tbody").html(html);
+					$("#account-statement tbody").html(html);
+					$(".opening-main-account-balance").text(
+						formatCurrency(summary.opening_main_account_balance)
+					);
+					$(".closing-main-account-balance").text(
+						formatCurrency(summary.closing_main_account_balance)
+					);
+					$(".opening-safe-lock-balance").text(
+						formatCurrency(summary.opening_safe_lock_balance)
+					);
+					$(".closing-safe-lock-balance").text(
+						formatCurrency(summary.closing_safe_lock_balance)
+					);
+					$(".total-main-account-debit").text(
+						formatCurrency(summary.total_main_account_debit)
+					);
+					$(".total-main-account-credit").text(
+						formatCurrency(summary.total_main_account_credit)
+					);
+					$(".total-safe-lock-debit").text(
+						formatCurrency(summary.total_safe_lock_debit)
+					);
+					$(".total-safe-lock-credit").text(
+						formatCurrency(summary.total_safe_lock_credit)
+					);
+					$(".account-statement-start-time").text(
+						moment(startTime).format("Do MMMM, YYYY")
+					);
+					$(".account-statement-end-time").text(
+						moment(endTime).format("Do MMMM, YYYY")
+					);
+					$(".statement-customer-name").text(
+						`${response.transactions.first_name} ${response.transactions.last_name}`
+					);
+					accountStatementModal
+						.find(".statement-account-id")
+						.text(response.transactions.account_id);
+					accountStatementModal
+						.find(".statement-customer-phone")
+						.text(response.transactions.phone);
+					accountStatementModal
+						.find(".statement-customer-email")
+						.text(response.transactions.email);
+
+					accountStatementGenerationModal.modal("hide");
+					accountStatementModal.modal("show");
 				} else {
 					unblockUI();
 					console.log(response);
@@ -436,4 +474,72 @@ function generateAccountStatement() {
 			},
 		});
 	});
+}
+
+function formatCurrency(amount, currencyCode = "USD", locale = "en-US") {
+	const formatter = new Intl.NumberFormat(locale, {
+		style: "currency",
+		currency: currencyCode,
+	});
+
+	return formatter.format(amount);
+}
+
+function handlePrint(
+	selector = "#printableContent",
+	documentTitle = "Account Statement"
+) {
+	const $content = $(selector);
+
+	if ($content.length) {
+		const printArea = $content.html();
+		const printWindow = window.open("", "_blank", "width=800,height=600");
+
+		if (printWindow) {
+			printWindow.document.open();
+
+			// Clone all <link> and <style> tags from the current document
+			let styles = "";
+			$('link[rel="stylesheet"], style').each(function () {
+				styles += this.outerHTML;
+			});
+
+			printWindow.document.write(`
+				<html>
+					<head>
+					<title>${documentTitle}</title>
+					${styles}
+					<style>
+						@media print {
+							@page {
+								margin: 0;
+							}
+							body {
+								margin: 0 !important;
+								padding: 0 !important;
+							}
+						}
+					</style>
+					</head>
+					<body>
+					${printArea}
+					</body>
+				</html>
+			`);
+
+			printWindow.document.close();
+
+			// Wait for new window to finish rendering content
+			const interval = setInterval(() => {
+				if (printWindow.document.readyState === "complete") {
+					clearInterval(interval);
+					printWindow.focus();
+					printWindow.print();
+					// printWindow.close(); // optional
+				}
+			}, 300); // Check every 300ms
+		}
+	} else {
+		console.warn("Print content not found.");
+	}
 }

@@ -46,7 +46,7 @@
 
 </head>
 
-<body onload="isAuthenticated(); displayProfile(); loadUnreadMessages();">
+<body onload="isAuthenticated(); displayProfile(); loadUnreadMessages(); generateAccountStatement(); print1();">
 
     <!--*******************
         Preloader start
@@ -195,89 +195,48 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <div class="col-lg-12">
+                                    <div class="col-lg-12 print-area">
                                         <div class="card mt-3">
-                                            <div class="card-header"> Invoice <strong>01/01/01/2018</strong> <span class="float-end">
-                                                    <strong>Status:</strong> Pending</span> </div>
+                                            <!-- <div class="card-header"> Invoice <strong>01/01/01/2018</strong> <span class="float-end">
+                                                    <strong>Status:</strong> Pending</span> </div> -->
                                             <div class="card-body">
                                                 <div class="row mb-5">
                                                     <div class="mt-4 col-xl-3 col-lg-6 col-md-6 col-sm-6">
                                                         <h6>From:</h6>
-                                                        <div> <strong>Webz Poland</strong> </div>
-                                                        <div>Madalinskiego 8</div>
-                                                        <div>71-101 Szczecin, Poland</div>
-                                                        <div>Email: info@webz.com.pl</div>
-                                                        <div>Phone: +48 444 666 3333</div>
+                                                        <div class="account-statement-start-time"></div>
                                                     </div>
                                                     <div class="mt-4 col-xl-3 col-lg-6 col-md-6 col-sm-6">
                                                         <h6>to:</h6>
-                                                        <div> <strong>Bob Mart</strong> </div>
-                                                        <div>Attn: Daniel Marek</div>
-                                                        <div>43-190 Mikolow, Poland</div>
-                                                        <div>Email: marek@daniel.com</div>
-                                                        <div>Phone: +48 123 456 789</div>
+                                                        <div class="account-statement-end-time"></div>
                                                     </div>
                                                     <div class="mt-4 col-xl-6 col-lg-12 col-md-12 col-sm-12 d-flex justify-content-lg-end justify-content-md-center justify-content-xs-start">
                                                         <div class="row align-items-center">
                                                             <div class="col-sm-9">
-                                                                <div class="brand-logo mb-3">
-                                                                    <img class="logo-abbr me-2" width="50" src="images/logo.png" alt="">
-                                                                    <img class="logo-compact" width="110" src="images/logo-text.png" alt="">
-                                                                </div>
-                                                                <span>Please send exact amount: <strong class="d-block">0.15050000 BTC</strong>
-                                                                    <strong>1DonateWffyhwAjskoEwXt83pHZxhLTr8H</strong></span><br>
-                                                                <small class="text-muted">Current exchange rate 1BTC = $6590 USD</small>
+                                                                <span><strong class="d-block statement-customer-name"></strong>
+                                                                    <strong class="statement-account-id"></strong></span><br>
+                                                                <span><strong class="d-block statement-customer-phone"></strong>
+                                                                    <strong class="statement-customer-email"></strong></span><br>
                                                             </div>
-                                                            <div class="col-sm-3 mt-3"> <img src="images/qr.png" alt="" class="img-fluid width110"> </div>
+                                                            <div class="col-sm-3 mt-3"> <img src="../images/finhive-logo.png" alt="" class="img-fluid width110"> </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="table-responsive">
-                                                    <table class="table table-striped">
+                                                    <table class="table table-striped" id="account-statement">
                                                         <thead>
                                                             <tr>
                                                                 <th class="center">#</th>
-                                                                <th>Item</th>
-                                                                <th>Description</th>
-                                                                <th class="right">Unit Cost</th>
-                                                                <th class="center">Qty</th>
-                                                                <th class="right">total</th>
+                                                                <th>Transaction Date</th>
+                                                                <th>Transaction Type</th>
+                                                                <th class="right">Amount</th>
+                                                                <th class="center">Fee</th>
+                                                                <th class="right">Balance</th>
+                                                                <th class="right">Source</th>
+                                                                <th class="right">Budget Category</th>
+                                                                <th class="right">Spending Status</th>
                                                             </tr>
                                                         </thead>
-                                                        <tbody>
-                                                            <tr>
-                                                                <td class="center">1</td>
-                                                                <td class="left strong">Origin License</td>
-                                                                <td class="left">Extended License</td>
-                                                                <td class="right">$999,00</td>
-                                                                <td class="center">1</td>
-                                                                <td class="right">$999,00</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td class="center">2</td>
-                                                                <td class="left">Custom Services</td>
-                                                                <td class="left">Instalation and Customization (cost per hour)</td>
-                                                                <td class="right">$150,00</td>
-                                                                <td class="center">20</td>
-                                                                <td class="right">$3.000,00</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td class="center">3</td>
-                                                                <td class="left">Hosting</td>
-                                                                <td class="left">1 year subcription</td>
-                                                                <td class="right">$499,00</td>
-                                                                <td class="center">1</td>
-                                                                <td class="right">$499,00</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td class="center">4</td>
-                                                                <td class="left">Platinum Support</td>
-                                                                <td class="left">1 year subcription 24/7</td>
-                                                                <td class="right">$3.999,00</td>
-                                                                <td class="center">1</td>
-                                                                <td class="right">$3.999,00</td>
-                                                            </tr>
-                                                        </tbody>
+                                                        <tbody></tbody>
                                                     </table>
                                                 </div>
                                                 <div class="row">
@@ -286,23 +245,43 @@
                                                         <table class="table table-clear">
                                                             <tbody>
                                                                 <tr>
-                                                                    <td class="left"><strong>Subtotal</strong></td>
-                                                                    <td class="right">$8.497,00</td>
+                                                                    <td class="left"><strong>Opening Main Account Balance</strong></td>
+                                                                    <td class="right opening-main-account-balance">$8.497,00</td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td class="left"><strong>Discount (20%)</strong></td>
-                                                                    <td class="right">$1,699,40</td>
+                                                                    <td class="left"><strong>Closing Main Account Balance</strong></td>
+                                                                    <td class="right closing-main-account-balance">$1,699,40</td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td class="left"><strong>VAT (10%)</strong></td>
-                                                                    <td class="right">$679,76</td>
+                                                                    <td class="left"><strong>Total Main Account Debit</strong></td>
+                                                                    <td class="right total-main-account-debit">$1,699,40</td>
                                                                 </tr>
                                                                 <tr>
+                                                                    <td class="left"><strong>Total Main Account Credit</strong></td>
+                                                                    <td class="right total-main-account-credit">$1,699,40</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td class="left"><strong>Opening Safe Lock Balance</strong></td>
+                                                                    <td class="right opening-safe-lock-balance">$679,76</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td class="left"><strong>Closing Safe Lock Balance</strong></td>
+                                                                    <td class="right closing-safe-lock-balance">$679,76</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td class="left"><strong>Total Safe Lock Debit</strong></td>
+                                                                    <td class="right total-safe-lock-debit">$679,76</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td class="left"><strong>Total Safe Lock Credit</strong></td>
+                                                                    <td class="right total-safe-lock-credit">$679,76</td>
+                                                                </tr>
+                                                                <!-- <tr>
                                                                     <td class="left"><strong>total</strong></td>
                                                                     <td class="right"><strong>$7.477,36</strong><br>
                                                                         <strong>0.15050000 BTC</strong>
                                                                     </td>
-                                                                </tr>
+                                                                </tr> -->
                                                             </tbody>
                                                         </table>
                                                     </div>
@@ -313,7 +292,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary">Generate Statement</button>
+                                    <button type="button" class="btn btn-primary btn-generate-statement" onclick="handlePrint('.print-area', 'Account Statement');">Generate Statement</button>
                                 </div>
                             </div>
                         </div>

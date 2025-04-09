@@ -275,6 +275,11 @@ try {
             // Get and sanitize user input
             $token = $mysqli->real_escape_string($_GET['token']);
             $userID = payloadClaim($token, 'user_id');
+            $account_id = payloadClaim($token, "account_id");
+            $firstName = payloadClaim($token, "first_name");
+            $lastName = payloadClaim($token, "last_name");
+            $email = payloadClaim($token, "email");
+            $phone = payloadClaim($token, "phone");
 
             $transactionID = !isset($_GET['transaction_id']) || empty($_GET['transaction_id']) ? null : $mysqli->real_escape_string($_GET['transaction_id']);
             $accountID = !isset($_GET['account_id']) || empty($_GET['account_id']) ? null : $mysqli->real_escape_string($_GET['account_id']);
@@ -387,6 +392,11 @@ try {
             $meta = [
                 'transactions'  =>      $transactions,
                 'summary'       =>      $accountSummary,
+                "first_name"    =>      $firstName,
+                "last_name"     =>      $lastName,
+                "email"         =>      $email,
+                "phone"         =>      $phone,
+                "account_id"    =>      $account_id
             ];
 
             $response['error'] = false;
