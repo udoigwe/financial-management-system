@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 02, 2025 at 01:26 AM
+-- Generation Time: Apr 09, 2025 at 02:10 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -25,34 +25,57 @@ DELIMITER $$
 --
 -- Procedures
 --
+CREATE DEFINER=`root`@`localhost` PROCEDURE `checkSafeLockPeriod` (IN `p_account_id` INT)   BEGIN
+    IF EXISTS (
+        SELECT 1 
+        FROM safe_lock 
+        WHERE account_id = p_account_id
+          AND NOW() BETWEEN lock_start_time AND lock_end_time
+    ) THEN
+        SELECT 'LOCK_ACTIVE' AS status;
+    ELSE
+        SELECT 'NO_LOCK' AS status;
+    END IF;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `checkTransactionBudget` (IN `p_originating_account` INT, IN `p_budget_category_id` INT, IN `p_amount` DECIMAL(10,2), IN `p_source` VARCHAR(20))   BEGIN
     DECLARE v_budget_limit DECIMAL(10,2);
     DECLARE v_budget_start_time DATETIME;
     DECLARE v_budget_end_time DATETIME;
     DECLARE v_total_spent DECIMAL(10,2);
-    DECLARE v_current_time DATETIME;
     DECLARE v_status VARCHAR(50);
+    DECLARE v_current_time DATETIME;
+    DECLARE v_category_name VARCHAR(100);
 
     SET v_current_time = NOW();
 
-    -- If source is 'Safe Lock', always return 'Within Budget'
-    IF p_source = 'Safe Lock' THEN
+    -- Get budget details including category name
+    SELECT 
+        budget_limit, 
+        budget_limit_start_time, 
+        budget_limit_end_time,
+        category_name
+    INTO 
+        v_budget_limit, 
+        v_budget_start_time, 
+        v_budget_end_time,
+        v_category_name
+    FROM budget_categories
+    WHERE category_id = p_budget_category_id;
+
+    -- If category is 'Savings', always within budget
+    IF v_category_name = 'Savings' THEN
+        SET v_status = 'Within Budget';
+    ELSEIF v_current_time NOT BETWEEN v_budget_start_time AND v_budget_end_time THEN
         SET v_status = 'Within Budget';
     ELSE
-        -- Get budget limit and time frame
-        SELECT budget_limit, budget_limit_start_time, budget_limit_end_time 
-        INTO v_budget_limit, v_budget_start_time, v_budget_end_time
-        FROM budget_categories
-        WHERE category_id = p_budget_category_id;
-
-        -- Calculate total spent within budget period
+        -- Get total spent within the timeframe
         SELECT IFNULL(SUM(amount), 0) INTO v_total_spent
         FROM transactions
-        WHERE account_it = p_originating_account
-        AND budget_category_id = p_budget_category_id
+        WHERE budget_category_id = p_budget_category_id
         AND created_at BETWEEN v_budget_start_time AND v_budget_end_time;
 
-        -- Determine budget status
+        -- Check against limit
         IF (v_total_spent + p_amount) > v_budget_limit THEN
             SET v_status = 'Exceeds Budget';
         ELSE
@@ -60,7 +83,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `checkTransactionBudget` (IN `p_orig
         END IF;
     END IF;
 
-    -- Return the status
+    -- Return result
     SELECT v_status AS transaction_budget_status;
 END$$
 
@@ -88,6 +111,9 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `fundsTransfer` (IN `p_originating_a
     
     -- Determine if category is 'Savings'
     IF v_category_name = 'Savings' THEN
+        SET v_transaction_budget_status = 'Within Budget';
+    -- If now is outside budget timeframe, consider it Within Budget
+    ELSEIF v_current_time NOT BETWEEN v_budget_start_time AND v_budget_end_time THEN
         SET v_transaction_budget_status = 'Within Budget';
     ELSE
         -- Calculate total spent within budget time frame
@@ -145,30 +171,184 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `fundsTransfer` (IN `p_originating_a
     IF v_category_name = 'Savings' THEN
         SELECT balance INTO v_originating_balance FROM account WHERE account_id = p_originating_account_id;
         SELECT balance INTO v_destination_balance FROM safe_lock WHERE account_id = p_destination_account_id;
+    ELSEIF p_source = 'Safe Lock' THEN
+        SELECT balance INTO v_originating_balance FROM safe_lock WHERE account_id = p_originating_account_id;
+        SELECT balance INTO v_destination_balance FROM account WHERE account_id = p_destination_account_id;
     ELSE
         SELECT balance INTO v_originating_balance FROM account WHERE account_id = p_originating_account_id;
         SELECT balance INTO v_destination_balance FROM account WHERE account_id = p_destination_account_id;
     END IF;
     
     -- Insert transaction record
-    INSERT INTO transactions (
-        account_id, budget_category_id, transaction_type, amount, transaction_fee,
-        transaction_budget_status, transaction_description, transaction_source
-    ) VALUES (
-        p_originating_account_id, p_budget_category_id, 'Debit', p_amount, v_transaction_fee,
-        v_transaction_budget_status, 'Fund Transfer', p_source
-    );
-    
-    INSERT INTO transactions (
-        account_id, budget_category_id, transaction_type, amount, transaction_fee,
-        transaction_budget_status, transaction_description, transaction_source
-    ) VALUES (
-        p_destination_account_id, NULL, 'Credit', p_amount, 0,
-        'Within Budget', 'Fund Received', 'Main Account'
-    );
+    IF v_category_name = 'Savings' THEN
+        INSERT INTO transactions (
+            account_id, budget_category_id, transaction_type, amount, transaction_fee, balance_after_transaction,
+            transaction_budget_status, transaction_description, transaction_source, transaction_destination
+        ) VALUES (
+            p_originating_account_id, p_budget_category_id, 'Debit', p_amount, v_transaction_fee, v_originating_balance,
+            v_transaction_budget_status, 'Funds Transfer', p_source, 'Safe Lock'
+        );
+    ELSE
+        INSERT INTO transactions (
+            account_id, budget_category_id, transaction_type, amount, transaction_fee, balance_after_transaction,
+            transaction_budget_status, transaction_description, transaction_source, transaction_destination
+        ) VALUES (
+            p_originating_account_id, p_budget_category_id, 'Debit', p_amount, v_transaction_fee, v_originating_balance,
+            v_transaction_budget_status, 'Funds Transfer', p_source, 'Main Account'
+        );
+    END IF;
+
+    IF v_category_name = 'Savings' THEN
+        INSERT INTO transactions (
+            account_id, sender_account_id, transaction_type, amount, transaction_fee, balance_after_transaction, transaction_description, transaction_source, transaction_destination
+        ) VALUES (
+            p_destination_account_id, p_originating_account_id, 'Credit', p_amount, 0, v_destination_balance, 'Funds Received', p_source, 'Safe Lock'
+        );
+    ELSE
+        INSERT INTO transactions (
+            account_id, sender_account_id, transaction_type, amount, transaction_fee, balance_after_transaction, transaction_description, transaction_source, transaction_destination
+        ) VALUES (
+            p_destination_account_id, p_originating_account_id, 'Credit', p_amount, 0, v_destination_balance, 'Funds Received', p_source, p_source
+        );
+    END IF;
     
     -- Return updated balances
     SELECT v_originating_balance AS originating_balance, v_destination_balance AS destination_balance;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GenerateAccountStatementSummary` (IN `in_transaction_id` INT, IN `in_account_id` INT, IN `in_budget_category_id` INT, IN `in_transaction_type` VARCHAR(10), IN `in_transaction_budget_status` VARCHAR(20), IN `in_transaction_source` VARCHAR(20), IN `in_transaction_destination` VARCHAR(20), IN `in_from_created_at` DATE, IN `in_to_created_at` DATE)   BEGIN
+    -- Variables
+    DECLARE opening_main DECIMAL(18, 2) DEFAULT 0;
+    DECLARE closing_main DECIMAL(18, 2) DEFAULT 0;
+    DECLARE opening_safe DECIMAL(18, 2) DEFAULT 0;
+    DECLARE closing_safe DECIMAL(18, 2) DEFAULT 0;
+
+    DECLARE total_debit_main DECIMAL(18, 2) DEFAULT 0;
+    DECLARE total_credit_main DECIMAL(18, 2) DEFAULT 0;
+    DECLARE total_debit_safe DECIMAL(18, 2) DEFAULT 0;
+    DECLARE total_credit_safe DECIMAL(18, 2) DEFAULT 0;
+
+    DECLARE exceeds_count INT DEFAULT 0;
+    DECLARE within_count INT DEFAULT 0;
+    DECLARE spender_type VARCHAR(30);
+
+    -- Temp table to store filtered transactions
+    CREATE TEMPORARY TABLE temp_filtered AS
+    SELECT *
+    FROM transactions
+    WHERE (in_transaction_id IS NULL OR transaction_id = in_transaction_id)
+      AND (in_account_id IS NULL OR account_id = in_account_id)
+      AND (in_budget_category_id IS NULL OR budget_category_id = in_budget_category_id)
+      AND (in_transaction_type IS NULL OR transaction_type = in_transaction_type)
+      AND (in_transaction_budget_status IS NULL OR transaction_budget_status = in_transaction_budget_status)
+      AND (in_transaction_source IS NULL OR transaction_source = in_transaction_source)
+      AND (in_transaction_destination IS NULL OR transaction_destination = in_transaction_destination)
+      AND (in_from_created_at IS NULL OR DATE(created_at) >= in_from_created_at)
+      AND (in_to_created_at IS NULL OR DATE(created_at) <= in_to_created_at)
+    ORDER BY created_at ASC;
+
+    -- Opening and closing balances
+    SELECT COALESCE(balance_after_transaction, 0)
+    INTO opening_main
+    FROM temp_filtered
+    WHERE transaction_source = 'Main Account'
+    ORDER BY created_at ASC
+    LIMIT 1;
+
+    SELECT COALESCE(balance_after_transaction, 0)
+    INTO closing_main
+    FROM temp_filtered
+    WHERE transaction_source = 'Main Account'
+    ORDER BY created_at DESC
+    LIMIT 1;
+
+    SELECT COALESCE(balance_after_transaction, 0)
+    INTO opening_safe
+    FROM temp_filtered
+    WHERE transaction_source = 'Safe Lock'
+    ORDER BY created_at ASC
+    LIMIT 1;
+
+    SELECT COALESCE(balance_after_transaction, 0)
+    INTO closing_safe
+    FROM temp_filtered
+    WHERE transaction_source = 'Safe Lock'
+    ORDER BY created_at DESC
+    LIMIT 1;
+
+    -- Totals per source
+    SELECT 
+        COALESCE(SUM(CASE WHEN transaction_type = 'Debit' THEN amount ELSE 0 END), 0),
+        COALESCE(SUM(CASE WHEN transaction_type = 'Credit' THEN amount ELSE 0 END), 0)
+    INTO total_debit_main, total_credit_main
+    FROM temp_filtered
+    WHERE transaction_source = 'Main Account';
+
+    SELECT 
+        COALESCE(SUM(CASE WHEN transaction_type = 'Debit' THEN amount ELSE 0 END), 0),
+        COALESCE(SUM(CASE WHEN transaction_type = 'Credit' THEN amount ELSE 0 END), 0)
+    INTO total_debit_safe, total_credit_safe
+    FROM temp_filtered
+    WHERE transaction_source = 'Safe Lock';
+
+    -- Budget spender type
+    SELECT 
+        COALESCE(SUM(CASE WHEN transaction_budget_status = 'Exceeds Budget' THEN 1 ELSE 0 END), 0),
+        COALESCE(SUM(CASE WHEN transaction_budget_status = 'Within Budget' THEN 1 ELSE 0 END), 0)
+    INTO exceeds_count, within_count
+    FROM temp_filtered;
+
+    IF exceeds_count > within_count THEN
+        SET spender_type = 'EXTRAVAGANT SPENDER';
+    ELSE
+        SET spender_type = 'METICULOUS SPENDER';
+    END IF;
+
+    -- Return the report as a single row
+    SELECT 
+        opening_main AS opening_main_account_balance,
+        closing_main AS closing_main_account_balance,
+        opening_safe AS opening_safe_lock_balance,
+        closing_safe AS closing_safe_lock_balance,
+
+        total_debit_main AS total_main_account_debit,
+        total_credit_main AS total_main_account_credit,
+        total_debit_safe AS total_safe_lock_debit,
+        total_credit_safe AS total_safe_lock_credit,
+
+        exceeds_count AS total_exceeds_budget,
+        within_count AS total_within_budget,
+        spender_type AS spender_category;
+
+    -- Clean up
+    DROP TEMPORARY TABLE IF EXISTS temp_filtered;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetMonthlyTransactionSummary` (IN `input_account_id` INT)   BEGIN
+    -- If input_account_id is NULL, get summary for all accounts
+    IF input_account_id IS NULL THEN
+        SELECT 
+            DATE(created_at) AS payment_date,
+            ROUND(SUM(CASE WHEN transaction_type = 'Credit' THEN amount ELSE 0 END), 2) AS total_credit,
+            ROUND(SUM(CASE WHEN transaction_type = 'Debit' THEN amount ELSE 0 END), 2) AS total_debit
+        FROM transactions
+        WHERE MONTH(created_at) = MONTH(CURRENT_DATE())
+          AND YEAR(created_at) = YEAR(CURRENT_DATE())
+        GROUP BY DATE(created_at)
+        ORDER BY payment_date;
+    ELSE
+        -- If input_account_id is provided, get summary for that specific account
+        SELECT 
+            DATE(created_at) AS payment_date,
+            ROUND(SUM(CASE WHEN transaction_type = 'Credit' THEN amount ELSE 0 END), 2) AS total_credit,
+            ROUND(SUM(CASE WHEN transaction_type = 'Debit' THEN amount ELSE 0 END), 2) AS total_debit
+        FROM transactions
+        WHERE MONTH(created_at) = MONTH(CURRENT_DATE())
+          AND YEAR(created_at) = YEAR(CURRENT_DATE())
+          AND account_id = input_account_id  -- Use the parameter name 'input_account_id' for comparison
+        GROUP BY DATE(created_at)
+        ORDER BY payment_date;
+    END IF;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `newAccount` (IN `new_user_id` INT, OUT `new_account_id` INT)   BEGIN
@@ -191,7 +371,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `newAccount` (IN `new_user_id` INT, 
     IF min_officer_id IS NOT NULL THEN
         -- Insert new account record for the customer and assign the selected account officer
         INSERT INTO account (user_id, account_officer_id, account_type, balance, pin)
-        VALUES (new_user_id, min_officer_id, 'SAVINGS', 1500.00, 1234);
+        VALUES (new_user_id, min_officer_id, 'SAVINGS', 1500.0, 1234);
 
         -- Retrieve the last inserted account_id
         SET new_account_id = LAST_INSERT_ID();
@@ -205,6 +385,63 @@ END$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `storeNotification` (IN `p_user_id` INT, IN `p_title` VARCHAR(255), IN `p_message` TEXT)   BEGIN
     INSERT INTO notifications (user_id, title, message)
     VALUES (p_user_id, p_title, p_message);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `validateTransactionPIN` (IN `p_user_id` INT, IN `p_entered_pin` VARCHAR(255))   BEGIN
+    DECLARE stored_pin INT;
+    DECLARE user_exists INT DEFAULT 0;
+    
+    -- Check if user exists
+    SELECT COUNT(*) INTO user_exists 
+    FROM users 
+    WHERE user_id = p_user_id;
+
+    -- If user does not exist, return 'USER_NOT_FOUND'
+    IF user_exists = 0 THEN
+        SELECT 'USER_NOT_FOUND' AS result;
+    ELSE
+        -- Retrieve the stored PIN
+        SELECT pin INTO stored_pin
+        FROM account_view
+        WHERE user_id = p_user_id;
+        
+        -- Validate PIN
+        IF stored_pin = p_entered_pin THEN
+            SELECT 'SUCCESS' AS result;
+        ELSE
+            SELECT 'INVALID_PIN' AS result;
+        END IF;
+    END IF;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `verifyOTP` (IN `p_account_id` INT, IN `p_otp` INT)   BEGIN
+    DECLARE otp_count INT;
+    DECLARE otp_expired INT;
+    
+    -- Check if the OTP exists
+    SELECT COUNT(*) INTO otp_count 
+    FROM otp
+    WHERE account_id = p_account_id 
+    AND otp = p_otp;
+    
+    IF otp_count = 0 THEN
+        SELECT 'OTP_NOT_FOUND' AS status;
+    ELSE
+        -- Check if the OTP has expired
+        SELECT COUNT(*) INTO otp_expired 
+        FROM otp
+        WHERE account_id = p_account_id 
+        AND otp = p_otp 
+        AND expires_at <= NOW();
+        
+        IF otp_expired > 0 THEN
+            SELECT 'OTP_EXPIRED' AS status;
+        ELSE
+            -- OTP is valid, delete it and return success status
+            DELETE FROM otp WHERE account_id = p_account_id;
+            SELECT 'OTP_VALID' AS status;
+        END IF;
+    END IF;
 END$$
 
 DELIMITER ;
@@ -221,7 +458,7 @@ CREATE TABLE `account` (
   `account_officer_id` int(11) DEFAULT NULL,
   `account_type` enum('Savings','Current','Fixed Deposit') NOT NULL DEFAULT 'Savings',
   `pin` int(6) NOT NULL,
-  `balance` int(11) NOT NULL DEFAULT 0,
+  `balance` float NOT NULL DEFAULT 0,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -232,8 +469,8 @@ CREATE TABLE `account` (
 
 INSERT INTO `account` (`account_id`, `user_id`, `account_officer_id`, `account_type`, `pin`, `balance`, `created_at`, `updated_at`) VALUES
 (1000000029, 31, 30, 'Savings', 1234, 1500, '2025-03-31 22:12:43', NULL),
-(1000000032, 34, 28, 'Savings', 1234, 1500, '2025-04-01 05:47:17', '2025-04-01 21:11:16'),
-(1000000033, 35, 23, 'Savings', 1234, 1500, '2025-04-01 21:48:19', '2025-04-01 23:01:59');
+(1000000032, 34, 28, 'Savings', 1234, 2390.82, '2025-04-01 05:47:17', '2025-04-05 23:12:16'),
+(1000000033, 35, 23, 'Savings', 1234, 358.18, '2025-04-01 21:48:19', '2025-04-05 22:49:13');
 
 --
 -- Triggers `account`
@@ -279,7 +516,7 @@ CREATE TABLE `account_view` (
 ,`account_officer_id` int(11)
 ,`account_type` enum('Savings','Current','Fixed Deposit')
 ,`pin` int(6)
-,`balance` int(11)
+,`balance` float
 ,`created_at` timestamp
 ,`updated_at` timestamp
 ,`first_name` varchar(255)
@@ -334,13 +571,19 @@ INSERT INTO `budget_categories` (`category_id`, `account_id`, `category_name`, `
 (15, 1000000032, 'Miscellaneous', 'I want to manage my miscelllaneous spendings', 1212, '2025-04-01 12:36:00', '2025-04-30 12:36:00', '#a55f5f', 'Active', '2025-04-01 12:38:04', NULL),
 (16, 1000000032, 'Investments', 'Monitoring my investment strategies', 323, '2025-04-11 13:13:00', '2025-04-25 13:13:00', '#9787ab', 'Active', '2025-04-01 13:13:30', NULL),
 (17, 1000000032, 'Drinks', 'I want to save 230 this month on drinks', 230, '2025-04-03 13:14:00', '2025-04-27 13:14:00', '#473e3e', 'Active', '2025-04-01 13:14:46', NULL),
-(18, 1000000033, 'Savings', 'Budget category associated with the SafeLock', 0, '2025-04-01 21:48:19', '2025-04-01 21:48:19', '#FB23231F', 'Active', '2025-04-01 21:48:19', NULL),
+(18, 1000000033, 'Savings', 'Budget category associated with the SafeLock', 1, '2025-04-01 21:48:00', '2025-04-01 21:48:00', '#000000', 'Active', '2025-04-01 21:48:19', '2025-04-05 20:10:41'),
 (19, 1000000033, 'Miscellaneous', 'This will guide me in my miscellaneous spendings', 140, '2025-04-01 00:59:00', '2025-04-23 02:00:00', '#55a595', 'Active', '2025-04-01 21:55:26', NULL),
-(20, 1000000033, 'Drinks', 'Budget on drinking', 140, '2025-04-10 21:56:00', '2025-04-17 21:56:00', '#48934a', 'Active', '2025-04-01 21:56:52', NULL);
+(20, 1000000033, 'Drinks', 'Budget on drinking', 140, '2025-04-01 21:56:00', '2025-04-17 21:56:00', '#48934a', 'Active', '2025-04-01 21:56:52', '2025-04-05 19:45:39');
 
 --
 -- Triggers `budget_categories`
 --
+DELIMITER $$
+CREATE TRIGGER `before_update_budget_categories` BEFORE UPDATE ON `budget_categories` FOR EACH ROW BEGIN
+    SET NEW.edited_at = NOW();
+END
+$$
+DELIMITER ;
 DELIMITER $$
 CREATE TRIGGER `before_update_budget_category` BEFORE UPDATE ON `budget_categories` FOR EACH ROW BEGIN
     SET NEW.edited_at = NOW();
@@ -475,7 +718,60 @@ INSERT INTO `notifications` (`notification_id`, `user_id`, `title`, `message`, `
 (35, 35, 'Support Email Sent', 'A support email has been sent to udoigweuchechukwu@gmail.com', 'Read', '2025-04-01 21:59:58', NULL),
 (36, 35, 'Account Update', 'Account updated successfully', 'Read', '2025-04-01 23:00:42', NULL),
 (37, 35, 'Password Update', 'Password update was successful', 'Unread', '2025-04-01 23:01:29', NULL),
-(38, 35, 'Pin Update', 'Transaction Pin update was successful', 'Unread', '2025-04-01 23:01:59', NULL);
+(38, 35, 'Pin Update', 'Transaction Pin update was successful', 'Unread', '2025-04-01 23:01:59', NULL),
+(39, 35, 'Login Successful', 'Welcome onboard Tolu Ayo', 'Unread', '2025-04-04 21:17:57', NULL),
+(40, 35, 'Your OTP for Fund Transfer', 'An OTP has been sent to udoigweuchechukwu@gmail.com. Please check your inbox.', 'Read', '2025-04-05 07:45:43', '2025-04-05 07:52:34'),
+(41, 35, 'Your OTP for Fund Transfer', 'An OTP has been sent to udoigweuchechukwu@gmail.com. Please check your inbox.', 'Unread', '2025-04-05 07:47:27', NULL),
+(42, 35, 'Debit Alert', 'Your account has been debited with $150', 'Read', '2025-04-05 07:49:20', '2025-04-05 07:52:27'),
+(43, 34, 'Credit Alert', 'Your account has been credited with $150', 'Unread', '2025-04-05 07:49:20', NULL),
+(44, 35, 'Debit Alert', 'Your account has been debited with $30', 'Unread', '2025-04-05 07:58:01', NULL),
+(45, 34, 'Credit Alert', 'Your account has been credited with $30', 'Unread', '2025-04-05 07:58:01', NULL),
+(46, 35, 'Debit Alert', 'Your account has been debited with $10', 'Unread', '2025-04-05 08:00:38', NULL),
+(47, 34, 'Credit Alert', 'Your account has been credited with $10', 'Unread', '2025-04-05 08:00:38', NULL),
+(48, 35, 'Debit Alert', 'Your account has been debited with $3.4', 'Unread', '2025-04-05 08:05:00', NULL),
+(49, 34, 'Credit Alert', 'Your account has been credited with $3.4', 'Unread', '2025-04-05 08:05:00', NULL),
+(50, 35, 'Debit Alert', 'Your account has been debited with $3.1', 'Unread', '2025-04-05 08:06:32', NULL),
+(51, 34, 'Credit Alert', 'Your account has been credited with $3.1', 'Unread', '2025-04-05 08:06:32', NULL),
+(52, 35, 'Your OTP for Fund Transfer', 'An OTP has been sent to udoigweuchechukwu@gmail.com. Please check your inbox.', 'Unread', '2025-04-05 09:37:48', NULL),
+(53, 35, 'Debit Alert', 'Your account has been debited with $100', 'Unread', '2025-04-05 09:38:29', NULL),
+(54, 35, 'Credit Alert', 'Your account has been credited with $100', 'Unread', '2025-04-05 09:38:29', NULL),
+(55, 35, 'Debit Alert', 'Your account has been debited with $150.76', 'Unread', '2025-04-05 12:45:47', NULL),
+(56, 34, 'Credit Alert', 'Your account has been credited with $150.76', 'Unread', '2025-04-05 12:45:47', NULL),
+(57, 35, 'Debit Alert', 'Your account has been debited with $141.50', 'Unread', '2025-04-05 19:06:08', NULL),
+(58, 34, 'Credit Alert', 'Your account has been credited with $141.50', 'Unread', '2025-04-05 19:06:08', NULL),
+(59, 35, 'Debit Alert', 'Your account has been debited with $150', 'Unread', '2025-04-05 19:07:42', NULL),
+(60, 34, 'Credit Alert', 'Your account has been credited with $150', 'Unread', '2025-04-05 19:07:42', NULL),
+(61, 35, 'Debit Alert', 'Your account has been debited with $142.56', 'Unread', '2025-04-05 19:13:01', NULL),
+(62, 34, 'Credit Alert', 'Your account has been credited with $142.56', 'Unread', '2025-04-05 19:13:01', NULL),
+(63, 35, 'Your OTP for Fund Transfer', 'An OTP has been sent to udoigweuchechukwu@gmail.com. Please check your inbox.', 'Unread', '2025-04-05 19:48:35', NULL),
+(64, 35, 'Debit Alert', 'Your account has been debited with $141.76', 'Unread', '2025-04-05 19:49:16', NULL),
+(65, 34, 'Credit Alert', 'Your account has been credited with $141.76', 'Unread', '2025-04-05 19:49:16', NULL),
+(66, 35, 'Debit Alert', 'Your account has been debited with $150', 'Unread', '2025-04-05 19:51:47', NULL),
+(67, 35, 'Credit Alert', 'Your account has been credited with $150', 'Unread', '2025-04-05 19:51:47', NULL),
+(68, 35, 'Debit Alert', 'Your account has been debited with $130', 'Unread', '2025-04-05 19:53:14', NULL),
+(69, 35, 'Credit Alert', 'Your account has been credited with $130', 'Unread', '2025-04-05 19:53:14', NULL),
+(70, 35, 'Budget Category Updated', 'Budget Category updated successfully', 'Unread', '2025-04-05 20:10:14', NULL),
+(71, 35, 'Budget Category Updated', 'Budget Category updated successfully', 'Unread', '2025-04-05 20:10:41', NULL),
+(72, 35, 'Debit Alert', 'Your account has been debited with $115', 'Unread', '2025-04-05 22:35:47', NULL),
+(73, 35, 'Credit Alert', 'Your account has been credited with $115', 'Unread', '2025-04-05 22:35:47', NULL),
+(74, 35, 'Debit Alert', 'Your account has been debited with $112', 'Unread', '2025-04-05 22:35:57', NULL),
+(75, 35, 'Credit Alert', 'Your account has been credited with $112', 'Unread', '2025-04-05 22:35:57', NULL),
+(76, 35, 'Debit Alert', 'Your account has been debited with $12', 'Unread', '2025-04-05 22:40:04', NULL),
+(77, 35, 'Credit Alert', 'Your account has been credited with $12', 'Unread', '2025-04-05 22:40:04', NULL),
+(78, 35, 'Debit Alert', 'Your account has been debited with $13', 'Unread', '2025-04-05 22:43:58', NULL),
+(79, 35, 'Credit Alert', 'Your account has been credited with $13', 'Unread', '2025-04-05 22:43:58', NULL),
+(80, 35, 'Debit Alert', 'Your account has been debited with $34', 'Unread', '2025-04-05 22:49:19', NULL),
+(81, 34, 'Credit Alert', 'Your account has been credited with $34', 'Unread', '2025-04-05 22:49:19', NULL),
+(82, 35, 'Your OTP for Fund Transfer', 'An OTP has been sent to udoigweuchechukwu@gmail.com. Please check your inbox.', 'Unread', '2025-04-05 22:51:26', NULL),
+(83, 35, 'Debit Alert', 'Your account has been debited with $13', 'Unread', '2025-04-05 22:51:56', NULL),
+(84, 34, 'Credit Alert', 'Your account has been credited with $13', 'Unread', '2025-04-05 22:51:56', NULL),
+(85, 35, 'Debit Alert', 'Your account has been debited with $34', 'Unread', '2025-04-05 23:06:29', NULL),
+(86, 34, 'Credit Alert', 'Your account has been credited with $34', 'Unread', '2025-04-05 23:06:29', NULL),
+(87, 35, 'Your OTP for Fund Transfer', 'An OTP has been sent to udoigweuchechukwu@gmail.com. Please check your inbox.', 'Unread', '2025-04-05 23:07:34', NULL),
+(88, 35, 'Your OTP for Fund Transfer', 'An OTP has been sent to udoigweuchechukwu@gmail.com. Please check your inbox.', 'Unread', '2025-04-05 23:10:19', NULL),
+(89, 35, 'Your OTP for Fund Transfer', 'An OTP has been sent to udoigweuchechukwu@gmail.com. Please check your inbox.', 'Unread', '2025-04-05 23:11:56', NULL),
+(90, 35, 'Debit Alert', 'Your account has been debited with $234', 'Read', '2025-04-05 23:12:22', '2025-04-06 07:49:39'),
+(91, 34, 'Credit Alert', 'Your account has been credited with $234', 'Unread', '2025-04-05 23:12:22', NULL);
 
 --
 -- Triggers `notifications`
@@ -518,7 +814,8 @@ CREATE TABLE `otp` (
   `otp_id` int(11) NOT NULL,
   `account_id` int(11) DEFAULT NULL,
   `otp` int(6) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `expires_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -562,7 +859,7 @@ CREATE TABLE `safe_lock` (
 INSERT INTO `safe_lock` (`safe_lock_id`, `account_id`, `balance`, `lock_start_time`, `lock_end_time`, `created_at`, `updated_at`) VALUES
 (3, 1000000029, 0, '2025-03-31 22:12:43', '2025-03-31 22:42:43', '2025-03-31 22:12:43', NULL),
 (6, 1000000032, 0, '2025-04-01 05:47:17', '2025-04-01 06:17:17', '2025-04-01 05:47:17', NULL),
-(7, 1000000033, 0, '2025-04-01 21:48:19', '2025-04-01 22:18:19', '2025-04-01 21:48:19', NULL);
+(7, 1000000033, 336.95, '2025-04-01 21:48:00', '2025-04-29 21:48:00', '2025-04-01 21:48:19', '2025-04-05 23:12:16');
 
 --
 -- Triggers `safe_lock`
@@ -606,15 +903,52 @@ CREATE TABLE `safe_lock_view` (
 CREATE TABLE `transactions` (
   `transaction_id` int(11) NOT NULL,
   `account_id` int(11) DEFAULT NULL,
+  `sender_account_id` int(11) DEFAULT NULL,
   `budget_category_id` int(11) DEFAULT NULL,
   `transaction_type` enum('Credit','Debit') NOT NULL,
   `amount` float NOT NULL DEFAULT 0,
   `transaction_fee` float NOT NULL DEFAULT 0,
-  `transaction_budget_status` enum('Exceeds Budget','Within Budget') NOT NULL DEFAULT 'Within Budget',
+  `balance_after_transaction` float NOT NULL,
+  `transaction_budget_status` enum('Exceeds Budget','Within Budget') DEFAULT NULL,
   `transaction_description` text NOT NULL,
   `transaction_source` enum('Main Account','Safe Lock') NOT NULL DEFAULT 'Main Account',
+  `transaction_destination` enum('Main Account','Safe Lock') NOT NULL DEFAULT 'Main Account',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `transactions`
+--
+
+INSERT INTO `transactions` (`transaction_id`, `account_id`, `sender_account_id`, `budget_category_id`, `transaction_type`, `amount`, `transaction_fee`, `balance_after_transaction`, `transaction_budget_status`, `transaction_description`, `transaction_source`, `transaction_destination`, `created_at`) VALUES
+(20, 1000000033, NULL, 20, 'Debit', 141.5, 0, 1358.5, 'Within Budget', 'Funds Transfer', 'Main Account', 'Main Account', '2025-04-05 19:06:02'),
+(21, 1000000032, 1000000033, NULL, 'Credit', 141.5, 0, 1641.5, NULL, 'Funds Received', 'Main Account', 'Main Account', '2025-04-05 19:06:02'),
+(22, 1000000033, NULL, 20, 'Debit', 150, 0, 1208.5, 'Within Budget', 'Funds Transfer', 'Main Account', 'Main Account', '2025-04-05 19:07:36'),
+(23, 1000000032, 1000000033, NULL, 'Credit', 150, 0, 1791.5, NULL, 'Funds Received', 'Main Account', 'Main Account', '2025-04-05 19:07:36'),
+(24, 1000000033, NULL, 20, 'Debit', 142.56, 0, 1065.94, 'Within Budget', 'Funds Transfer', 'Main Account', 'Main Account', '2025-04-05 19:12:55'),
+(25, 1000000032, 1000000033, NULL, 'Credit', 142.56, 0, 1934.06, NULL, 'Funds Received', 'Main Account', 'Main Account', '2025-04-05 19:12:55'),
+(26, 1000000033, NULL, 20, 'Debit', 141.76, 0, 924.18, 'Exceeds Budget', 'Funds Transfer', 'Main Account', 'Main Account', '2025-04-05 19:49:10'),
+(27, 1000000032, 1000000033, NULL, 'Credit', 141.76, 0, 2075.82, NULL, 'Funds Received', 'Main Account', 'Main Account', '2025-04-05 19:49:10'),
+(28, 1000000033, NULL, 18, 'Debit', 150, 0, 774.18, 'Within Budget', 'Funds Transfer', 'Main Account', 'Safe Lock', '2025-04-05 19:51:41'),
+(29, 1000000033, 1000000033, NULL, 'Credit', 150, 0, 250, NULL, 'Funds Received', 'Main Account', 'Safe Lock', '2025-04-05 19:51:41'),
+(30, 1000000033, NULL, 18, 'Debit', 130, 0, 644.18, 'Within Budget', 'Funds Transfer', 'Main Account', 'Safe Lock', '2025-04-05 19:53:08'),
+(31, 1000000033, 1000000033, NULL, 'Credit', 130, 0, 380, NULL, 'Funds Received', 'Main Account', 'Safe Lock', '2025-04-05 19:53:08'),
+(32, 1000000033, NULL, 18, 'Debit', 115, 0, 529.18, 'Within Budget', 'Funds Transfer', 'Main Account', 'Safe Lock', '2025-04-05 22:34:41'),
+(33, 1000000033, NULL, NULL, 'Credit', 115, 0, 495, NULL, 'Funds Received', 'Main Account', 'Safe Lock', '2025-04-05 22:34:41'),
+(34, 1000000033, NULL, 18, 'Debit', 112, 0, 417.18, 'Within Budget', 'Funds Transfer', 'Main Account', 'Safe Lock', '2025-04-05 22:35:47'),
+(35, 1000000033, NULL, NULL, 'Credit', 112, 0, 607, NULL, 'Funds Received', 'Main Account', 'Safe Lock', '2025-04-05 22:35:47'),
+(36, 1000000033, NULL, 18, 'Debit', 12, 0, 405.18, 'Within Budget', 'Funds Transfer', 'Main Account', 'Safe Lock', '2025-04-05 22:39:58'),
+(37, 1000000033, 1000000033, NULL, 'Credit', 12, 0, 619, NULL, 'Funds Received', 'Main Account', 'Safe Lock', '2025-04-05 22:39:58'),
+(38, 1000000033, NULL, 18, 'Debit', 13, 0, 392.18, 'Within Budget', 'Funds Transfer', 'Main Account', 'Safe Lock', '2025-04-05 22:43:49'),
+(39, 1000000033, 1000000033, NULL, 'Credit', 13, 0, 632, NULL, 'Funds Received', 'Main Account', 'Safe Lock', '2025-04-05 22:43:49'),
+(40, 1000000033, NULL, 19, 'Debit', 34, 0, 358.18, 'Within Budget', 'Funds Transfer', 'Main Account', 'Main Account', '2025-04-05 22:49:13'),
+(41, 1000000032, 1000000033, NULL, 'Credit', 34, 0, 2109.82, NULL, 'Funds Received', 'Main Account', 'Main Account', '2025-04-05 22:49:13'),
+(42, 1000000033, NULL, 20, 'Debit', 13, 0.65, 358.18, 'Exceeds Budget', 'Funds Transfer', 'Safe Lock', 'Main Account', '2025-04-05 22:51:48'),
+(43, 1000000032, 1000000033, NULL, 'Credit', 13, 0, 2122.82, NULL, 'Funds Received', 'Safe Lock', 'Safe Lock', '2025-04-05 22:51:48'),
+(44, 1000000033, NULL, 19, 'Debit', 34, 1.7, 582.65, 'Within Budget', 'Funds Transfer', 'Safe Lock', 'Main Account', '2025-04-05 23:06:29'),
+(45, 1000000032, 1000000033, NULL, 'Credit', 34, 0, 2156.82, NULL, 'Funds Received', 'Safe Lock', 'Safe Lock', '2025-04-05 23:06:29'),
+(46, 1000000033, NULL, 19, 'Debit', 234, 11.7, 336.95, 'Exceeds Budget', 'Funds Transfer', 'Safe Lock', 'Main Account', '2025-04-05 23:12:16'),
+(47, 1000000032, 1000000033, NULL, 'Credit', 234, 0, 2390.82, NULL, 'Funds Received', 'Safe Lock', 'Safe Lock', '2025-04-05 23:12:16');
 
 -- --------------------------------------------------------
 
@@ -625,13 +959,16 @@ CREATE TABLE `transactions` (
 CREATE TABLE `transactions_view` (
 `transaction_id` int(11)
 ,`account_id` int(11)
+,`sender_account_id` int(11)
 ,`budget_category_id` int(11)
 ,`transaction_type` enum('Credit','Debit')
 ,`amount` float
 ,`transaction_fee` float
+,`balance_after_transaction` float
 ,`transaction_budget_status` enum('Exceeds Budget','Within Budget')
 ,`transaction_description` text
 ,`transaction_source` enum('Main Account','Safe Lock')
+,`transaction_destination` enum('Main Account','Safe Lock')
 ,`created_at` timestamp
 ,`user_id` int(11)
 ,`first_name` varchar(255)
@@ -640,6 +977,10 @@ CREATE TABLE `transactions_view` (
 ,`phone` varchar(255)
 ,`account_type` enum('Savings','Current','Fixed Deposit')
 ,`category_name` varchar(255)
+,`color_code` varchar(255)
+,`sender_first_name` varchar(255)
+,`sender_last_name` varchar(255)
+,`sender_phone` varchar(255)
 );
 
 -- --------------------------------------------------------
@@ -683,7 +1024,7 @@ INSERT INTO `users` (`user_id`, `first_name`, `last_name`, `gender`, `dob`, `add
 (30, 'Yaz', 'Sullivan', 'Female', '2001-02-03', 'Winsconsin', '+1-2910-1029', 'yaz@gmail.com', 'Drivers License', '1213233', 'Account Officer', 'finhive', NULL, '2025-03-31 17:34:34', NULL, 'Active', '2025-03-30 22:08:43', '2025-03-31 17:34:34'),
 (31, 'Uchechukwu', 'Udo', 'Male', '2001-03-30', 'Winsconsin', '08065198300', 'udoigweuchechukwu1@gmail.com', 'Drivers License', '112232323', 'Customer', 'finhive2025', '8f7d807e1f53eff5f9efbe5cb81090fb', '2025-04-01 05:35:50', '2025-04-01 03:53:54', 'Active', '2025-03-31 22:12:43', '2025-04-01 05:35:50'),
 (34, 'Ikem', 'Abia', 'Male', '1998-07-10', 'New York', '0909817281', 'udoigweuchechukwu2@gmail.com', 'Drivers License', '332242', 'Customer', 'finhive2025', '1fc214004c9481e4c8073e85323bfd4b', '2025-04-01 21:38:45', '2025-04-01 21:32:53', 'Active', '2025-04-01 05:47:17', '2025-04-01 21:38:45'),
-(35, 'Tolu', 'Ayo', 'Male', '2001-07-05', 'Baltimore, Maryland', '0908789185', 'udoigweuchechukwu@gmail.com', 'Drivers License', '76837364', 'Customer', 'finhive2025', '34ed066df378efacc9b924ec161e7639', '2025-04-01 23:01:29', '2025-04-01 21:50:18', 'Active', '2025-04-01 21:48:19', '2025-04-01 23:01:29');
+(35, 'Tolu', 'Ayo', 'Male', '2001-07-05', 'Baltimore, Maryland', '0908789185', 'udoigweuchechukwu@gmail.com', 'Drivers License', '76837364', 'Customer', 'finhive2025', '34ed066df378efacc9b924ec161e7639', '2025-04-04 21:17:57', '2025-04-04 21:17:57', 'Active', '2025-04-01 21:48:19', '2025-04-04 21:17:57');
 
 --
 -- Triggers `users`
@@ -792,7 +1133,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `transactions_view`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `transactions_view`  AS SELECT `a`.`transaction_id` AS `transaction_id`, `a`.`account_id` AS `account_id`, `a`.`budget_category_id` AS `budget_category_id`, `a`.`transaction_type` AS `transaction_type`, `a`.`amount` AS `amount`, `a`.`transaction_fee` AS `transaction_fee`, `a`.`transaction_budget_status` AS `transaction_budget_status`, `a`.`transaction_description` AS `transaction_description`, `a`.`transaction_source` AS `transaction_source`, `a`.`created_at` AS `created_at`, `b`.`user_id` AS `user_id`, `b`.`first_name` AS `first_name`, `b`.`last_name` AS `last_name`, `b`.`email` AS `email`, `b`.`phone` AS `phone`, `b`.`account_type` AS `account_type`, `c`.`category_name` AS `category_name` FROM ((`transactions` `a` left join `account_view` `b` on(`a`.`account_id` = `b`.`account_id`)) left join `budget_categories` `c` on(`a`.`budget_category_id` = `c`.`category_id`)) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `transactions_view`  AS SELECT `a`.`transaction_id` AS `transaction_id`, `a`.`account_id` AS `account_id`, `a`.`sender_account_id` AS `sender_account_id`, `a`.`budget_category_id` AS `budget_category_id`, `a`.`transaction_type` AS `transaction_type`, `a`.`amount` AS `amount`, `a`.`transaction_fee` AS `transaction_fee`, `a`.`balance_after_transaction` AS `balance_after_transaction`, `a`.`transaction_budget_status` AS `transaction_budget_status`, `a`.`transaction_description` AS `transaction_description`, `a`.`transaction_source` AS `transaction_source`, `a`.`transaction_destination` AS `transaction_destination`, `a`.`created_at` AS `created_at`, `b`.`user_id` AS `user_id`, `b`.`first_name` AS `first_name`, `b`.`last_name` AS `last_name`, `b`.`email` AS `email`, `b`.`phone` AS `phone`, `b`.`account_type` AS `account_type`, `c`.`category_name` AS `category_name`, `c`.`color_code` AS `color_code`, `d`.`first_name` AS `sender_first_name`, `d`.`last_name` AS `sender_last_name`, `d`.`phone` AS `sender_phone` FROM (((`transactions` `a` left join `account_view` `b` on(`a`.`account_id` = `b`.`account_id`)) left join `budget_categories` `c` on(`a`.`budget_category_id` = `c`.`category_id`)) left join `account_view` `d` on(`a`.`sender_account_id` = `d`.`account_id`)) ;
 
 --
 -- Indexes for dumped tables
@@ -881,13 +1222,13 @@ ALTER TABLE `cards`
 -- AUTO_INCREMENT for table `notifications`
 --
 ALTER TABLE `notifications`
-  MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=92;
 
 --
 -- AUTO_INCREMENT for table `otp`
 --
 ALTER TABLE `otp`
-  MODIFY `otp_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `otp_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `safe_lock`
@@ -899,7 +1240,7 @@ ALTER TABLE `safe_lock`
 -- AUTO_INCREMENT for table `transactions`
 --
 ALTER TABLE `transactions`
-  MODIFY `transaction_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `transaction_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -940,7 +1281,7 @@ ALTER TABLE `notifications`
 -- Constraints for table `otp`
 --
 ALTER TABLE `otp`
-  ADD CONSTRAINT `otp_ibfk_1` FOREIGN KEY (`account_id`) REFERENCES `users` (`user_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+  ADD CONSTRAINT `otp_ibfk_1` FOREIGN KEY (`account_id`) REFERENCES `account` (`account_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `safe_lock`
