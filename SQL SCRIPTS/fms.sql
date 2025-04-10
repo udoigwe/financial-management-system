@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 09, 2025 at 02:10 AM
+-- Generation Time: Apr 11, 2025 at 01:16 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -771,7 +771,31 @@ INSERT INTO `notifications` (`notification_id`, `user_id`, `title`, `message`, `
 (88, 35, 'Your OTP for Fund Transfer', 'An OTP has been sent to udoigweuchechukwu@gmail.com. Please check your inbox.', 'Unread', '2025-04-05 23:10:19', NULL),
 (89, 35, 'Your OTP for Fund Transfer', 'An OTP has been sent to udoigweuchechukwu@gmail.com. Please check your inbox.', 'Unread', '2025-04-05 23:11:56', NULL),
 (90, 35, 'Debit Alert', 'Your account has been debited with $234', 'Read', '2025-04-05 23:12:22', '2025-04-06 07:49:39'),
-(91, 34, 'Credit Alert', 'Your account has been credited with $234', 'Unread', '2025-04-05 23:12:22', NULL);
+(91, 34, 'Credit Alert', 'Your account has been credited with $234', 'Unread', '2025-04-05 23:12:22', NULL),
+(92, 22, 'Login Successful', 'Welcome onboard Mike Mayers', 'Unread', '2025-04-10 17:19:04', NULL),
+(93, 38, 'Account Creation Notification', 'An account creation notification email has been sent to udoigweuchechukwu@gmail.com', 'Unread', '2025-04-10 19:25:52', NULL),
+(94, 22, 'Account Creation Notification', 'An account creation notification email has been sent to udoigweuchechukwu@gmail.com', 'Unread', '2025-04-10 19:25:52', NULL),
+(95, 39, 'Account Creation Notification', 'An account creation notification email has been sent to udoigweuchechukwu@gmail.com', 'Unread', '2025-04-10 19:58:01', NULL),
+(96, 22, 'Account Creation Notification', 'An account creation notification email has been sent to udoigweuchechukwu@gmail.com', 'Unread', '2025-04-10 19:58:01', NULL),
+(97, 40, 'Account Creation Notification', 'An account creation notification email has been sent to udoigweuchechukwu@gmail.com', 'Unread', '2025-04-10 20:06:08', NULL),
+(98, 22, 'Account Creation Notification', 'An account creation notification email has been sent to udoigweuchechukwu@gmail.com', 'Unread', '2025-04-10 20:06:08', NULL),
+(99, 42, 'Account Creation Notification', 'An account creation notification email has been sent to udoigweuchechukwu@gmail.com', 'Unread', '2025-04-10 20:16:57', NULL),
+(100, 22, 'Account Creation Notification', 'An account creation notification email has been sent to udoigweuchechukwu@gmail.com', 'Unread', '2025-04-10 20:16:57', NULL),
+(101, 38, 'Account Update', 'Your account was updated successfully', 'Unread', '2025-04-10 20:49:09', NULL),
+(102, 22, 'Account Update', 'User updated successfully', 'Unread', '2025-04-10 20:49:09', NULL),
+(103, 39, 'Account Update', 'Your account was updated successfully', 'Unread', '2025-04-10 20:49:39', NULL),
+(104, 22, 'Account Update', 'User updated successfully', 'Unread', '2025-04-10 20:49:39', NULL),
+(105, 40, 'Account Update', 'Your account was updated successfully', 'Unread', '2025-04-10 20:49:53', NULL),
+(106, 22, 'Account Update', 'User updated successfully', 'Unread', '2025-04-10 20:49:53', NULL),
+(107, 42, 'Account Update', 'Your account was updated successfully', 'Unread', '2025-04-10 20:53:41', NULL),
+(108, 22, 'Account Update', 'User updated successfully', 'Unread', '2025-04-10 20:53:41', NULL),
+(109, 22, 'Login Successful', 'Welcome onboard Mike Mayers', 'Unread', '2025-04-10 20:54:08', NULL),
+(110, 35, 'Login Successful', 'Welcome onboard Tolu Ayo', 'Unread', '2025-04-10 22:03:48', NULL),
+(111, 22, 'Login Successful', 'Welcome onboard Mike Mayers', 'Unread', '2025-04-10 22:10:16', NULL),
+(112, 22, 'Login Successful', 'Welcome onboard Mike Mayers', 'Read', '2025-04-10 22:10:50', '2025-04-10 22:10:53'),
+(113, 40, 'Login Successful', 'Welcome onboard Melvine Heinz', 'Unread', '2025-04-10 22:34:24', NULL),
+(114, 30, 'Login Successful', 'Welcome onboard Yaz Sullivan', 'Unread', '2025-04-10 22:51:39', NULL),
+(115, 40, 'Login Successful', 'Welcome onboard Melvine Heinz', 'Unread', '2025-04-10 22:56:01', NULL);
 
 --
 -- Triggers `notifications`
@@ -1015,16 +1039,20 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `first_name`, `last_name`, `gender`, `dob`, `address`, `phone`, `email`, `identification`, `identification_number`, `role`, `password`, `hash`, `hash_time`, `last_seen`, `account_status`, `created_at`, `updated_at`) VALUES
-(22, 'Mike', 'Mayers', 'Male', '1972-03-22', 'Texas ', '09089098789', 'admin@finhive.com', 'Drivers License', '1234554232', 'Admin', 'finhive', 'd707329bece455a462b58ce00d1194c9', '2025-03-30 00:38:08', NULL, 'Active', '2025-03-17 23:22:15', '2025-03-30 00:38:08'),
+(22, 'Mike', 'Mayers', 'Male', '1972-03-22', 'Texas ', '09089098789', 'admin@finhive.com', 'Drivers License', '1234554232', 'Admin', 'finhive', 'd707329bece455a462b58ce00d1194c9', '2025-04-10 22:10:50', '2025-04-10 22:10:50', 'Active', '2025-03-17 23:22:15', '2025-04-10 22:10:50'),
 (23, 'John', 'Woo', 'Male', '1969-03-02', 'Texas', '09089098788', 'john@gmail.com', 'Drivers License', '12321232', 'Account Officer', 'finhive', '647bba344396e7c8170902bcf2e15551', '2025-03-30 00:40:00', NULL, 'Active', '2025-03-19 00:15:14', '2025-03-30 00:40:00'),
 (24, 'Wilson', 'Gihon', 'Male', '1981-09-10', 'State House, Winsconsin', '+1-2910-10291', 'gihon@finhive.com', 'Drivers License', '1110192019', 'Account Officer', 'finhive', NULL, '2025-03-30 00:41:44', NULL, 'Active', '2025-03-30 00:41:44', NULL),
 (26, 'James', 'Earl', 'Male', '2001-03-30', 'Washington DC', '+1-902-01992', 'james-earl@gmail.com', 'SSN', '238923-298923', 'Account Officer', 'finhive', NULL, '2025-03-31 17:34:20', NULL, 'Active', '2025-03-30 01:34:07', '2025-03-31 17:34:20'),
 (27, 'China', 'Aduino', 'Female', '2001-03-30', 'Texas Houston', '090817291', 'china@finhive.com', 'Drivers License', '12112121', 'Account Officer', 'finhive', NULL, '2025-03-31 17:34:25', NULL, 'Active', '2025-03-30 01:35:59', '2025-03-31 17:34:25'),
 (28, 'Jazmine', 'Sullivan', 'Female', '2001-03-30', 'Texas Houston', '+1-291-29182', 'jazmine@finhive.com', 'Drivers License', '128981729', 'Account Officer', 'finhive', NULL, '2025-03-31 17:34:30', NULL, 'Active', '2025-03-30 01:38:01', '2025-03-31 17:34:30'),
-(30, 'Yaz', 'Sullivan', 'Female', '2001-02-03', 'Winsconsin', '+1-2910-1029', 'yaz@gmail.com', 'Drivers License', '1213233', 'Account Officer', 'finhive', NULL, '2025-03-31 17:34:34', NULL, 'Active', '2025-03-30 22:08:43', '2025-03-31 17:34:34'),
+(30, 'Yaz', 'Sullivan', 'Female', '2001-02-03', 'Winsconsin', '+1-2910-1029', 'yaz@gmail.com', 'Drivers License', '1213233', 'Account Officer', 'finhive', NULL, '2025-04-10 22:51:39', '2025-04-10 22:51:39', 'Active', '2025-03-30 22:08:43', '2025-04-10 22:51:39'),
 (31, 'Uchechukwu', 'Udo', 'Male', '2001-03-30', 'Winsconsin', '08065198300', 'udoigweuchechukwu1@gmail.com', 'Drivers License', '112232323', 'Customer', 'finhive2025', '8f7d807e1f53eff5f9efbe5cb81090fb', '2025-04-01 05:35:50', '2025-04-01 03:53:54', 'Active', '2025-03-31 22:12:43', '2025-04-01 05:35:50'),
 (34, 'Ikem', 'Abia', 'Male', '1998-07-10', 'New York', '0909817281', 'udoigweuchechukwu2@gmail.com', 'Drivers License', '332242', 'Customer', 'finhive2025', '1fc214004c9481e4c8073e85323bfd4b', '2025-04-01 21:38:45', '2025-04-01 21:32:53', 'Active', '2025-04-01 05:47:17', '2025-04-01 21:38:45'),
-(35, 'Tolu', 'Ayo', 'Male', '2001-07-05', 'Baltimore, Maryland', '0908789185', 'udoigweuchechukwu@gmail.com', 'Drivers License', '76837364', 'Customer', 'finhive2025', '34ed066df378efacc9b924ec161e7639', '2025-04-04 21:17:57', '2025-04-04 21:17:57', 'Active', '2025-04-01 21:48:19', '2025-04-04 21:17:57');
+(35, 'Tolu', 'Ayo', 'Male', '2001-07-05', 'Baltimore, Maryland', '0908789185', 'udoigweuchechukwu3@gmail.com', 'Drivers License', '76837364', 'Customer', 'finhive2025', '34ed066df378efacc9b924ec161e7639', '2025-04-10 22:03:48', '2025-04-10 22:03:48', 'Active', '2025-04-01 21:48:19', '2025-04-10 22:03:48'),
+(38, 'James', 'Mark', 'Male', '1999-02-10', 'Main Street, New York', '+1 2348 1291 01', 'udoigweuchechukwu4@gmail.com', 'Drivers License', '12345531', 'Account Officer', 'finhive', NULL, '2025-04-10 20:49:09', NULL, 'Active', '2025-04-10 19:25:49', '2025-04-10 20:49:09'),
+(39, 'Jazmine', 'Yaz', 'Female', '2000-02-10', 'Main Street Kansas City', '+1 2345 1121', 'yazmine@gmail.com', 'Drivers License', '1234554422', 'Account Officer', 'finhive', NULL, '2025-04-10 20:49:39', NULL, 'Active', '2025-04-10 19:57:50', '2025-04-10 20:49:39'),
+(40, 'Melvine', 'Heinz', 'Female', '1999-09-10', 'Main Street Califonia', '+1291 19281 821', 'heinz@gmail.com', 'SSN', '123212321', 'Account Officer', 'finhive', NULL, '2025-04-10 22:56:01', '2025-04-10 22:56:01', 'Active', '2025-04-10 20:05:18', '2025-04-10 22:56:01'),
+(42, 'Tom', 'Halland', 'Male', '2003-03-10', 'Main Street North Jakorta', '+1 909 8019 192', 'udoigweuchechukwu@gmail.com', 'Drivers License', '12343212', 'Admin', 'finhive', NULL, '2025-04-10 20:53:41', NULL, 'Inactive', '2025-04-10 20:16:54', '2025-04-10 20:53:41');
 
 --
 -- Triggers `users`
@@ -1222,7 +1250,7 @@ ALTER TABLE `cards`
 -- AUTO_INCREMENT for table `notifications`
 --
 ALTER TABLE `notifications`
-  MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=92;
+  MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=116;
 
 --
 -- AUTO_INCREMENT for table `otp`
@@ -1246,7 +1274,7 @@ ALTER TABLE `transactions`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
 -- Constraints for dumped tables
