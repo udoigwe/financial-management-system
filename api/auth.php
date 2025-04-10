@@ -541,6 +541,7 @@ try {
                     'user_id'               =>              $user['user_id'],
                     'first_name'            =>              $user['first_name'],
                     'last_name'             =>              $user['last_name'],
+                    'gender'                =>              $user['gender'],
                     'dob'                   =>              $user['dob'],
                     'address'               =>              $user['address'],
                     'phone'                 =>              $user['phone'],

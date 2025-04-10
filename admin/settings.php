@@ -3,7 +3,7 @@
 
 <head>
     <?php include('../includes/head2.php'); ?>
-    <title>FinHive | Customer | Profile & Settings</title>
+    <title>FinHive | Admin | Profile & Settings</title>
 </head>
 
 <body onload="isAuthenticated(); displayProfile(); loadUnreadMessages(); generateAccountStatement(); print1();">
@@ -48,7 +48,7 @@
         <!--**********************************
             Sidebar start
         ***********************************-->
-        <?php include('../includes/customer-sidebar.php'); ?>
+        <?php include('../includes/admin-sidebar.php'); ?>
         <!--**********************************
             Sidebar end
         ***********************************-->
@@ -77,11 +77,11 @@
                                     </div>
                                     <div class="profile-details">
                                         <div class="profile-name px-3 pt-2">
-                                            <h4 class="text-primary mb-0 logged-user-name">Mitchell C. Shay</h4>
-                                            <p class="logged-user-role">UX / UI Designer</p>
+                                            <h4 class="text-primary mb-0 logged-user-name"></h4>
+                                            <p class="logged-user-role"></p>
                                         </div>
                                         <div class="profile-email px-2 pt-2">
-                                            <h4 class="text-muted mb-0 logged-user-email">info@example.com</h4>
+                                            <h4 class="text-muted mb-0 logged-user-email"></h4>
                                             <p>Email</p>
                                         </div>
                                     </div>
@@ -103,33 +103,9 @@
                                             </li>
                                             <li class="nav-item" role="presentation"><a href="#password-settings" data-bs-toggle="tab" class="nav-link" aria-selected="false" tabindex="-1" role="tab">Password Settings</a>
                                             </li>
-                                            <li class="nav-item" role="presentation"><a href="#pin-settings" data-bs-toggle="tab" class="nav-link" aria-selected="false" tabindex="-1" role="tab">Transaction PIN Settings</a>
-                                            </li>
                                         </ul>
                                         <div class="tab-content">
                                             <div id="about-me" class="tab-pane fade active show" role="tabpanel">
-                                                <!-- <div class="profile-about-me">
-                                                    <div class="pt-4 border-bottom-1 pb-3">
-                                                        <h4 class="text-primary">About Me</h4>
-                                                        <p class="mb-2">A wonderful serenity has taken possession of my entire soul, like these sweet mornings of spring which I enjoy with my whole heart. I am alone, and feel the charm of existence was created for the bliss of souls like mine.I am so happy, my dear friend, so absorbed in the exquisite sense of mere tranquil existence, that I neglect my talents.</p>
-                                                        <p>A collection of textile samples lay spread out on the table - Samsa was a travelling salesman - and above it there hung a picture that he had recently cut out of an illustrated magazine and housed in a nice, gilded frame.</p>
-                                                    </div>
-                                                </div>
-                                                <div class="profile-skills mb-5">
-                                                    <h4 class="text-primary mb-2">Skills</h4>
-                                                    <a href="javascript:void(0);" class="btn btn-primary light btn-xs mb-1">Admin</a>
-                                                    <a href="javascript:void(0);" class="btn btn-primary light btn-xs mb-1">Dashboard</a>
-                                                    <a href="javascript:void(0);" class="btn btn-primary light btn-xs mb-1">Photoshop</a>
-                                                    <a href="javascript:void(0);" class="btn btn-primary light btn-xs mb-1">Bootstrap</a>
-                                                    <a href="javascript:void(0);" class="btn btn-primary light btn-xs mb-1">Responsive</a>
-                                                    <a href="javascript:void(0);" class="btn btn-primary light btn-xs mb-1">Crypto</a>
-                                                </div>
-                                                <div class="profile-lang  mb-5">
-                                                    <h4 class="text-primary mb-2">Language</h4>
-                                                    <a href="javascript:void(0);" class="text-muted pe-3 f-s-16"><i class="flag-icon flag-icon-us"></i> English</a>
-                                                    <a href="javascript:void(0);" class="text-muted pe-3 f-s-16"><i class="flag-icon flag-icon-fr"></i> French</a>
-                                                    <a href="javascript:void(0);" class="text-muted pe-3 f-s-16"><i class="flag-icon flag-icon-bd"></i> Bangla</a>
-                                                </div> -->
                                                 <div class="profile-personal-info mt-5">
                                                     <h4 class="text-primary mb-4">Personal Information</h4>
                                                     <div class="row mb-2">
@@ -176,47 +152,6 @@
                                                             <h5 class="f-w-500">Address <span class="pull-right">:</span></h5>
                                                         </div>
                                                         <div class="col-sm-9 col-7 logged-user-address"><span></span>
-                                                        </div>
-                                                    </div>
-                                                    <h4 class="text-primary mb-4">Bank Account Information</h4>
-                                                    <div class="row mb-2">
-                                                        <div class="col-sm-3 col-5">
-                                                            <h5 class="f-w-500">Account Number <span class="pull-right">:</span>
-                                                            </h5>
-                                                        </div>
-                                                        <div class="col-sm-9 col-7 logged-user-account-number"><span></span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row mb-2">
-                                                        <div class="col-sm-3 col-5">
-                                                            <h5 class="f-w-500">Account Type <span class="pull-right">:</span>
-                                                            </h5>
-                                                        </div>
-                                                        <div class="col-sm-9 col-7 logged-user-account-type"><span></span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row mb-2">
-                                                        <div class="col-sm-3 col-5">
-                                                            <h5 class="f-w-500">Account Officer <span class="pull-right">:</span>
-                                                            </h5>
-                                                        </div>
-                                                        <div class="col-sm-9 col-7 logged-user-account-officer"><span></span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row mb-2">
-                                                        <div class="col-sm-3 col-5">
-                                                            <h5 class="f-w-500">Account Officer Phone Number <span class="pull-right">:</span>
-                                                            </h5>
-                                                        </div>
-                                                        <div class="col-sm-9 col-7 logged-user-account-officer-phone-number"><span></span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row mb-2">
-                                                        <div class="col-sm-3 col-5">
-                                                            <h5 class="f-w-500">Account Officer Email <span class="pull-right">:</span>
-                                                            </h5>
-                                                        </div>
-                                                        <div class="col-sm-9 col-7 logged-user-account-officer-email"><span></span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -306,28 +241,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div id="pin-settings" class="tab-pane fade" role="tabpanel">
-                                                <div class="pt-3">
-                                                    <div class="settings-form">
-                                                        <h4 class="text-primary">Transaction PIN Settings</h4>
-                                                        <form id="pin-update-form">
-                                                            <div class="form-group">
-                                                                <label>Current Transaction PIN</label>
-                                                                <input type="password" class="form-control required current_pin" name="current_pin">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label>New Transaction PIN</label>
-                                                                <input type="password" class="form-control required new_pin" name="new_pin">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label>Confirm Transaction PIN</label>
-                                                                <input type="password" class="form-control required confirm_pin" name="confirm_pin">
-                                                            </div>
-                                                            <button class="btn btn-primary" type="submit">Update Transaction PIN</button>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -385,7 +298,7 @@
     ***********************************-->
     <!-- Required vendors -->
     <?php include('../includes/scripts2.php'); ?>
-    <script src="../js/pages/customer/settings.js"></script>
+    <script src="../js/pages/admin/settings.js"></script>
 
 
 </body>
