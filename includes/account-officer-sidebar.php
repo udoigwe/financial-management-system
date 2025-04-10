@@ -20,7 +20,7 @@
                 </a>
             </li>
             <li>
-                <a class="ai-icon" href="#settings">
+                <a class="ai-icon" href="settings">
                     <i class="flaticon-381-settings"></i>
                     <span class="nav-text">Security & Settings</span>
                 </a>
