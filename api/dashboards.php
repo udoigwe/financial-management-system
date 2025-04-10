@@ -86,35 +86,35 @@ try {
             $stmt->close();
 
             //get unread messages count
-            $stmt = $mysqli->prepare("SELECT COUNT(*} AS unread_notifications FROM notifications WHERE user_id = $userID AND notification_status = 'Unread'");
+            $stmt = $mysqli->prepare("SELECT COUNT(*) AS unread_notifications FROM notifications WHERE user_id = $userID AND notification_status = 'Unread'");
             $stmt->execute();
             $result = $stmt->get_result();
             $unreadMessagesCount = intval($result->fetch_assoc()['unread_notifications']);
             $stmt->close();
 
             //get active budget categories count
-            $stmt = $mysqli->prepare("SELECT COUNT(*} AS active_budget_categories_count FROM budget_categories WHERE account_id = $accountID AND budget_category_status = 'Active'");
+            $stmt = $mysqli->prepare("SELECT COUNT(*) AS active_budget_categories_count FROM budget_categories WHERE account_id = $accountID AND budget_category_status = 'Active'");
             $stmt->execute();
             $result = $stmt->get_result();
             $activeBudgetCategoriesCount = intval($result->fetch_assoc()['active_budget_categories_count']);
             $stmt->close();
 
             //get successful transactions count
-            $stmt = $mysqli->prepare("SELECT COUNT(*} AS transactions_count FROM transactions WHERE account_id = $accountID");
+            $stmt = $mysqli->prepare("SELECT COUNT(*) AS transactions_count FROM transactions WHERE account_id = $accountID");
             $stmt->execute();
             $result = $stmt->get_result();
             $transactionsCount = intval($result->fetch_assoc()['transactions_count']);
             $stmt->close();
 
             //get successful transactions count that exceeded budget
-            $stmt = $mysqli->prepare("SELECT COUNT(*} AS exceeds_budget_count FROM transactions WHERE account_id = $accountID AND transaction_budget_status = 'Exceeds Budget'");
+            $stmt = $mysqli->prepare("SELECT COUNT(*) AS exceeds_budget_count FROM transactions WHERE account_id = $accountID AND transaction_budget_status = 'Exceeds Budget'");
             $stmt->execute();
             $result = $stmt->get_result();
             $exceedsBudgetCount = intval($result->fetch_assoc()['exceeds_budget_count']);
             $stmt->close();
 
             //get successful transactions count that within budget
-            $stmt = $mysqli->prepare("SELECT COUNT(*} AS within_budget_count FROM transactions WHERE account_id = $accountID AND transaction_budget_status = 'Within Budget'");
+            $stmt = $mysqli->prepare("SELECT COUNT(*) AS within_budget_count FROM transactions WHERE account_id = $accountID AND transaction_budget_status = 'Within Budget'");
             $stmt->execute();
             $result = $stmt->get_result();
             $withinBudgetCount = intval($result->fetch_assoc()['within_budget_count']);

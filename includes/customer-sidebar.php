@@ -19,12 +19,12 @@
                     <span class="nav-text">Transactions</span>
                 </a>
             </li>
-            <li>
+            <!-- <li>
                 <a class="ai-icon" href="javascript:void()">
                     <i class="flaticon-381-id-card"></i>
                     <span class="nav-text">Cards</span>
                 </a>
-            </li>
+            </li> -->
             <li>
                 <a class="ai-icon" href="support">
                     <i class="flaticon-381-help"></i>

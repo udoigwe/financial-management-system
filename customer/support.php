@@ -6,7 +6,7 @@
     <title>FinHive | Customer | Support</title>
 </head>
 
-<body onload="isAuthenticated(); displayProfile(); loadUnreadMessages();">
+<body onload="isAuthenticated(); displayProfile(); loadUnreadMessages(); generateAccountStatement(); print1();">
 
     <!--*******************
         Preloader start
@@ -121,6 +121,14 @@
 
         <!--**********************************
            Unread message modal end
+        ***********************************-->
+
+        <!--**********************************
+            Global modals
+        ***********************************-->
+        <?php include('../includes/globalModals.php'); ?>
+        <!--**********************************
+            Global modals
         ***********************************-->
 
     </div>

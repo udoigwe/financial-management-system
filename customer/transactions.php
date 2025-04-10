@@ -159,7 +159,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="modal fade" id="accountStatementGenerationModal">
+                    <!-- <div class="modal fade" id="accountStatementGenerationModal">
                         <div class="modal-dialog modal-dialog-centered" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -197,8 +197,6 @@
                                 <div class="modal-body">
                                     <div class="col-lg-12 print-area">
                                         <div class="card mt-3">
-                                            <!-- <div class="card-header"> Invoice <strong>01/01/01/2018</strong> <span class="float-end">
-                                                    <strong>Status:</strong> Pending</span> </div> -->
                                             <div class="card-body">
                                                 <div class="row mb-5">
                                                     <div class="mt-4 col-xl-3 col-lg-6 col-md-6 col-sm-6">
@@ -276,12 +274,6 @@
                                                                     <td class="left"><strong>Total Safe Lock Credit</strong></td>
                                                                     <td class="right total-safe-lock-credit">$679,76</td>
                                                                 </tr>
-                                                                <!-- <tr>
-                                                                    <td class="left"><strong>total</strong></td>
-                                                                    <td class="right"><strong>$7.477,36</strong><br>
-                                                                        <strong>0.15050000 BTC</strong>
-                                                                    </td>
-                                                                </tr> -->
                                                             </tbody>
                                                         </table>
                                                     </div>
@@ -296,7 +288,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="col-xl-12 col-lg-12 col-xxl-12 col-sm-12">
                     <div class="card">
@@ -432,6 +424,14 @@
 
         <!--**********************************
            Unread message modal end
+        ***********************************-->
+
+        <!--**********************************
+            Global modals
+        ***********************************-->
+        <?php include('../includes/globalModals.php'); ?>
+        <!--**********************************
+            Global modals
         ***********************************-->
 
     </div>
