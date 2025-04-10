@@ -8,6 +8,12 @@
             </div>
             <div class="modal-body">
                 <form id="account-statement-form">
+                    <div class="form-group account-holder-box">
+                        <label class="text-black font-w500" for="account_id">Account Holder</label>
+                        <select class="d-block default-select w-100 account_id">
+                            <option value="">Choose...</option>
+                        </select>
+                    </div>
                     <div class="form-group">
                         <label class="text-black font-w500">Date Range (Start)</label>
                         <input type="date" class="form-control required start_date_range datetime" name="start_date_range">
@@ -36,8 +42,11 @@
             <div class="modal-body">
                 <div class="col-lg-12 print-area">
                     <div class="card mt-3">
-                        <!-- <div class="card-header"> Invoice <strong>01/01/01/2018</strong> <span class="float-end">
-                                <strong>Status:</strong> Pending</span> </div> -->
+                        <div class="card-header spender-class-box">
+                            <span class="float-end">
+                                <strong>Status:</strong> <span class="spender-class"></span>
+                            </span>
+                        </div>
                         <div class="card-body">
                             <div class="row mb-5">
                                 <div class="mt-4 col-xl-3 col-lg-6 col-md-6 col-sm-6">

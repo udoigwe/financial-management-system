@@ -488,6 +488,11 @@ try {
             $user = $result->fetch_array();
             $stmt->close();
 
+            //check if user is inactive deny
+            if ($user['account_status'] === "Inactive") {
+                throw new Exception('Sorry!!! You have been denied access. Please contact support');
+            }
+
             //check if user is a customer
             $stmt = $mysqli->prepare("SELECT * FROM account_view WHERE email = ? LIMIT 1");
             $stmt->bind_param('s', $email);

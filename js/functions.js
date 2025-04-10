@@ -304,6 +304,46 @@ function loadNotification(notificationID) {
 }
 
 function generateAccountStatement() {
+	var token = sessionStorage.getItem("token");
+	var role = payloadClaim(token, "role");
+	var form = $("#account-statement-form");
+
+	if (role === "Customer") {
+		form.find(".account-holder-box").slideUp();
+		$(".spender-class-box").slideUp();
+	}
+
+	$.ajax({
+		type: "GET",
+		url: `${API_URL_ROOT}/users?call=get_accounts&token=${token}`,
+		dataType: "json",
+		success: function (response) {
+			if (response.error === false) {
+				unblockUI();
+
+				const accounts = response.accounts;
+				let html = '<option value="">Please select</option>';
+
+				for (let i = 0; i < accounts.length; i++) {
+					const account = accounts[i];
+
+					html += `
+										<option value="${account.account_id}">${account.first_name} ${account.last_name} (${account.account_id})</option>
+								`;
+				}
+				form.find("select.account_id").html(html);
+				form.find("select.account_id").selectpicker("refresh");
+			} else {
+				unblockUI();
+				console.log(response);
+			}
+		},
+		error: function (req, status, err) {
+			showSimpleMessage("Attention", req.statusText, "error");
+			unblockUI();
+		},
+	});
+
 	$("#account-statement-form").on("submit", function (e) {
 		e.preventDefault();
 		var form = $(this);
@@ -318,7 +358,11 @@ function generateAccountStatement() {
 			"input.required, select.required, textarea.required"
 		);
 		var token = sessionStorage.getItem("token");
-		var accountID = payloadClaim(token, "account_id");
+		var role = payloadClaim(token, "role");
+		var accountID =
+			role === "Customer"
+				? payloadClaim(token, "account_id")
+				: form.find("select.account_id").val();
 
 		blockUI();
 
@@ -335,6 +379,15 @@ function generateAccountStatement() {
 				//alert(`${fields[i].name} is required`);
 				return false;
 			}
+		}
+
+		if (role !== "Customer" && !accountID) {
+			showSimpleMessage(
+				"Attention",
+				`Please provide an account holder`,
+				"error"
+			);
+			return false;
 		}
 
 		const start = moment(startTime);
@@ -362,7 +415,14 @@ function generateAccountStatement() {
 
 		$.ajax({
 			type: "GET",
-			url: `${API_URL_ROOT}/transactions?call=get_transactions
+			url:
+				role === "Customer"
+					? `${API_URL_ROOT}/transactions?call=get_transactions
+				&account_id=${accountID}
+				&token=${token}
+				&from_created_at=${startTime}
+				&to_created_at=${endTime}`
+					: `${API_URL_ROOT}/transactions?call=get_transactions_2
 				&account_id=${accountID}
 				&token=${token}
 				&from_created_at=${startTime}
@@ -460,7 +520,16 @@ function generateAccountStatement() {
 					accountStatementModal
 						.find(".statement-customer-email")
 						.text(response.transactions.email);
+					accountStatementModal
+						.find(".spender-class")
+						.html(
+							summary.spender_category === "METICULOUS SPENDER"
+								? `<span class="badge badge-rounded badge-success">${summary.spender_category}</span>`
+								: `<span class="badge badge-rounded badge-danger">${summary.spender_category}</span>`
+						);
 
+					form.get(0).reset();
+					form.find("select.account_id").selectpicker("val", "");
 					accountStatementGenerationModal.modal("hide");
 					accountStatementModal.modal("show");
 				} else {

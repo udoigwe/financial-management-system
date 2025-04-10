@@ -3,7 +3,7 @@
 
 <head>
     <?php include('../includes/head2.php'); ?>
-    <title>FinHive | Admin | Dashboard</title>
+    <title>FinHive | Account Officer | Dashboard</title>
     <link rel="stylesheet" href="../vendor/chartist/css/chartist.min.css">
 </head>
 
@@ -49,7 +49,7 @@
         <!--**********************************
             Sidebar start
         ***********************************-->
-        <?php include('../includes/admin-sidebar.php'); ?>
+        <?php include('../includes/account-officer-sidebar.php'); ?>
         <!--**********************************
             Sidebar end
         ***********************************-->
@@ -73,7 +73,7 @@
                                     <div class="media-body me-3">
                                         <h2 class="text-black font-w700 main-account-balance"></h2>
                                         <p class="mb-0 text-black font-w600">Main Account Balance</p>
-                                        <span><!-- <b class="text-success me-1">+0,5%</b> -->All Account Holders</span>
+                                        <span><!-- <b class="text-success me-1">+0,5%</b> -->All Account Holders under you</span>
                                     </div>
                                     <div class="d-inline-block">
                                         <svg class="primary-icon" width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -93,7 +93,7 @@
                                     <div class="media-body me-3">
                                         <h2 class="text-black font-w700 safe-lock-balance"></h2>
                                         <p class="mb-0 text-black font-w600">Safe Lock Balance</p>
-                                        <span><!-- <b class="text-success me-1">+0,5%</b> -->All Account Holders</span>
+                                        <span><!-- <b class="text-success me-1">+0,5%</b> -->All Account Holders under you</span>
                                     </div>
                                     <div class="d-inline-block">
                                         <svg class="primary-icon" width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -112,7 +112,7 @@
                                     <div class="media-body me-3">
                                         <h2 class="text-black font-w700 total-service-charges">0</h2>
                                         <p class="mb-0 text-black font-w600">Total Service Charges</p>
-                                        <span><!-- <b class="text-success me-1">+0,5%</b> -->Across All SafeLock Transactions Within Lock Periods</span>
+                                        <span><!-- <b class="text-success me-1">+0,5%</b> -->From SafeLock Transactions Within Lock Periods under you</span>
                                     </div>
                                     <div class="d-inline-block">
                                         <svg class="primary-icon" width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -142,7 +142,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-xl-4 col-xxl-6 col-sm-6">
+                    <div class="col-xl-3 col-xxl-6 col-sm-6">
                         <div class="card card-bx">
                             <div class="card-body">
                                 <div class="media align-items-center">
@@ -160,14 +160,14 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-4 col-xxl-6 col-sm-6">
+                    <div class="col-xl-3 col-xxl-6 col-sm-6">
                         <div class="card card-bx">
                             <div class="card-body">
                                 <div class="media align-items-center">
                                     <div class="media-body me-3">
                                         <h2 class="text-black font-w700 transactions-count"></h2>
                                         <p class="mb-0 text-black font-w600">Successful Transactions</p>
-                                        <span><!-- <b class="text-danger me-1">-2%</b> -->Across All Account Holders</span>
+                                        <span><!-- <b class="text-danger me-1">-2%</b> -->Across All Account Holders under you</span>
                                     </div>
                                     <div class="d-inline-block">
                                         <svg class="primary-icon" width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -179,7 +179,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-4 col-xxl-6 col-sm-6">
+                    <div class="col-xl-3 col-xxl-6 col-sm-6">
                         <div class="card card-bx">
                             <div class="card-body">
                                 <div class="media align-items-center">
@@ -191,6 +191,25 @@
                                     <div class="d-inline-block">
                                         <svg class="primary-icon" width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M10 48V40C10 39.4477 10.4477 39 11 39H15C15.5523 39 16 39.4477 16 40V48C16 48.5523 15.5523 49 15 49H11C10.4477 49 10 48.5523 10 48ZM22 48V32C22 31.4477 22.4477 31 23 31H27C27.5523 31 28 31.4477 28 32V48C28 48.5523 27.5523 49 27 49H23C22.4477 49 22 48.5523 22 48ZM34 48V20C34 19.4477 34.4477 19 35 19H39C39.5523 19 40 19.4477 40 20V48C40 48.5523 39.5523 49 39 49H35C34.4477 49 34 48.5523 34 48ZM46 48V27C46 26.4477 46.4477 26 47 26H51C51.5523 26 52 26.4477 52 27V48C52 48.5523 51.5523 49 51 49H47C46.4477 49 46 48.5523 46 48Z" fill="#1E33F2" />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-xxl-6 col-sm-6">
+                        <div class="card card-bx">
+                            <div class="card-body">
+                                <div class="media align-items-center">
+                                    <div class="media-body me-3">
+                                        <h2 class="text-black font-w700 customer-count"></h2>
+                                        <p class="mb-0 text-black font-w600">Customers</p>
+                                        <span><!-- <b class="text-danger me-1">-2%</b> -->Account holders under you</span>
+                                    </div>
+                                    <div class="d-inline-block">
+                                        <svg class="primary-icon" width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <circle cx="30" cy="20" r="8" stroke="#1E33F2" stroke-width="2" />
+                                            <path d="M15 44C15 38.4772 19.4772 34 25 34H35C40.5228 34 45 38.4772 45 44V46C45 47.1046 44.1046 48 43 48H17C15.8954 48 15 47.1046 15 46V44Z" stroke="#1E33F2" stroke-width="2" />
                                         </svg>
                                     </div>
                                 </div>
@@ -225,7 +244,7 @@
                                     <div class="media-body me-3">
                                         <h2 class="text-black font-w700 total-credits"></h2>
                                         <p class="mb-0 text-black font-w600">Total Credits</p>
-                                        <span><!-- <b class="text-danger me-1">-2%</b> -->From Inception</span>
+                                        <span><!-- <b class="text-danger me-1">-2%</b> -->From account holders under you</span>
                                     </div>
                                     <div class="d-inline-block">
                                         <svg class="primary-icon" width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -246,7 +265,7 @@
                                     <div class="media-body me-3">
                                         <h2 class="text-black font-w700 total-debits"></h2>
                                         <p class="mb-0 text-black font-w600">Total Debits</p>
-                                        <span><!-- <b class="text-danger me-1">-2%</b> -->From Inception</span>
+                                        <span><!-- <b class="text-danger me-1">-2%</b> -->From account holders under you</span>
                                     </div>
                                     <div class="d-inline-block">
                                         <svg class="primary-icon" width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -267,69 +286,12 @@
                                     <div class="media-body me-3">
                                         <h2 class="text-black font-w700 active-budget-categories-count"></h2>
                                         <p class="mb-0 text-black font-w600">Budget Categories</p>
-                                        <span><!-- <b class="text-success me-1">+0,5%</b> -->Across All Account Holders</span>
+                                        <span><!-- <b class="text-success me-1">+0,5%</b> -->Across All Account Holders under you</span>
                                     </div>
                                     <div class="d-inline-block">
                                         <svg class="primary-icon" width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M45 10H39.18C38.58 7.67 36.42 6 34 6H26C23.58 6 21.42 7.67 20.82 10H15C12.24 10 10 12.24 10 15V50C10 52.76 12.24 55 15 55H45C47.76 55 50 52.76 50 50V15C50 12.24 47.76 10 45 10ZM26 10H34C34.55 10 35 10.45 35 11C35 11.55 34.55 12 34 12H26C25.45 12 25 11.55 25 11C25 10.45 25.45 10 26 10ZM45 50H15V15H20V18C20 19.1 20.9 20 22 20H38C39.1 20 40 19.1 40 18V15H45V50Z" fill="#1E33F2" />
                                             <path d="M30 27C27.79 27 26 28.79 26 31H29C29 30.45 29.45 30 30 30C30.55 30 31 30.45 31 31C31 31.55 30.55 32 30 32C27.79 32 26 33.79 26 36C26 38.21 27.79 40 30 40C32.21 40 34 38.21 34 36H31C31 36.55 30.55 37 30 37C29.45 37 29 36.55 29 36C29 35.45 29.45 35 30 35C32.21 35 34 33.21 34 31C34 28.79 32.21 27 30 27Z" fill="#1E33F2" />
-                                        </svg>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-4 col-xxl-6 col-sm-6">
-                        <div class="card card-bx">
-                            <div class="card-body">
-                                <div class="media align-items-center">
-                                    <div class="media-body me-3">
-                                        <h2 class="text-black font-w700 admin-count"></h2>
-                                        <p class="mb-0 text-black font-w600">Administrative Users</p>
-                                        <span><!-- <b class="text-danger me-1">-2%</b> -->Administrators</span>
-                                    </div>
-                                    <div class="d-inline-block">
-                                        <svg class="primary-icon" width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="30" cy="20" r="8" stroke="#1E33F2" stroke-width="2" />
-                                            <path d="M15 44C15 38.4772 19.4772 34 25 34H35C40.5228 34 45 38.4772 45 44V46C45 47.1046 44.1046 48 43 48H17C15.8954 48 15 47.1046 15 46V44Z" stroke="#1E33F2" stroke-width="2" />
-                                        </svg>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-4 col-xxl-6 col-sm-6">
-                        <div class="card card-bx">
-                            <div class="card-body">
-                                <div class="media align-items-center">
-                                    <div class="media-body me-3">
-                                        <h2 class="text-black font-w700 customer-count"></h2>
-                                        <p class="mb-0 text-black font-w600">Customers</p>
-                                        <span><!-- <b class="text-danger me-1">-2%</b> -->Customers</span>
-                                    </div>
-                                    <div class="d-inline-block">
-                                        <svg class="primary-icon" width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="30" cy="20" r="8" stroke="#1E33F2" stroke-width="2" />
-                                            <path d="M15 44C15 38.4772 19.4772 34 25 34H35C40.5228 34 45 38.4772 45 44V46C45 47.1046 44.1046 48 43 48H17C15.8954 48 15 47.1046 15 46V44Z" stroke="#1E33F2" stroke-width="2" />
-                                        </svg>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-4 col-xxl-6 col-sm-6">
-                        <div class="card card-bx">
-                            <div class="card-body">
-                                <div class="media align-items-center">
-                                    <div class="media-body me-3">
-                                        <h2 class="text-black font-w700 account-officer-count"></h2>
-                                        <p class="mb-0 text-black font-w600">Account Officers</p>
-                                        <span><!-- <b class="text-danger me-1">-2%</b> -->Account Officers</span>
-                                    </div>
-                                    <div class="d-inline-block">
-                                        <svg class="primary-icon" width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="30" cy="20" r="8" stroke="#1E33F2" stroke-width="2" />
-                                            <path d="M15 44C15 38.4772 19.4772 34 25 34H35C40.5228 34 45 38.4772 45 44V46C45 47.1046 44.1046 48 43 48H17C15.8954 48 15 47.1046 15 46V44Z" stroke="#1E33F2" stroke-width="2" />
                                         </svg>
                                     </div>
                                 </div>
@@ -389,7 +351,7 @@
     <?php include('../includes/scripts2.php'); ?>
     <!-- Apex Chart -->
     <script src="../vendor/apexchart/apexchart.js"></script>
-    <script src="../js/pages/admin/index.js"></script>
+    <script src="../js/pages/ao/index.js"></script>
 
 
 </body>

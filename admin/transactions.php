@@ -91,8 +91,8 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
-                                        <label for="budget_category_id2">Budget Category</label>
-                                        <select class="d-block default-select w-100" id="budget_category_id2">
+                                        <label for="account_id">Account Holder</label>
+                                        <select class="d-block default-select w-100" id="account_id">
                                             <option value="">Choose...</option>
                                         </select>
                                     </div>
@@ -217,7 +217,7 @@
     <!-- Required vendors -->
     <?php include('../includes/scripts2.php'); ?>
     <script src="../vendor/datatables/js/jquery.dataTables.min.js"></script>
-    <script src="../js/pages/customer/transactions.js"></script>
+    <script src="../js/pages/admin/transactions.js"></script>
 
 
 </body>
