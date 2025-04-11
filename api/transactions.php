@@ -556,6 +556,172 @@ try {
 
             break;
 
+        case 'get_transactions_3':
+            if (!checkAvailability(array('token'))) {
+                throw new Exception('Invalid request: Token is required');
+            }
+
+            if (!verifyJWT('sha256', $_GET['token'], TOKEN_SECRET)) {
+                throw new Exception('Invalid authorization token provided');
+            }
+
+            // Get and sanitize user input
+            $token = $mysqli->real_escape_string($_GET['token']);
+            $userID = payloadClaim($token, 'user_id');
+
+            $firstName = null;
+            $lastName = null;
+            $email = null;
+            $phone = null;
+
+            $transactionID = !isset($_GET['transaction_id']) || empty($_GET['transaction_id']) ? null : $mysqli->real_escape_string($_GET['transaction_id']);
+            $accountID = !isset($_GET['account_id']) || empty($_GET['account_id']) ? null : $mysqli->real_escape_string($_GET['account_id']);
+            $budgetCategoryID = !isset($_GET['budget_category_id']) || empty($_GET['budget_category_id']) ? null : $mysqli->real_escape_string($_GET['budget_category_id']);
+            $transactionType = !isset($_GET['transaction_type']) || empty($_GET['transaction_type']) ? null : $mysqli->real_escape_string($_GET['transaction_type']);
+            $transactionBudgetStatus = !isset($_GET['transaction_budget_status']) || empty($_GET['transaction_budget_status']) ? null : $mysqli->real_escape_string($_GET['transaction_budget_status']);
+            $transactionSource = !isset($_GET['transaction_source']) || empty($_GET['transaction_source']) ? null : $mysqli->real_escape_string($_GET['transaction_source']);
+            $transactionDestination = !isset($_GET['transaction_destination']) || empty($_GET['transaction_destination']) ? null : $mysqli->real_escape_string($_GET['transaction_destination']);
+            $fromCreatedAt = !isset($_GET['from_created_at']) || empty($_GET['from_created_at']) ? null : $mysqli->real_escape_string($_GET['from_created_at']);
+            $toCreatedAt = !isset($_GET['to_created_at']) || empty($_GET['to_created_at']) ? null : $mysqli->real_escape_string($_GET['to_created_at']);
+
+            //instantiate transactions array
+            $transactions = array();
+
+            //instantiate my account IDs array
+            $myAccountIDs = array();
+
+            //get all account holders under me
+            $stmt = $mysqli->prepare("SELECT * FROM account_view WHERE account_officer_id = $userID");
+            $stmt->execute();
+            $result = $stmt->get_result();
+            while ($row = $result->fetch_assoc()) {
+                $myAccountIDs[] = $row['account_id'];
+            }
+            $implodedAccountIDs = count($myAccountIDs) > 0 ? implode(', ', $myAccountIDs) : null;
+            $stmt->close();
+
+            // Initialize the query and filter array
+            $query = !$implodedAccountIDs ? "SELECT * FROM transactions_view WHERE 1 = 0" : "SELECT * FROM transactions_view WHERE account_id IN ($implodedAccountIDs)";  // '1=1' acts as a base filter
+            $params = [];
+            $types = "";
+
+            // Add conditions based on variable availability
+            if (!is_null($transactionID)) {
+                $query .= " AND transaction_id = ?";
+                $params[] = $transactionID;
+                $types .= "i"; // 'i' for integer type 's' for string type
+            }
+
+            if (!is_null($accountID)) {
+                $query .= " AND account_id = ?";
+                $params[] = $accountID;
+                $types .= "i"; // 'i' for integer type 's' for string type
+
+                //get account details
+                $stmt = $mysqli->prepare("SELECT * FROM account_view WHERE account_id = ? LIMIT 1");
+                $stmt->bind_param("i", $accountID);
+                $stmt->execute();
+                $res = $stmt->get_result();
+                $holder = $res->fetch_assoc();
+                $firstName = $holder['first_name'];
+                $lastName = $holder['last_name'];
+                $email = $holder['email'];
+                $phone = $holder['phone'];
+                $stmt->close();
+            }
+
+            if (!is_null($budgetCategoryID)) {
+                $query .= " AND budget_category_id = ?";
+                $params[] = $budgetCategoryID;
+                $types .= "i"; // 'i' for integer type 's' for string type
+            }
+
+            if (!is_null($transactionType)) {
+                $query .= " AND transaction_type = ?";
+                $params[] = $transactionType;
+                $types .= "s"; // 'i' for integer type 's' for string type
+            }
+
+            if (!is_null($transactionBudgetStatus)) {
+                $query .= " AND transaction_budget_status = ?";
+                $params[] = $transactionBudgetStatus;
+                $types .= "s"; // 'i' for integer type 's' for string type
+            }
+
+            if (!is_null($transactionSource)) {
+                $query .= " AND transaction_source = ?";
+                $params[] = $transactionSource;
+                $types .= "s"; // 'i' for integer type 's' for string type
+            }
+
+            if (!is_null($transactionDestination)) {
+                $query .= " AND transaction_destination = ?";
+                $params[] = $transactionDestination;
+                $types .= "s"; // 'i' for integer type 's' for string type
+            }
+
+            if (!is_null($fromCreatedAt)) {
+                $query .= " AND DATE(created_at) >= ?";
+                $params[] = $fromCreatedAt;
+                $types .= "s"; // 'i' for integer type 's' for string type
+            }
+
+            if (!is_null($toCreatedAt)) {
+                $query .= " AND DATE(created_at) <= ?";
+                $params[] = $toCreatedAt;
+                $types .= "s"; // 'i' for integer type 's' for string type
+            }
+
+            $query .= " ORDER BY created_at DESC";
+
+            $stmt = $mysqli->prepare($query);
+            if ($stmt === false) {
+                throw new Exception("Error preparing statement: " . $mysqli->error);
+            }
+
+            // Only bind parameters if there are any
+            if (!empty($params)) {
+                $stmt->bind_param($types, ...$params);
+            }
+
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            while ($row = $result->fetch_assoc()) {
+                $transactions[] = $row;
+            }
+
+            $stmt->close();
+
+            //get statement summary
+            $stmt = $mysqli->prepare("CALL GenerateAccountStatementSummary(?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            if (!$stmt) {
+                throw new Exception('Database error: ' . $mysqli->error);
+            }
+            $stmt->bind_param('iiissssss', $transactionID, $accountID, $budgetCategoryID, $transactionType, $transactionBudgetStatus, $transactionSource, $transactionDestination, $fromCreatedAt, $toCreatedAt);
+
+            if (!$stmt->execute()) {
+                throw new Exception('An error occured: ' . $mysqli->error);
+            }
+            $result = $stmt->get_result();
+            $accountSummary = $result->fetch_assoc();
+            $stmt->close();
+
+            $meta = [
+                'transactions'  =>      $transactions,
+                'summary'       =>      $accountSummary,
+                "first_name"    =>      $firstName,
+                "last_name"     =>      $lastName,
+                "email"         =>      $email,
+                "phone"         =>      $phone,
+                "account_id"    =>      $accountID
+            ];
+
+            $response['error'] = false;
+            $response['transactions'] = $meta;
+
+            break;
+
         default:
             throw new Exception('Invalid API call');
     }

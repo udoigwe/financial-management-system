@@ -92,14 +92,14 @@
                                 <div class="col-lg-4 col-sm-5 ms-auto">
                                     <table class="table table-clear">
                                         <tbody>
-                                            <tr>
+                                            <!-- <tr>
                                                 <td class="left"><strong>Opening Main Account Balance</strong></td>
                                                 <td class="right opening-main-account-balance">$8.497,00</td>
                                             </tr>
                                             <tr>
                                                 <td class="left"><strong>Closing Main Account Balance</strong></td>
                                                 <td class="right closing-main-account-balance">$1,699,40</td>
-                                            </tr>
+                                            </tr> -->
                                             <tr>
                                                 <td class="left"><strong>Total Main Account Debit</strong></td>
                                                 <td class="right total-main-account-debit">$1,699,40</td>
@@ -108,14 +108,14 @@
                                                 <td class="left"><strong>Total Main Account Credit</strong></td>
                                                 <td class="right total-main-account-credit">$1,699,40</td>
                                             </tr>
-                                            <tr>
+                                            <!-- <tr>
                                                 <td class="left"><strong>Opening Safe Lock Balance</strong></td>
                                                 <td class="right opening-safe-lock-balance">$679,76</td>
                                             </tr>
                                             <tr>
                                                 <td class="left"><strong>Closing Safe Lock Balance</strong></td>
                                                 <td class="right closing-safe-lock-balance">$679,76</td>
-                                            </tr>
+                                            </tr> -->
                                             <tr>
                                                 <td class="left"><strong>Total Safe Lock Debit</strong></td>
                                                 <td class="right total-safe-lock-debit">$679,76</td>
@@ -124,12 +124,6 @@
                                                 <td class="left"><strong>Total Safe Lock Credit</strong></td>
                                                 <td class="right total-safe-lock-credit">$679,76</td>
                                             </tr>
-                                            <!-- <tr>
-                                                <td class="left"><strong>total</strong></td>
-                                                <td class="right"><strong>$7.477,36</strong><br>
-                                                    <strong>0.15050000 BTC</strong>
-                                                </td>
-                                            </tr> -->
                                         </tbody>
                                     </table>
                                 </div>

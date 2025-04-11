@@ -76,7 +76,7 @@ function payloadClaim($jwt, $param)
 function checkAvailability($params)
 {
     foreach ($params as $param) {
-        if (!isset($_REQUEST[$param]) || empty($_REQUEST[$param])) {
+        if (!isset($_REQUEST[$param]) || $_REQUEST[$param] === null/* empty($_REQUEST[$param]) */) {
             return false;
         }
     }

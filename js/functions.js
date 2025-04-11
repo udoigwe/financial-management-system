@@ -306,6 +306,7 @@ function loadNotification(notificationID) {
 function generateAccountStatement() {
 	var token = sessionStorage.getItem("token");
 	var role = payloadClaim(token, "role");
+	var userID = payloadClaim(token, "user_id");
 	var form = $("#account-statement-form");
 
 	if (role === "Customer") {
@@ -315,7 +316,10 @@ function generateAccountStatement() {
 
 	$.ajax({
 		type: "GET",
-		url: `${API_URL_ROOT}/users?call=get_accounts&token=${token}`,
+		url:
+			role === "Account Officer"
+				? `${API_URL_ROOT}/users?call=get_accounts&account_officer_id=${userID}&token=${token}`
+				: `${API_URL_ROOT}/users?call=get_accounts&token=${token}`,
 		dataType: "json",
 		success: function (response) {
 			if (response.error === false) {
@@ -370,7 +374,6 @@ function generateAccountStatement() {
 			if (fields[i].value == "") {
 				/*alert(fields[i].id)*/
 				unblockUI();
-				form.find("#" + fields[i].id).focus();
 				showSimpleMessage(
 					"Attention",
 					`${fields[i].name} is required`,

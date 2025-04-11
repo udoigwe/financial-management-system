@@ -69,6 +69,8 @@ try {
 
             // Generate account verification hash
             $hash = md5(rand(0, 1000));
+            //generate hashed password
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT, ['cost' => 10]);
 
             // Start database transaction
             $mysqli->autocommit(false);
@@ -79,7 +81,7 @@ try {
             if (!$stmt) {
                 throw new Exception('Database error: ' . $mysqli->error);
             }
-            $stmt->bind_param('sssssssssss', $firstName, $lastName, $dob, $gender, $address, $phone, $email, $identification, $identificationNumber, $password, $hash);
+            $stmt->bind_param('sssssssssss', $firstName, $lastName, $dob, $gender, $address, $phone, $email, $identification, $identificationNumber, $hashedPassword, $hash);
             $stmt->execute();
             $userID = $stmt->insert_id;
             $stmt->close();
@@ -102,6 +104,11 @@ try {
 
             //record this success message
             $stmt = $mysqli->prepare("CALL storeNotification($userID, 'Account Verification', '$successMessage')");
+            $stmt->execute();
+            $stmt->close();
+
+            //inform customer to setup budget categories outside the savings category
+            $stmt = $mysqli->prepare("CALL storeNotification($userID, 'Budget Categories', 'Please endevor to setup budget categories to track spending')");
             $stmt->execute();
             $stmt->close();
 
@@ -357,10 +364,11 @@ try {
                 throw new Exception('Email & hash combination does not exist');
             }
             $stmt->close();
+            $hashedPassword = password_hash($newPass, PASSWORD_DEFAULT, ['cost' => 10]);
 
             // update password
             $stmt = $mysqli->prepare("UPDATE users SET password = ? WHERE email = ? AND hash = ?");
-            $stmt->bind_param('sss', $newPass, $email, $hash);
+            $stmt->bind_param('sss', $hashedPassword, $email, $hash);
 
             if (!$stmt->execute()) {
                 throw new Exception('An error occured while attempting to reset password: ' . $mysqli->error);
@@ -397,10 +405,11 @@ try {
                 throw new Exception('Current password is incorrect');
             }
             $stmt->close();
+            $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT, ['cost' => 10]);
 
             // update password
             $stmt = $mysqli->prepare("UPDATE users SET password = ? WHERE user_id = ?");
-            $stmt->bind_param('si', $newPassword, $userID);
+            $stmt->bind_param('si', $hashedPassword, $userID);
 
             if (!$stmt->execute()) {
                 throw new Exception('An error occured while attempting to reset password: ' . $mysqli->error);
@@ -476,8 +485,8 @@ try {
             $customerDetails = null;
 
             // Check if email and password combination exists
-            $stmt = $mysqli->prepare("SELECT * FROM users WHERE email = ? AND password = ? LIMIT 1");
-            $stmt->bind_param('ss', $email, $password);
+            $stmt = $mysqli->prepare("SELECT * FROM users WHERE email = ? LIMIT 1");
+            $stmt->bind_param('s', $email);
             $stmt->execute();
             $result = $stmt->get_result();
 
@@ -487,6 +496,11 @@ try {
 
             $user = $result->fetch_array();
             $stmt->close();
+
+            //check password validity
+            if (!password_verify($password, $user['password'])) {
+                throw new Exception('Invalid password');
+            }
 
             //check if user is inactive deny
             if ($user['account_status'] === "Inactive") {

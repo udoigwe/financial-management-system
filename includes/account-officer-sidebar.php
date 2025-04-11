@@ -14,7 +14,7 @@
                 </a>
             </li>
             <li>
-                <a class="ai-icon" href="#transactions">
+                <a class="ai-icon" href="transactions">
                     <i class="flaticon-381-transfer"></i>
                     <span class="nav-text">Transactions</span>
                 </a>

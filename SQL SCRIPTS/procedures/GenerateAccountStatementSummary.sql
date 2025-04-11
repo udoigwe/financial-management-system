@@ -42,49 +42,67 @@ BEGIN
       AND (in_to_created_at IS NULL OR DATE(created_at) <= in_to_created_at)
     ORDER BY created_at ASC;
 
-    -- Opening and closing balances
+    -- Opening and closing balances for Main Account and Safe Lock
+    -- Opening Main Account balance (first record from source or destination)
     SELECT COALESCE(balance_after_transaction, 0)
     INTO opening_main
     FROM temp_filtered
-    WHERE transaction_source = 'Main Account'
+    WHERE transaction_source = 'Main Account' OR transaction_destination = 'Main Account'
     ORDER BY created_at ASC
     LIMIT 1;
 
+    -- Closing Main Account balance (last record from source or destination)
     SELECT COALESCE(balance_after_transaction, 0)
     INTO closing_main
     FROM temp_filtered
-    WHERE transaction_source = 'Main Account'
+    WHERE transaction_source = 'Main Account' OR transaction_destination = 'Main Account'
     ORDER BY created_at DESC
     LIMIT 1;
 
+    -- Opening Safe Lock balance (first record from source or destination)
     SELECT COALESCE(balance_after_transaction, 0)
     INTO opening_safe
     FROM temp_filtered
-    WHERE transaction_source = 'Safe Lock'
+    WHERE transaction_source = 'Safe Lock' OR transaction_destination = 'Safe Lock'
     ORDER BY created_at ASC
     LIMIT 1;
 
+    -- Closing Safe Lock balance (last record from source or destination)
     SELECT COALESCE(balance_after_transaction, 0)
     INTO closing_safe
     FROM temp_filtered
-    WHERE transaction_source = 'Safe Lock'
+    WHERE transaction_source = 'Safe Lock' OR transaction_destination = 'Safe Lock'
     ORDER BY created_at DESC
     LIMIT 1;
 
-    -- Totals per source
+    -- Totals per source and destination
+    -- For Main Account Debits (transaction_source = 'Main Account')
     SELECT 
-        COALESCE(SUM(CASE WHEN transaction_type = 'Debit' THEN amount ELSE 0 END), 0),
-        COALESCE(SUM(CASE WHEN transaction_type = 'Credit' THEN amount ELSE 0 END), 0)
-    INTO total_debit_main, total_credit_main
+        COALESCE(SUM(CASE WHEN transaction_type = 'Debit' THEN amount ELSE 0 END), 0)
+    INTO total_debit_main
     FROM temp_filtered
     WHERE transaction_source = 'Main Account';
 
+    -- For Main Account Credits (transaction_destination = 'Main Account')
     SELECT 
-        COALESCE(SUM(CASE WHEN transaction_type = 'Debit' THEN amount ELSE 0 END), 0),
         COALESCE(SUM(CASE WHEN transaction_type = 'Credit' THEN amount ELSE 0 END), 0)
-    INTO total_debit_safe, total_credit_safe
+    INTO total_credit_main
+    FROM temp_filtered
+    WHERE transaction_destination = 'Main Account';
+
+    -- For Safe Lock Debits (transaction_source = 'Safe Lock')
+    SELECT 
+        COALESCE(SUM(CASE WHEN transaction_type = 'Debit' THEN amount ELSE 0 END), 0)
+    INTO total_debit_safe
     FROM temp_filtered
     WHERE transaction_source = 'Safe Lock';
+
+    -- For Safe Lock Credits (transaction_destination = 'Safe Lock')
+    SELECT 
+        COALESCE(SUM(CASE WHEN transaction_type = 'Credit' THEN amount ELSE 0 END), 0)
+    INTO total_credit_safe
+    FROM temp_filtered
+    WHERE transaction_destination = 'Safe Lock';
 
     -- Budget spender type
     SELECT 
