@@ -13,6 +13,7 @@ SELECT
     b.role,
     b.last_seen,
     b.created_at AS joined_at,
+    b.account_status,
     c.first_name AS account_officer_first_name,
     c.last_name AS account_officer_last_name,
     c.phone AS account_officer_phone,

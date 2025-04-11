@@ -8,7 +8,7 @@
                 </a>
             </li>
             <li>
-                <a class="ai-icon" href="#users">
+                <a class="ai-icon" href="accounts">
                     <i class="flaticon-381-user"></i>
                     <span class="nav-text">My Account Holders</span>
                 </a>

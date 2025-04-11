@@ -359,6 +359,55 @@ try {
             $response['message'] = $successMessage;
 
             break;
+        
+        case 'send_support_response_email':
+            if (!checkAvailability(array('to', 'subject', 'message', 'user_id', 'token'))) {
+                throw new Exception('Invalid request: All fields are required');
+            }
+
+            if (!verifyJWT('sha256', $_GET['token'], TOKEN_SECRET)) {
+                throw new Exception('Invalid authorization token provided');
+            }
+
+            $token = $_GET['token'];
+            $userId = payloadClaim($token, 'user_id');
+
+            // Get and sanitize user input
+            $to = $mysqli->real_escape_string($_POST['to']);
+            $subject = $mysqli->real_escape_string($_POST['subject']);
+            $msg = $mysqli->real_escape_string($_POST['message']);
+            $user_id = $mysqli->real_escape_string($_POST['user_id']);
+
+            $message = supportResponseHTML($subject, $msg);
+            $successMessage = 'An email has been sent to ' . $to;
+            $successMessage2 = 'An email has been sent to ' . $to;
+
+            // Send verification email
+            if (!sendMail($to, $message, $subject)) {
+                throw new Exception('An error occurred while sending the email.');
+            }
+
+            // Start database transaction
+            $mysqli->autocommit(false);
+            $mysqli->begin_transaction();
+
+            //record this success message
+            $stmt = $mysqli->prepare("CALL storeNotification($userId, 'Support Email Sent', '$successMessage')");
+            $stmt->execute();
+            $stmt->close();
+            
+            //record this success message
+            $stmt = $mysqli->prepare("CALL storeNotification($user_id, 'Support Email Received', '$successMessage2')");
+            $stmt->execute();
+            $stmt->close();
+
+            // Commit transaction if everything is successful
+            $mysqli->commit();
+
+            $response['error'] = false;
+            $response['message'] = $successMessage;
+
+            break;
 
         default:
             throw new Exception('Invalid API call');
