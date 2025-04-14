@@ -137,6 +137,7 @@ $(function () {
 					"input.required, select.required, textarea.required"
 				);
 				var token = sessionStorage.getItem("token");
+				var addCategoryModal = $("#addCategoryModal");
 
 				blockUI();
 
@@ -193,7 +194,7 @@ $(function () {
 								"success"
 							);
 							form.get(0).reset();
-
+							addCategoryModal.find(".btn-close").click();
 							loadUnreadMessages();
 							loadBudgetCategories();
 						} else {
@@ -239,6 +240,7 @@ $(function () {
 					"input.required, select.required, textarea.required"
 				);
 				var token = sessionStorage.getItem("token");
+				var editModal = $("#editCategoryModal");
 
 				blockUI();
 
@@ -295,6 +297,7 @@ $(function () {
 								"success"
 							);
 							form.get(0).reset();
+							editModal.find(".btn-close").click();
 							loadUnreadMessages();
 							loadBudgetCategories();
 						} else {

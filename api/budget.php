@@ -115,6 +115,7 @@ try {
             $stmt->bind_param('isi', $accountID, $categoryName, $categoryID);
             $stmt->execute();
             $result = $stmt->get_result();
+            //$category = $result->fetch_assoc();
 
             if ($result->num_rows > 0) {
                 throw new Exception('Category name already exists');
@@ -124,6 +125,10 @@ try {
             // Start database transaction
             $mysqli->autocommit(false);
             $mysqli->begin_transaction();
+
+            /* if ($category['category_name'] === "Savings" && $categoryName !== "Savings") {
+                throw new Exception('Sorry!!! You are not allowed to change the savings category');
+            } */
 
             // update budget category
             $stmt = $mysqli->prepare("UPDATE budget_categories SET `category_name` = ?, `category_description` = ?, `budget_limit` = ?, `budget_limit_start_time` = ?, `budget_limit_end_time` = ?, `color_code` = ?, `budget_category_status` = ? WHERE category_id = ?");

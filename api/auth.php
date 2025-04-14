@@ -108,7 +108,7 @@ try {
             $stmt->close();
 
             //inform customer to setup budget categories outside the savings category
-            $stmt = $mysqli->prepare("CALL storeNotification($userID, 'Budget Categories', 'Please endevor to setup budget categories to track spending')");
+            $stmt = $mysqli->prepare("CALL storeNotification($userID, 'Budget Categories', 'Setup budget categories to track spending')");
             $stmt->execute();
             $stmt->close();
 

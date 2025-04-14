@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 12, 2025 at 12:29 AM
+-- Generation Time: Apr 14, 2025 at 08:34 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -487,10 +487,13 @@ CREATE TABLE `account` (
 
 INSERT INTO `account` (`account_id`, `user_id`, `account_officer_id`, `account_type`, `pin`, `balance`, `created_at`, `updated_at`) VALUES
 (1000000029, 31, 30, 'Savings', 1234, 1500, '2025-03-31 22:12:43', NULL),
-(1000000032, 34, 28, 'Savings', 1234, 2390.82, '2025-04-01 05:47:17', '2025-04-05 23:12:16'),
-(1000000033, 35, 23, 'Savings', 1234, 358.18, '2025-04-01 21:48:19', '2025-04-05 22:49:13'),
+(1000000032, 34, 28, 'Savings', 1234, 2422.82, '2025-04-01 05:47:17', '2025-04-13 21:22:02'),
+(1000000033, 35, 23, 'Savings', 1234, 1014.18, '2025-04-01 21:48:19', '2025-04-13 21:58:24'),
 (1000000034, 43, 24, 'Savings', 1234, 1500, '2025-04-11 20:42:53', NULL),
-(1000000035, 44, 26, 'Savings', 1234, 1468, '2025-04-11 21:26:35', '2025-04-11 21:42:23');
+(1000000035, 44, 26, 'Savings', 1234, 1468, '2025-04-11 21:26:35', '2025-04-11 21:42:23'),
+(1000000036, 45, 40, 'Savings', 1234, 1500, '2025-04-13 20:48:27', '2025-04-13 23:05:34'),
+(1000000037, 46, 27, 'Savings', 1234, 1500, '2025-04-13 21:05:26', NULL),
+(1000000038, 47, 38, 'Savings', 1234, 747, '2025-04-13 21:08:44', '2025-04-13 21:54:26');
 
 --
 -- Triggers `account`
@@ -586,8 +589,8 @@ INSERT INTO `budget_categories` (`category_id`, `account_id`, `category_name`, `
 (3, 1000000029, 'Savings', 'Budget category associated with the SafeLock', 0, '2025-03-31 22:12:00', '2025-03-31 22:12:00', '#FB23231F', 'Active', '2025-03-31 22:12:43', '2025-04-11 21:36:40'),
 (6, 1000000032, 'Savings', 'Budget category associated with the SafeLock', 0, '2025-04-01 05:47:00', '2025-04-01 05:47:00', '#FB23231F', 'Active', '2025-04-01 05:47:17', '2025-04-11 21:36:29'),
 (11, 1000000032, 'Entertainment/Subscriptions', 'Budget category to manage my entertainment lifestyles', 160, '2025-04-01 12:24:00', '2025-04-25 12:24:00', '#501b1b', 'Active', '2025-04-01 12:25:13', NULL),
-(12, 1000000032, 'Transportation/Fuel', 'This is it', 145, '2025-04-01 18:29:00', '2025-04-26 15:29:00', '#b38080', 'Active', '2025-04-01 12:29:24', NULL),
-(13, 1000000032, 'Rent', 'sdsdsd', 212, '2025-04-01 12:30:00', '2025-04-16 12:30:00', '#71762e', 'Active', '2025-04-01 12:31:03', NULL),
+(12, 1000000032, 'Transportation/Fuel', 'This is i', 145, '2025-04-01 18:29:00', '2025-04-26 15:29:00', '#b38080', 'Active', '2025-04-01 12:29:24', '2025-04-13 22:54:39'),
+(13, 1000000032, 'Rent', 'sdsdsg', 212, '2025-04-01 12:30:00', '2025-04-16 12:30:00', '#71762e', 'Active', '2025-04-01 12:31:03', '2025-04-13 22:54:19'),
 (14, 1000000032, 'Housing/Mortgage', 'aaddad', 1244, '2025-04-01 12:33:00', '2025-04-30 12:33:00', '#9f7ec9', 'Active', '2025-04-01 12:33:33', NULL),
 (15, 1000000032, 'Miscellaneous', 'I want to manage my miscelllaneous spendings', 1212, '2025-04-01 12:36:00', '2025-04-30 12:36:00', '#a55f5f', 'Active', '2025-04-01 12:38:04', NULL),
 (16, 1000000032, 'Investments', 'Monitoring my investment strategies', 323, '2025-04-11 13:13:00', '2025-04-25 13:13:00', '#9787ab', 'Active', '2025-04-01 13:13:30', NULL),
@@ -595,8 +598,15 @@ INSERT INTO `budget_categories` (`category_id`, `account_id`, `category_name`, `
 (18, 1000000033, 'Savings', 'Budget category associated with the SafeLock', 1, '2025-04-01 21:48:00', '2025-04-01 21:48:00', '#000000', 'Active', '2025-04-01 21:48:19', '2025-04-05 20:10:41'),
 (19, 1000000033, 'Miscellaneous', 'This will guide me in my miscellaneous spendings', 140, '2025-04-01 00:59:00', '2025-04-23 02:00:00', '#55a595', 'Active', '2025-04-01 21:55:26', '2025-04-11 21:17:52'),
 (20, 1000000033, 'Drinks', 'Budget on drinking', 140, '2025-04-01 21:56:00', '2025-04-17 21:56:00', '#48934a', 'Active', '2025-04-01 21:56:52', '2025-04-11 21:17:35'),
-(21, 1000000034, 'Savings', 'Budget category associated with the SafeLock', 0, '2025-04-11 20:42:00', '2025-04-11 20:42:00', '#FB23231F', 'Active', '2025-04-11 20:42:53', '2025-04-11 21:36:14'),
-(22, 1000000035, 'Savings', 'Budget category associated with the SafeLock', 0, '2025-04-11 21:26:00', '2025-04-30 21:26:00', '#000000', 'Active', '2025-04-11 21:26:35', '2025-04-11 21:37:31');
+(21, 1000000034, 'Tolu', 'Budget category associated with the SafeLock', 100, '2025-04-11 20:42:00', '2025-04-11 20:42:00', '#000000', 'Active', '2025-04-11 20:42:53', '2025-04-13 22:40:44'),
+(22, 1000000035, 'Savings', 'Budget category associated with the SafeLock', 0, '2025-04-11 21:26:00', '2025-04-30 21:26:00', '#000000', 'Active', '2025-04-11 21:26:35', '2025-04-11 21:37:31'),
+(23, 1000000036, 'Savings', 'Budget category associated with the SafeLock', 0, '2025-04-13 20:48:00', '2025-05-13 20:48:00', '#000000', 'Active', '2025-04-13 20:48:27', '2025-04-13 20:50:59'),
+(24, 1000000037, 'Savings', 'Budget category associated with the SafeLock', 0, '2025-04-13 21:05:00', '2025-05-13 21:05:00', '#FB23231F', 'Active', '2025-04-13 21:05:26', NULL),
+(25, 1000000038, 'Savings', 'Budget category associated with the SafeLock', 0, '2025-04-13 21:08:00', '2025-05-29 21:08:00', '#ab41c8', 'Active', '2025-04-13 21:08:44', '2025-04-13 21:13:30'),
+(26, 1000000038, 'Rent', 'Budget for my rent', 500, '2025-04-11 21:14:00', '2025-04-30 21:14:00', '#79ecc9', 'Active', '2025-04-13 21:15:48', '2025-04-13 21:17:45'),
+(27, 1000000034, 'Travel/Vacations', 'Travel ', 123, '2025-04-26 22:25:00', '2025-04-30 22:25:00', '#d0ecd0', 'Active', '2025-04-13 22:25:53', NULL),
+(28, 1000000034, 'Housing/Mortgage', 'Housing', 305, '2025-04-03 22:27:00', '2025-04-27 22:27:00', '#700a0a', 'Active', '2025-04-13 22:27:49', NULL),
+(29, 1000000034, 'Food/Groceries', 'Food', 230, '2025-04-03 22:28:00', '2025-04-27 22:28:00', '#a3981f', 'Active', '2025-04-13 22:28:22', NULL);
 
 --
 -- Triggers `budget_categories`
@@ -663,7 +673,10 @@ INSERT INTO `cards` (`card_id`, `account_id`, `card_number`, `expiry_date`, `car
 (33, 1000000032, '8826857163765170', '2029-04-01', 'DEBIT', '2025-04-01 05:47:17'),
 (34, 1000000033, '7339800880236091', '2029-04-01', 'DEBIT', '2025-04-01 21:48:19'),
 (35, 1000000034, '6144783317332165', '2029-04-11', 'DEBIT', '2025-04-11 20:42:53'),
-(36, 1000000035, '4698144911529412', '2029-04-11', 'DEBIT', '2025-04-11 21:26:35');
+(36, 1000000035, '4698144911529412', '2029-04-11', 'DEBIT', '2025-04-11 21:26:35'),
+(37, 1000000036, '1562105485842760', '2029-04-13', 'DEBIT', '2025-04-13 20:48:27'),
+(38, 1000000037, '3716215776383717', '2029-04-13', 'DEBIT', '2025-04-13 21:05:26'),
+(39, 1000000038, '1097477916061690', '2029-04-13', 'DEBIT', '2025-04-13 21:08:44');
 
 -- --------------------------------------------------------
 
@@ -827,7 +840,7 @@ INSERT INTO `notifications` (`notification_id`, `user_id`, `title`, `message`, `
 (119, 23, 'Login Successful', 'Welcome onboard John Woo', 'Unread', '2025-04-11 19:51:08', NULL),
 (120, 23, 'Login Successful', 'Welcome onboard John Woo', 'Unread', '2025-04-11 20:30:08', NULL),
 (121, 23, 'Login Successful', 'Welcome onboard John Woo', 'Unread', '2025-04-11 20:30:23', NULL),
-(122, 43, 'Account Verification', 'An account verification email has been sent to udoigweuchechukwu@gmail.com', 'Unread', '2025-04-11 20:42:56', NULL),
+(122, 43, 'Account Verification', 'An account verification email has been sent to udoigweuchechukwu@gmail.com', 'Read', '2025-04-11 20:42:56', '2025-04-13 22:31:42'),
 (123, 23, 'Login Successful', 'Welcome onboard John Woo', 'Unread', '2025-04-11 20:55:13', NULL),
 (124, 43, 'Login Successful', 'Welcome onboard Laura Hills', 'Unread', '2025-04-11 21:06:20', NULL),
 (125, 35, 'Login Successful', 'Welcome onboard Tolu Ayo', 'Unread', '2025-04-11 21:16:45', NULL),
@@ -838,7 +851,61 @@ INSERT INTO `notifications` (`notification_id`, `user_id`, `title`, `message`, `
 (130, 44, 'Budget Category Updated', 'Budget Category updated successfully', 'Unread', '2025-04-11 21:35:33', NULL),
 (131, 44, 'Budget Category Updated', 'Budget Category updated successfully', 'Unread', '2025-04-11 21:37:31', NULL),
 (132, 44, 'Debit Alert', 'Your account has been debited with $32', 'Unread', '2025-04-11 21:42:32', NULL),
-(133, 44, 'Credit Alert', 'Your account has been credited with $32', 'Unread', '2025-04-11 21:42:32', NULL);
+(133, 44, 'Credit Alert', 'Your account has been credited with $32', 'Unread', '2025-04-11 21:42:32', NULL),
+(134, 22, 'Login Successful', 'Welcome onboard Mike Mayers', 'Unread', '2025-04-11 22:39:47', NULL),
+(135, 30, 'Login Successful', 'Welcome onboard Yaz Sullivan', 'Unread', '2025-04-11 22:41:43', NULL),
+(136, 22, 'Login Successful', 'Welcome onboard Mike Mayers', 'Unread', '2025-04-11 22:47:27', NULL),
+(137, 22, 'Support Email Sent', 'An email has been sent to udoigweuchechukwu@gmail.com', 'Read', '2025-04-11 23:15:07', '2025-04-11 23:15:12'),
+(138, 44, 'Support Email Received', 'An email has been sent to udoigweuchechukwu@gmail.com', 'Unread', '2025-04-11 23:15:07', NULL),
+(139, 45, 'Account Verification', 'An account verification email has been sent to udoigweuchechukwu@gmail.com', 'Unread', '2025-04-13 20:48:30', NULL),
+(140, 45, 'Budget Categories', 'Please endevor to setup budget categories to track spending', 'Unread', '2025-04-13 20:48:30', NULL),
+(141, 45, 'Login Successful', 'Welcome onboard James Earl', 'Unread', '2025-04-13 20:49:02', NULL),
+(142, 45, 'Budget Category Updated', 'Budget Category updated successfully', 'Unread', '2025-04-13 20:49:27', NULL),
+(143, 45, 'Budget Category Updated', 'Budget Category updated successfully', 'Unread', '2025-04-13 20:50:59', NULL),
+(144, 46, 'Account Verification', 'An account verification email has been sent to udoigweuchechukwu@gmail.com', 'Unread', '2025-04-13 21:05:29', NULL),
+(145, 46, 'Budget Categories', 'Please endevor to setup budget categories to track spending', 'Unread', '2025-04-13 21:05:29', NULL),
+(146, 46, 'Login Successful', 'Welcome onboard Michael Jackson', 'Unread', '2025-04-13 21:06:10', NULL),
+(147, 47, 'Account Verification', 'An account verification email has been sent to udoigweuchechukwu@gmail.com', 'Read', '2025-04-13 21:08:47', '2025-04-13 21:11:08'),
+(148, 47, 'Budget Categories', 'Please endevor to setup budget categories to track spending', 'Read', '2025-04-13 21:08:47', '2025-04-13 21:11:22'),
+(149, 47, 'Login Successful', 'Welcome onboard Helena Kai', 'Read', '2025-04-13 21:09:34', '2025-04-13 21:11:18'),
+(150, 47, 'Budget Category Updated', 'Budget Category updated successfully', 'Unread', '2025-04-13 21:13:30', NULL),
+(151, 47, 'Budget Category Created', 'Budget Category created successfully', 'Unread', '2025-04-13 21:15:48', NULL),
+(152, 47, 'Budget Category Updated', 'Budget Category updated successfully', 'Unread', '2025-04-13 21:16:06', NULL),
+(153, 47, 'Budget Category Updated', 'Budget Category updated successfully', 'Unread', '2025-04-13 21:16:24', NULL),
+(154, 47, 'Budget Category Updated', 'Budget Category updated successfully', 'Unread', '2025-04-13 21:17:20', NULL),
+(155, 47, 'Budget Category Updated', 'Budget Category updated successfully', 'Unread', '2025-04-13 21:17:45', NULL),
+(156, 47, 'Debit Alert', 'Your account has been debited with $32', 'Unread', '2025-04-13 21:22:08', NULL),
+(157, 34, 'Credit Alert', 'Your account has been credited with $32', 'Unread', '2025-04-13 21:22:08', NULL),
+(158, 47, 'Your OTP for Fund Transfer', 'An OTP has been sent to udoigweuchechukwu@gmail.com. Please check your inbox.', 'Unread', '2025-04-13 21:23:35', NULL),
+(159, 47, 'Debit Alert', 'Your account has been debited with $600', 'Unread', '2025-04-13 21:24:41', NULL),
+(160, 35, 'Credit Alert', 'Your account has been credited with $600', 'Unread', '2025-04-13 21:24:41', NULL),
+(161, 47, 'Support Email Sent', 'A support email has been sent to udoigweuchechukwu@gmail.com', 'Unread', '2025-04-13 21:40:28', NULL),
+(162, 47, 'Account Update', 'Account updated successfully', 'Unread', '2025-04-13 21:41:59', NULL),
+(163, 47, 'Password Update', 'Password update was successful', 'Unread', '2025-04-13 21:45:35', NULL),
+(164, 47, 'Password Update', 'Password update was successful', 'Unread', '2025-04-13 21:45:46', NULL),
+(165, 47, 'Pin Update', 'Transaction Pin update was successful', 'Unread', '2025-04-13 21:46:58', NULL),
+(166, 47, 'Debit Alert', 'Your account has been debited with $121', 'Unread', '2025-04-13 21:54:34', NULL),
+(167, 47, 'Credit Alert', 'Your account has been credited with $121', 'Unread', '2025-04-13 21:54:34', NULL),
+(168, 47, 'Your OTP for Fund Transfer', 'An OTP has been sent to udoigweuchechukwu@gmail.com. Please check your inbox.', 'Unread', '2025-04-13 21:58:08', NULL),
+(169, 47, 'Debit Alert', 'Your account has been debited with $56', 'Unread', '2025-04-13 21:58:30', NULL),
+(170, 35, 'Credit Alert', 'Your account has been credited with $56', 'Unread', '2025-04-13 21:58:30', NULL),
+(171, 22, 'Login Successful', 'Welcome onboard Mike Mayers', 'Unread', '2025-04-13 22:04:51', NULL),
+(172, 48, 'Account Creation Notification', 'An account creation notification email has been sent to udoigweuchechukwu@gmail.com', 'Unread', '2025-04-13 22:08:07', NULL),
+(173, 22, 'Account Creation Notification', 'An account creation notification email has been sent to udoigweuchechukwu@gmail.com', 'Read', '2025-04-13 22:08:07', '2025-04-13 22:08:16'),
+(174, 48, 'Account Update', 'Your account was updated successfully', 'Unread', '2025-04-13 22:09:25', NULL),
+(175, 22, 'Account Update', 'User updated successfully', 'Unread', '2025-04-13 22:09:25', NULL),
+(176, 48, 'Account Update', 'Your account was updated successfully', 'Unread', '2025-04-13 22:09:50', NULL),
+(177, 22, 'Account Update', 'User updated successfully', 'Unread', '2025-04-13 22:09:50', NULL),
+(178, 22, 'Login Successful', 'Welcome onboard Mike Mayers', 'Unread', '2025-04-13 22:10:48', NULL),
+(179, 30, 'Login Successful', 'Welcome onboard Yaz Sullivan', 'Unread', '2025-04-13 22:20:04', NULL),
+(180, 43, 'Login Successful', 'Welcome onboard Laura Hills', 'Unread', '2025-04-13 22:25:07', NULL),
+(181, 43, 'Budget Category Created', 'Budget Category created successfully', 'Unread', '2025-04-13 22:25:53', NULL),
+(182, 43, 'Budget Category Created', 'Budget Category created successfully', 'Unread', '2025-04-13 22:27:49', NULL),
+(183, 43, 'Budget Category Created', 'Budget Category created successfully', 'Unread', '2025-04-13 22:28:22', NULL),
+(184, 43, 'Budget Category Updated', 'Budget Category updated successfully', 'Unread', '2025-04-13 22:37:00', NULL),
+(185, 43, 'Budget Category Updated', 'Budget Category updated successfully', 'Unread', '2025-04-13 22:37:16', NULL),
+(186, 43, 'Budget Category Updated', 'Budget Category updated successfully', 'Unread', '2025-04-13 22:40:34', NULL),
+(187, 43, 'Budget Category Updated', 'Budget Category updated successfully', 'Unread', '2025-04-13 22:40:44', NULL);
 
 --
 -- Triggers `notifications`
@@ -927,8 +994,11 @@ INSERT INTO `safe_lock` (`safe_lock_id`, `account_id`, `balance`, `lock_start_ti
 (3, 1000000029, 0, '2025-03-31 22:12:43', '2025-03-31 22:42:43', '2025-03-31 22:12:43', NULL),
 (6, 1000000032, 0, '2025-04-01 05:47:17', '2025-04-01 06:17:17', '2025-04-01 05:47:17', NULL),
 (7, 1000000033, 336.95, '2025-04-01 21:48:00', '2025-04-29 21:48:00', '2025-04-01 21:48:19', '2025-04-05 23:12:16'),
-(8, 1000000034, 0, '2025-04-11 20:42:53', '2025-04-11 21:12:53', '2025-04-11 20:42:53', NULL),
-(9, 1000000035, 32, '2025-04-11 21:26:00', '2025-04-30 21:26:00', '2025-04-11 21:26:35', '2025-04-11 21:42:23');
+(8, 1000000034, 0, '2025-04-11 20:42:00', '2025-04-11 20:42:00', '2025-04-11 20:42:53', '2025-04-13 22:37:16'),
+(9, 1000000035, 32, '2025-04-11 21:26:00', '2025-04-30 21:26:00', '2025-04-11 21:26:35', '2025-04-11 21:42:23'),
+(10, 1000000036, 0, '2025-04-13 20:48:00', '2025-05-13 20:48:00', '2025-04-13 20:48:27', '2025-04-13 20:50:59'),
+(11, 1000000037, 0, '2025-04-13 21:05:26', '2025-04-13 21:35:26', '2025-04-13 21:05:26', NULL),
+(12, 1000000038, 62.2, '2025-04-13 21:08:00', '2025-05-29 21:08:00', '2025-04-13 21:08:44', '2025-04-13 21:58:24');
 
 --
 -- Triggers `safe_lock`
@@ -1019,7 +1089,15 @@ INSERT INTO `transactions` (`transaction_id`, `account_id`, `sender_account_id`,
 (46, 1000000033, NULL, 19, 'Debit', 234, 11.7, 336.95, 'Exceeds Budget', 'Funds Transfer', 'Safe Lock', 'Main Account', '2025-04-05 23:12:16'),
 (47, 1000000032, 1000000033, NULL, 'Credit', 234, 0, 2390.82, NULL, 'Funds Received', 'Safe Lock', 'Safe Lock', '2025-04-05 23:12:16'),
 (48, 1000000035, NULL, 22, 'Debit', 32, 0, 1468, 'Within Budget', 'Funds Transfer', 'Main Account', 'Safe Lock', '2025-04-11 21:42:23'),
-(49, 1000000035, 1000000035, NULL, 'Credit', 32, 0, 32, NULL, 'Funds Received', 'Main Account', 'Safe Lock', '2025-04-11 21:42:23');
+(49, 1000000035, 1000000035, NULL, 'Credit', 32, 0, 32, NULL, 'Funds Received', 'Main Account', 'Safe Lock', '2025-04-11 21:42:23'),
+(50, 1000000038, NULL, 26, 'Debit', 32, 0, 1468, 'Within Budget', 'Funds Transfer', 'Main Account', 'Main Account', '2025-04-13 21:22:02'),
+(51, 1000000032, 1000000038, NULL, 'Credit', 32, 0, 2422.82, NULL, 'Funds Received', 'Main Account', 'Main Account', '2025-04-13 21:22:02'),
+(52, 1000000038, NULL, 26, 'Debit', 600, 0, 868, 'Exceeds Budget', 'Funds Transfer', 'Main Account', 'Main Account', '2025-04-13 21:24:36'),
+(53, 1000000033, 1000000038, NULL, 'Credit', 600, 0, 958.18, NULL, 'Funds Received', 'Main Account', 'Main Account', '2025-04-13 21:24:36'),
+(54, 1000000038, NULL, 25, 'Debit', 121, 0, 747, 'Within Budget', 'Funds Transfer', 'Main Account', 'Safe Lock', '2025-04-13 21:54:26'),
+(55, 1000000038, 1000000038, NULL, 'Credit', 121, 0, 121, NULL, 'Funds Received', 'Main Account', 'Safe Lock', '2025-04-13 21:54:26'),
+(56, 1000000038, NULL, 26, 'Debit', 56, 2.8, 62.2, 'Exceeds Budget', 'Funds Transfer', 'Safe Lock', 'Main Account', '2025-04-13 21:58:24'),
+(57, 1000000033, 1000000038, NULL, 'Credit', 56, 0, 1014.18, NULL, 'Funds Received', 'Safe Lock', 'Safe Lock', '2025-04-13 21:58:24');
 
 -- --------------------------------------------------------
 
@@ -1086,13 +1164,13 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `first_name`, `last_name`, `gender`, `dob`, `address`, `phone`, `email`, `identification`, `identification_number`, `role`, `password`, `hash`, `hash_time`, `last_seen`, `account_status`, `created_at`, `updated_at`) VALUES
-(22, 'Mike', 'Mayers', 'Male', '1972-03-22', 'Texas ', '09089098789', 'admin@finhive.com', 'Drivers License', '1234554232', 'Admin', '$2y$10$mGQNHY/ZVeHmemgScw8NXOwcKb/5hA7hoB9qI/FDRPeGXX3vgc3aC', 'd707329bece455a462b58ce00d1194c9', '2025-04-11 20:25:17', '2025-04-11 19:45:51', 'Active', '2025-03-17 23:22:15', '2025-04-11 20:25:17'),
+(22, 'Mike', 'Mayers', 'Male', '1972-03-22', 'Texas ', '09089098789', 'admin@finhive.com', 'Drivers License', '1234554232', 'Admin', '$2y$10$mGQNHY/ZVeHmemgScw8NXOwcKb/5hA7hoB9qI/FDRPeGXX3vgc3aC', 'd707329bece455a462b58ce00d1194c9', '2025-04-13 22:10:48', '2025-04-13 22:10:48', 'Active', '2025-03-17 23:22:15', '2025-04-13 22:10:48'),
 (23, 'John', 'Woo', 'Male', '1969-03-02', 'Texas', '09089098788', 'john@gmail.com', 'Drivers License', '12321232', 'Account Officer', '$2y$10$mGQNHY/ZVeHmemgScw8NXOwcKb/5hA7hoB9qI/FDRPeGXX3vgc3aC', '647bba344396e7c8170902bcf2e15551', '2025-04-11 20:55:13', '2025-04-11 20:55:13', 'Active', '2025-03-19 00:15:14', '2025-04-11 20:55:13'),
 (24, 'Wilson', 'Gihon', 'Male', '1981-09-10', 'State House, Winsconsin', '+1-2910-10291', 'gihon@finhive.com', 'Drivers License', '1110192019', 'Account Officer', '$2y$10$mGQNHY/ZVeHmemgScw8NXOwcKb/5hA7hoB9qI/FDRPeGXX3vgc3aC', NULL, '2025-04-11 20:25:27', NULL, 'Active', '2025-03-30 00:41:44', '2025-04-11 20:25:27'),
 (26, 'James', 'Earl', 'Male', '2001-03-30', 'Washington DC', '+1-902-01992', 'james-earl@gmail.com', 'SSN', '238923-298923', 'Account Officer', '$2y$10$mGQNHY/ZVeHmemgScw8NXOwcKb/5hA7hoB9qI/FDRPeGXX3vgc3aC', NULL, '2025-04-11 20:25:31', NULL, 'Active', '2025-03-30 01:34:07', '2025-04-11 20:25:31'),
 (27, 'China', 'Aduino', 'Female', '2001-03-30', 'Texas Houston', '090817291', 'china@finhive.com', 'Drivers License', '12112121', 'Account Officer', '$2y$10$mGQNHY/ZVeHmemgScw8NXOwcKb/5hA7hoB9qI/FDRPeGXX3vgc3aC', NULL, '2025-04-11 20:25:34', NULL, 'Active', '2025-03-30 01:35:59', '2025-04-11 20:25:34'),
 (28, 'Jazmine', 'Sullivan', 'Female', '2001-03-30', 'Texas Houston', '+1-291-29182', 'jazmine@finhive.com', 'Drivers License', '128981729', 'Account Officer', '$2y$10$mGQNHY/ZVeHmemgScw8NXOwcKb/5hA7hoB9qI/FDRPeGXX3vgc3aC', NULL, '2025-04-11 20:25:38', NULL, 'Active', '2025-03-30 01:38:01', '2025-04-11 20:25:38'),
-(30, 'Yaz', 'Sullivan', 'Female', '2001-02-03', 'Winsconsin', '+1-2910-1029', 'yaz@gmail.com', 'Drivers License', '1213233', 'Account Officer', '$2y$10$mGQNHY/ZVeHmemgScw8NXOwcKb/5hA7hoB9qI/FDRPeGXX3vgc3aC', NULL, '2025-04-11 20:25:42', '2025-04-11 19:48:45', 'Active', '2025-03-30 22:08:43', '2025-04-11 20:25:42'),
+(30, 'Yaz', 'Sullivan', 'Female', '2001-02-03', 'Winsconsin', '+1-2910-1029', 'yaz@gmail.com', 'Drivers License', '1213233', 'Account Officer', '$2y$10$mGQNHY/ZVeHmemgScw8NXOwcKb/5hA7hoB9qI/FDRPeGXX3vgc3aC', NULL, '2025-04-13 22:20:04', '2025-04-13 22:20:04', 'Active', '2025-03-30 22:08:43', '2025-04-13 22:20:04'),
 (31, 'Uchechukwu', 'Udo', 'Male', '2001-03-30', 'Winsconsin', '08065198300', 'udoigweuchechukwu1@gmail.com', 'Drivers License', '112232323', 'Customer', '$2y$10$mGQNHY/ZVeHmemgScw8NXOwcKb/5hA7hoB9qI/FDRPeGXX3vgc3aC', '8f7d807e1f53eff5f9efbe5cb81090fb', '2025-04-11 20:25:49', '2025-04-01 03:53:54', 'Active', '2025-03-31 22:12:43', '2025-04-11 20:25:49'),
 (34, 'Ikem', 'Abia', 'Male', '1998-07-10', 'New York', '0909817281', 'udoigweuchechukwu2@gmail.com', 'Drivers License', '332242', 'Customer', '$2y$10$mGQNHY/ZVeHmemgScw8NXOwcKb/5hA7hoB9qI/FDRPeGXX3vgc3aC', '1fc214004c9481e4c8073e85323bfd4b', '2025-04-11 20:25:53', '2025-04-01 21:32:53', 'Active', '2025-04-01 05:47:17', '2025-04-11 20:25:53'),
 (35, 'Tolu', 'Ayo', 'Male', '2001-07-05', 'Baltimore, Maryland', '0908789185', 'udoigweuchechukwu3@gmail.com', 'Drivers License', '76837364', 'Customer', '$2y$10$mGQNHY/ZVeHmemgScw8NXOwcKb/5hA7hoB9qI/FDRPeGXX3vgc3aC', '34ed066df378efacc9b924ec161e7639', '2025-04-11 21:16:45', '2025-04-11 21:16:45', 'Active', '2025-04-01 21:48:19', '2025-04-11 21:16:45'),
@@ -1100,8 +1178,12 @@ INSERT INTO `users` (`user_id`, `first_name`, `last_name`, `gender`, `dob`, `add
 (39, 'Jazmine', 'Yaz', 'Female', '2000-02-10', 'Main Street Kansas City', '+1 2345 1121', 'yazmine@gmail.com', 'Drivers License', '1234554422', 'Account Officer', '$2y$10$mGQNHY/ZVeHmemgScw8NXOwcKb/5hA7hoB9qI/FDRPeGXX3vgc3aC', NULL, '2025-04-11 20:26:03', NULL, 'Active', '2025-04-10 19:57:50', '2025-04-11 20:26:03'),
 (40, 'Melvine', 'Heinz', 'Female', '1999-09-10', 'Main Street Califonia', '+1291 19281 821', 'heinz@gmail.com', 'SSN', '123212321', 'Account Officer', '$2y$10$mGQNHY/ZVeHmemgScw8NXOwcKb/5hA7hoB9qI/FDRPeGXX3vgc3aC', NULL, '2025-04-11 20:26:06', '2025-04-11 19:47:49', 'Active', '2025-04-10 20:05:18', '2025-04-11 20:26:06'),
 (42, 'Tom', 'Halland', 'Male', '2003-03-10', 'Main Street North Jakorta', '+1 909 8019 192', 'udoigweuchechukwu5@gmail.com', 'Drivers License', '12343212', 'Admin', '$2y$10$mGQNHY/ZVeHmemgScw8NXOwcKb/5hA7hoB9qI/FDRPeGXX3vgc3aC', NULL, '2025-04-11 20:41:24', NULL, 'Inactive', '2025-04-10 20:16:54', '2025-04-11 20:41:24'),
-(43, 'Laura', 'Hills', 'Female', '1984-02-11', 'Portland Oregon', '+1 9829 8192 81', 'udoigweuchechukwu6@gmail.com', 'Drivers License', '1234321', 'Customer', '$2y$10$JyyLXWWoaDAhq0Vihy.2OO/kQnwEKDBa61gGJQcSSPQPE8peU9X0a', '6ea2ef7311b482724a9b7b0bc0dd85c6', '2025-04-11 21:25:38', '2025-04-11 21:06:20', 'Active', '2025-04-11 20:42:53', '2025-04-11 21:25:38'),
-(44, 'Harission', 'Ford', 'Male', '1985-12-31', 'New Hamshire', '+1 234 019 1029', 'udoigweuchechukwu@gmail.com', 'Drivers License', '178123212', 'Customer', '$2y$10$OcQtDArRXkdS3D7J/PxaG.pSiD1IohzrqOEA15P182PK2fp7BKnje', '84117275be999ff55a987b9381e01f96', '2025-04-11 21:27:18', '2025-04-11 21:27:18', 'Active', '2025-04-11 21:26:35', '2025-04-11 21:27:18');
+(43, 'Laura', 'Hills', 'Female', '1984-02-11', 'Portland Oregon', '+1 9829 8192 81', 'udoigweuchechukwu6@gmail.com', 'Drivers License', '1234321', 'Customer', '$2y$10$JyyLXWWoaDAhq0Vihy.2OO/kQnwEKDBa61gGJQcSSPQPE8peU9X0a', '6ea2ef7311b482724a9b7b0bc0dd85c6', '2025-04-13 22:25:07', '2025-04-13 22:25:07', 'Active', '2025-04-11 20:42:53', '2025-04-13 22:25:07'),
+(44, 'Harission', 'Ford', 'Male', '1985-12-31', 'New Hamshire', '+1 234 019 1029', 'udoigweuchechukwu7@gmail.com', 'Drivers License', '178123212', 'Customer', '$2y$10$OcQtDArRXkdS3D7J/PxaG.pSiD1IohzrqOEA15P182PK2fp7BKnje', '84117275be999ff55a987b9381e01f96', '2025-04-13 20:47:03', '2025-04-11 21:27:18', 'Active', '2025-04-11 21:26:35', '2025-04-13 20:47:03'),
+(45, 'James', 'Earl', 'Male', '1986-06-11', 'Montreal', '+1 2343 1221 12', 'udoigweuchechukwu8@gmail.com', 'Drivers License', '123456', 'Customer', '$2y$10$52TFK7yCbKGjtG432dp0le1r6SgEcPOJT4LHOS4NISZHXrzbN.N1O', '65658fde58ab3c2b6e5132a39fae7cb9', '2025-04-13 21:03:58', '2025-04-13 20:49:02', 'Active', '2025-04-13 20:48:27', '2025-04-13 21:03:58'),
+(46, 'Michael', 'Jackson', 'Male', '2000-04-03', 'Neverland Ranch', '+1 1233 1212 121', 'udoigweuchechukwu9@gmail.com', 'Drivers License', '1234344', 'Customer', '$2y$10$5wDHgpgMIoM3bg5MZu41H..yvZkp0yX6LPK/CIQqO0EbYIw8s7pK2', '061412e4a03c02f9902576ec55ebbe77', '2025-04-13 21:07:38', '2025-04-13 21:06:10', 'Active', '2025-04-13 21:05:26', '2025-04-13 21:07:38'),
+(47, 'Helena', 'Kane', 'Female', '2002-02-13', 'Massachusets', '+ 1232 12123', 'udoigweuchechukwu9@gmail.com', 'Drivers License', '1234', 'Customer', '$2y$10$ATNHH..LvMZeuGj9FCfJZug8FdC.h4n31GBCaLiozC/DTyse3jA5y', '182be0c5cdcd5072bb1864cdee4d3d6e', '2025-04-13 22:06:45', '2025-04-13 21:09:34', 'Active', '2025-04-13 21:08:44', '2025-04-13 22:06:45'),
+(48, 'John', 'Cena', 'Male', '1963-03-13', 'New Mexico', '+1 1231 1211', 'udoigweuchechukwu@gmail.com', 'Drivers License', '143235234525', 'Account Officer', 'finhive', NULL, '2025-04-13 22:09:50', NULL, 'Inactive', '2025-04-13 22:08:04', '2025-04-13 22:09:50');
 
 --
 -- Triggers `users`
@@ -1281,49 +1363,49 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `account`
 --
 ALTER TABLE `account`
-  MODIFY `account_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1000000036;
+  MODIFY `account_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1000000039;
 
 --
 -- AUTO_INCREMENT for table `budget_categories`
 --
 ALTER TABLE `budget_categories`
-  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `cards`
 --
 ALTER TABLE `cards`
-  MODIFY `card_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `card_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT for table `notifications`
 --
 ALTER TABLE `notifications`
-  MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=134;
+  MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=188;
 
 --
 -- AUTO_INCREMENT for table `otp`
 --
 ALTER TABLE `otp`
-  MODIFY `otp_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `otp_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `safe_lock`
 --
 ALTER TABLE `safe_lock`
-  MODIFY `safe_lock_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `safe_lock_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `transactions`
 --
 ALTER TABLE `transactions`
-  MODIFY `transaction_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
+  MODIFY `transaction_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
 -- Constraints for dumped tables

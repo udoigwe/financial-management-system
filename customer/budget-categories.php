@@ -61,7 +61,7 @@
                 <div class="form-head d-flex flex-wrap mb-sm-4 mb-3 align-items-center">
                     <div class="me-auto  d-lg-block mb-3">
                         <h2 class="text-black mb-0 font-w700">Budget Categories</h2>
-                        <p class="mb-0">Every spending must be budgeted for!!!</p>
+                        <p class="mb-0">Create budget categories</p>
                     </div>
                     <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#addCategoryModal" class="btn btn-primary btn-rounded mb-3"><i class="fa fa-user-plus me-3"></i>New Budget Category</a>
                     <!-- Add Category -->
