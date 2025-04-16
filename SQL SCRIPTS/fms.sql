@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 16, 2025 at 11:31 PM
+-- Generation Time: Apr 16, 2025 at 11:51 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -497,7 +497,8 @@ INSERT INTO `account` (`account_id`, `user_id`, `account_officer_id`, `account_t
 (1000000039, 49, 39, 'Savings', 1234, 1500, '2025-04-16 20:04:59', NULL),
 (1000000040, 50, 48, 'Savings', 1234, 1500, '2025-04-16 20:08:42', NULL),
 (1000000041, 51, 23, 'Savings', 1234, 1500, '2025-04-16 20:12:32', NULL),
-(1000000042, 52, 24, 'Savings', 1234, 1500, '2025-04-16 20:19:08', NULL);
+(1000000042, 52, 24, 'Savings', 1234, 1500, '2025-04-16 20:19:08', NULL),
+(1000000043, 53, 26, 'Savings', 1234, 1500, '2025-04-16 21:49:21', NULL);
 
 --
 -- Triggers `account`
@@ -615,7 +616,8 @@ INSERT INTO `budget_categories` (`category_id`, `account_id`, `category_name`, `
 (31, 1000000040, 'Savings', 'Budget category associated with the SafeLock', 0, '2025-04-16 20:08:00', '2025-05-16 20:08:00', '#FB23231F', 'Active', '2025-04-16 20:08:42', NULL),
 (32, 1000000041, 'Savings', 'Budget category associated with the SafeLock', 0, '2025-04-16 20:12:00', '2025-05-16 20:12:00', '#FB23231F', 'Active', '2025-04-16 20:12:32', NULL),
 (33, 1000000042, 'Savings', 'Budget category associated with the SafeLock', 0, '2025-04-16 20:19:00', '2025-05-16 20:19:00', '#000000', 'Active', '2025-04-16 20:19:08', '2025-04-16 20:29:13'),
-(34, 1000000042, 'Investments', 'Investment category', 121, '2025-04-01 20:30:00', '2025-04-26 20:30:00', '#1c3b63', 'Active', '2025-04-16 20:30:32', NULL);
+(34, 1000000042, 'Investments', 'Investment category', 121, '2025-04-01 20:30:00', '2025-04-26 20:30:00', '#1c3b63', 'Active', '2025-04-16 20:30:32', NULL),
+(35, 1000000043, 'Savings', 'Budget category associated with the SafeLock', 0, '2025-04-16 21:49:00', '2025-05-16 21:49:00', '#FB23231F', 'Active', '2025-04-16 21:49:21', NULL);
 
 --
 -- Triggers `budget_categories`
@@ -689,7 +691,8 @@ INSERT INTO `cards` (`card_id`, `account_id`, `card_number`, `expiry_date`, `car
 (40, 1000000039, '1761917936127526', '2029-04-16', 'DEBIT', '2025-04-16 20:04:59'),
 (41, 1000000040, '8202900114005996', '2029-04-16', 'DEBIT', '2025-04-16 20:08:42'),
 (42, 1000000041, '9174289639571099', '2029-04-16', 'DEBIT', '2025-04-16 20:12:32'),
-(43, 1000000042, '7807326298892660', '2029-04-16', 'DEBIT', '2025-04-16 20:19:08');
+(43, 1000000042, '7807326298892660', '2029-04-16', 'DEBIT', '2025-04-16 20:19:08'),
+(44, 1000000043, '2546578823012144', '2029-04-16', 'DEBIT', '2025-04-16 21:49:21');
 
 -- --------------------------------------------------------
 
@@ -938,7 +941,11 @@ INSERT INTO `notifications` (`notification_id`, `user_id`, `title`, `message`, `
 (204, 52, 'Budget Categories', 'Setup budget categories to track spending', 'Unread', '2025-04-16 20:19:12', NULL),
 (205, 52, 'Login Successful', 'Welcome onboard Love Iheanacho', 'Unread', '2025-04-16 20:21:26', NULL),
 (206, 52, 'Budget Category Updated', 'Budget Category updated successfully', 'Unread', '2025-04-16 20:29:13', NULL),
-(207, 52, 'Budget Category Created', 'Budget Category created successfully', 'Unread', '2025-04-16 20:30:32', NULL);
+(207, 52, 'Budget Category Created', 'Budget Category created successfully', 'Unread', '2025-04-16 20:30:32', NULL),
+(208, 44, 'Login Successful', 'Welcome onboard Harission Ford', 'Unread', '2025-04-16 21:38:26', NULL),
+(209, 53, 'Account Verification', 'An account verification email has been sent to udoigweuchechukwu@gmail.com', 'Unread', '2025-04-16 21:49:24', NULL),
+(210, 53, 'Budget Categories', 'Setup budget categories to track spending', 'Unread', '2025-04-16 21:49:24', NULL),
+(211, 53, 'Login Successful', 'Welcome onboard Lawrence Fishborne', 'Unread', '2025-04-16 21:49:41', NULL);
 
 --
 -- Triggers `notifications`
@@ -1035,7 +1042,8 @@ INSERT INTO `safe_lock` (`safe_lock_id`, `account_id`, `balance`, `lock_start_ti
 (13, 1000000039, 0, '2025-04-16 20:04:59', '2025-04-16 20:34:59', '2025-04-16 20:04:59', NULL),
 (14, 1000000040, 0, '2025-04-16 20:08:00', '2025-04-16 20:38:42', '2025-04-16 20:08:42', '2025-04-16 21:10:35'),
 (15, 1000000041, 0, '2025-04-16 20:12:00', '2025-04-30 20:42:00', '2025-04-16 20:12:32', '2025-04-16 21:10:25'),
-(16, 1000000042, 0, '2025-04-16 20:19:00', '2025-05-16 20:19:00', '2025-04-16 20:19:08', '2025-04-16 20:29:13');
+(16, 1000000042, 0, '2025-04-16 20:19:00', '2025-05-16 20:19:00', '2025-04-16 20:19:08', '2025-04-16 20:29:13'),
+(17, 1000000043, 0, '2025-04-16 21:49:00', '2025-05-16 21:49:00', '2025-04-16 21:49:21', NULL);
 
 --
 -- Triggers `safe_lock`
@@ -1218,7 +1226,7 @@ INSERT INTO `users` (`user_id`, `first_name`, `last_name`, `gender`, `dob`, `add
 (40, 'Melvine', 'Heinz', 'Female', '1999-09-10', 'Main Street Califonia', '+1291 19281 821', 'heinz@gmail.com', 'SSN', '123212321', 'Account Officer', '$2y$10$mGQNHY/ZVeHmemgScw8NXOwcKb/5hA7hoB9qI/FDRPeGXX3vgc3aC', NULL, '2025-04-11 20:26:06', '2025-04-11 19:47:49', 'Active', '2025-04-10 20:05:18', '2025-04-11 20:26:06'),
 (42, 'Tom', 'Halland', 'Male', '2003-03-10', 'Main Street North Jakorta', '+1 909 8019 192', 'udoigweuchechukwu5@gmail.com', 'Drivers License', '12343212', 'Admin', '$2y$10$mGQNHY/ZVeHmemgScw8NXOwcKb/5hA7hoB9qI/FDRPeGXX3vgc3aC', NULL, '2025-04-11 20:41:24', NULL, 'Inactive', '2025-04-10 20:16:54', '2025-04-11 20:41:24'),
 (43, 'Laura', 'Hills', 'Female', '1984-02-11', 'Portland Oregon', '+1 9829 8192 81', 'udoigweuchechukwu6@gmail.com', 'Drivers License', '1234321', 'Customer', '$2y$10$NsaTYnhXgiUmF0QX2THrEuQNqRsABO0L.8z9ADX4lX...8nkzDxjq', '6ea2ef7311b482724a9b7b0bc0dd85c6', '2025-04-16 19:21:56', '2025-04-16 18:51:31', 'Active', '2025-04-11 20:42:53', '2025-04-16 19:21:56'),
-(44, 'Harission', 'Ford', 'Male', '1985-12-31', 'New Hamshire', '+1 234 019 1029', 'udoigweuchechukwu7@gmail.com', 'Drivers License', '178123212', 'Customer', '$2y$10$OcQtDArRXkdS3D7J/PxaG.pSiD1IohzrqOEA15P182PK2fp7BKnje', '84117275be999ff55a987b9381e01f96', '2025-04-13 20:47:03', '2025-04-11 21:27:18', 'Active', '2025-04-11 21:26:35', '2025-04-13 20:47:03'),
+(44, 'Harission', 'Ford', 'Male', '1985-12-31', 'New Hamshire', '+1 234 019 1029', 'udoigweuchechukwu7@gmail.com', 'Drivers License', '178123212', 'Customer', '$2y$10$OcQtDArRXkdS3D7J/PxaG.pSiD1IohzrqOEA15P182PK2fp7BKnje', '84117275be999ff55a987b9381e01f96', '2025-04-16 21:38:26', '2025-04-16 21:38:26', 'Active', '2025-04-11 21:26:35', '2025-04-16 21:38:26'),
 (45, 'James', 'Earl', 'Male', '1986-06-11', 'Montreal', '+1 2343 1221 12', 'udoigweuchechukwu8@gmail.com', 'Drivers License', '123456', 'Customer', '$2y$10$52TFK7yCbKGjtG432dp0le1r6SgEcPOJT4LHOS4NISZHXrzbN.N1O', '65658fde58ab3c2b6e5132a39fae7cb9', '2025-04-13 21:03:58', '2025-04-13 20:49:02', 'Active', '2025-04-13 20:48:27', '2025-04-13 21:03:58'),
 (46, 'Michael', 'Jackson', 'Male', '2000-04-03', 'Neverland Ranch', '+1 1233 1212 121', 'udoigweuchechukwu9@gmail.com', 'Drivers License', '1234344', 'Customer', '$2y$10$5wDHgpgMIoM3bg5MZu41H..yvZkp0yX6LPK/CIQqO0EbYIw8s7pK2', '061412e4a03c02f9902576ec55ebbe77', '2025-04-13 21:07:38', '2025-04-13 21:06:10', 'Active', '2025-04-13 21:05:26', '2025-04-13 21:07:38'),
 (47, 'Helena', 'Kane', 'Female', '2002-02-13', 'Massachusets', '+ 1232 12123', 'udoigweuchechukwu9@gmail.com', 'Drivers License', '1234', 'Customer', '$2y$10$ATNHH..LvMZeuGj9FCfJZug8FdC.h4n31GBCaLiozC/DTyse3jA5y', '182be0c5cdcd5072bb1864cdee4d3d6e', '2025-04-13 22:06:45', '2025-04-13 21:09:34', 'Active', '2025-04-13 21:08:44', '2025-04-13 22:06:45'),
@@ -1226,7 +1234,8 @@ INSERT INTO `users` (`user_id`, `first_name`, `last_name`, `gender`, `dob`, `add
 (49, 'Malika', 'Lisa', 'Female', '1991-03-16', 'North Carolina', '+1 1239 9182 91', 'udoigweuchechukwu11@gmail.com', 'Drivers License', '224353', 'Customer', '$2y$10$2XOXpuXbTXHAi209QIpV8eW58MzJIyr7YcdNAI.fUxRnYrJkEQdoy', 'b5dc4e5d9b495d0196f61d45b26ef33e', '2025-04-16 20:07:05', NULL, 'Inactive', '2025-04-16 20:04:59', '2025-04-16 20:07:05'),
 (50, 'Lax', 'Onomeous', 'Male', '2000-03-16', 'New York', '+1 2928 918291', 'udoigweuchechukwu12@gmail.com', 'Drivers License', 'e33434', 'Customer', '$2y$10$KojCb7Nt7S8qgt2H.jbFr.aiUQlEQKCyH7yV0fm.vdvoopQPntDuG', '30ef30b64204a3088a26bc2e6ecf7602', '2025-04-16 20:10:44', NULL, 'Inactive', '2025-04-16 20:08:42', '2025-04-16 20:10:44'),
 (51, 'Iron', 'Man', 'Male', '1990-02-16', 'New York', '+1 324 1213 2424', 'udoigweuchechukwu13@gmail.com', 'Drivers License', '123431212', 'Customer', '$2y$10$nkHthAHB3WUaQfhKP9gJPOtjgo7Jfs21yR2.QukSvmC3VHAjRLPEu', 'a666587afda6e89aec274a3657558a27', '2025-04-16 20:16:56', NULL, 'Inactive', '2025-04-16 20:12:32', '2025-04-16 20:16:56'),
-(52, 'Love', 'Iheanacho', 'Male', '2002-02-16', 'South Carolina', '+1 2343 1234 12', 'udoigweuchechukwu@gmail.com', 'Drivers License', '23224242', 'Customer', '$2y$10$.w1Ss9nyiRTWYHHcNNFXd.yA2MwIoL.hs/dcA1tuzNjk70H9wneK2', '1be3bc32e6564055d5ca3e5a354acbef', '2025-04-16 20:21:26', '2025-04-16 20:21:26', 'Active', '2025-04-16 20:19:08', '2025-04-16 20:21:26');
+(52, 'Love', 'Iheanacho', 'Male', '2002-02-16', 'South Carolina', '+1 2343 1234 12', 'udoigweuchechukwu14@gmail.com', 'Drivers License', '23224242', 'Customer', '$2y$10$.w1Ss9nyiRTWYHHcNNFXd.yA2MwIoL.hs/dcA1tuzNjk70H9wneK2', '1be3bc32e6564055d5ca3e5a354acbef', '2025-04-16 21:48:18', '2025-04-16 20:21:26', 'Active', '2025-04-16 20:19:08', '2025-04-16 21:48:18'),
+(53, 'Lawrence', 'Fishborne', 'Male', '1991-01-16', 'China Town', '+1 4829 182 712', 'udoigweuchechukwu@gmail.com', 'Drivers License', '123456786', 'Customer', '$2y$10$2sn/sV1N/VG1QtCTEjFHv.0wdBWFG5vQug71vYCZ5cwHz7ql6gDJy', '0f49c89d1e7298bb9930789c8ed59d48', '2025-04-16 21:49:41', '2025-04-16 21:49:41', 'Active', '2025-04-16 21:49:21', '2025-04-16 21:49:41');
 
 --
 -- Triggers `users`
@@ -1256,7 +1265,7 @@ END
 $$
 DELIMITER ;
 DELIMITER $$
-CREATE TRIGGER `create_account_after_user_insert` AFTER INSERT ON `users` FOR EACH ROW BEGIN
+CREATE TRIGGER `create_account_and_safe_lock_after_user_insert` AFTER INSERT ON `users` FOR EACH ROW BEGIN
     DECLARE new_account_id INT;
 
     -- Only process if the new user is a customer
@@ -1267,7 +1276,7 @@ CREATE TRIGGER `create_account_after_user_insert` AFTER INSERT ON `users` FOR EA
         -- Insert a record into the safe_lock table using the new account_id
         IF new_account_id IS NOT NULL THEN
             INSERT INTO safe_lock (account_id, balance, lock_start_time, lock_end_time)
-            VALUES (new_account_id, 0.0, NOW(), NOW() + INTERVAL 30 MINUTE);
+            VALUES (new_account_id, 0.0, DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i:00'), DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 30 DAY), '%Y-%m-%d %H:%i:00'));
         END IF;
     END IF;
 END
@@ -1449,7 +1458,7 @@ ALTER TABLE `transactions`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 
 --
 -- Constraints for dumped tables
