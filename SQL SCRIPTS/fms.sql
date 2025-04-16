@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 14, 2025 at 08:34 AM
+-- Generation Time: Apr 16, 2025 at 11:31 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -479,7 +479,7 @@ CREATE TABLE `account` (
   `balance` float NOT NULL DEFAULT 0,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ;
 
 --
 -- Dumping data for table `account`
@@ -489,11 +489,15 @@ INSERT INTO `account` (`account_id`, `user_id`, `account_officer_id`, `account_t
 (1000000029, 31, 30, 'Savings', 1234, 1500, '2025-03-31 22:12:43', NULL),
 (1000000032, 34, 28, 'Savings', 1234, 2422.82, '2025-04-01 05:47:17', '2025-04-13 21:22:02'),
 (1000000033, 35, 23, 'Savings', 1234, 1014.18, '2025-04-01 21:48:19', '2025-04-13 21:58:24'),
-(1000000034, 43, 24, 'Savings', 1234, 1500, '2025-04-11 20:42:53', NULL),
+(1000000034, 43, 24, 'Savings', 1234, 1400, '2025-04-11 20:42:53', '2025-04-16 19:49:19'),
 (1000000035, 44, 26, 'Savings', 1234, 1468, '2025-04-11 21:26:35', '2025-04-11 21:42:23'),
 (1000000036, 45, 40, 'Savings', 1234, 1500, '2025-04-13 20:48:27', '2025-04-13 23:05:34'),
 (1000000037, 46, 27, 'Savings', 1234, 1500, '2025-04-13 21:05:26', NULL),
-(1000000038, 47, 38, 'Savings', 1234, 747, '2025-04-13 21:08:44', '2025-04-13 21:54:26');
+(1000000038, 47, 38, 'Savings', 1234, 747, '2025-04-13 21:08:44', '2025-04-13 21:54:26'),
+(1000000039, 49, 39, 'Savings', 1234, 1500, '2025-04-16 20:04:59', NULL),
+(1000000040, 50, 48, 'Savings', 1234, 1500, '2025-04-16 20:08:42', NULL),
+(1000000041, 51, 23, 'Savings', 1234, 1500, '2025-04-16 20:12:32', NULL),
+(1000000042, 52, 24, 'Savings', 1234, 1500, '2025-04-16 20:19:08', NULL);
 
 --
 -- Triggers `account`
@@ -579,15 +583,15 @@ CREATE TABLE `budget_categories` (
   `budget_category_status` enum('Active','Inactive') NOT NULL DEFAULT 'Active',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `edited_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ;
 
 --
 -- Dumping data for table `budget_categories`
 --
 
 INSERT INTO `budget_categories` (`category_id`, `account_id`, `category_name`, `category_description`, `budget_limit`, `budget_limit_start_time`, `budget_limit_end_time`, `color_code`, `budget_category_status`, `created_at`, `edited_at`) VALUES
-(3, 1000000029, 'Savings', 'Budget category associated with the SafeLock', 0, '2025-03-31 22:12:00', '2025-03-31 22:12:00', '#FB23231F', 'Active', '2025-03-31 22:12:43', '2025-04-11 21:36:40'),
-(6, 1000000032, 'Savings', 'Budget category associated with the SafeLock', 0, '2025-04-01 05:47:00', '2025-04-01 05:47:00', '#FB23231F', 'Active', '2025-04-01 05:47:17', '2025-04-11 21:36:29'),
+(3, 1000000029, 'Savings', 'Budget category associated with the SafeLock', 0, '2025-03-31 22:12:00', '2025-04-10 22:12:00', '#FB23231F', 'Active', '2025-03-31 22:12:43', '2025-04-16 20:53:06'),
+(6, 1000000032, 'Savings', 'Budget category associated with the SafeLock', 0, '2025-04-01 05:47:00', '2025-04-11 05:47:00', '#FB23231F', 'Active', '2025-04-01 05:47:17', '2025-04-16 20:53:21'),
 (11, 1000000032, 'Entertainment/Subscriptions', 'Budget category to manage my entertainment lifestyles', 160, '2025-04-01 12:24:00', '2025-04-25 12:24:00', '#501b1b', 'Active', '2025-04-01 12:25:13', NULL),
 (12, 1000000032, 'Transportation/Fuel', 'This is i', 145, '2025-04-01 18:29:00', '2025-04-26 15:29:00', '#b38080', 'Active', '2025-04-01 12:29:24', '2025-04-13 22:54:39'),
 (13, 1000000032, 'Rent', 'sdsdsg', 212, '2025-04-01 12:30:00', '2025-04-16 12:30:00', '#71762e', 'Active', '2025-04-01 12:31:03', '2025-04-13 22:54:19'),
@@ -595,10 +599,10 @@ INSERT INTO `budget_categories` (`category_id`, `account_id`, `category_name`, `
 (15, 1000000032, 'Miscellaneous', 'I want to manage my miscelllaneous spendings', 1212, '2025-04-01 12:36:00', '2025-04-30 12:36:00', '#a55f5f', 'Active', '2025-04-01 12:38:04', NULL),
 (16, 1000000032, 'Investments', 'Monitoring my investment strategies', 323, '2025-04-11 13:13:00', '2025-04-25 13:13:00', '#9787ab', 'Active', '2025-04-01 13:13:30', NULL),
 (17, 1000000032, 'Drinks', 'I want to save 230 this month on drinks', 230, '2025-04-03 13:14:00', '2025-04-27 13:14:00', '#473e3e', 'Active', '2025-04-01 13:14:46', NULL),
-(18, 1000000033, 'Savings', 'Budget category associated with the SafeLock', 1, '2025-04-01 21:48:00', '2025-04-01 21:48:00', '#000000', 'Active', '2025-04-01 21:48:19', '2025-04-05 20:10:41'),
+(18, 1000000033, 'Savings', 'Budget category associated with the SafeLock', 1, '2025-04-01 21:48:00', '2025-04-11 21:48:00', '#000000', 'Active', '2025-04-01 21:48:19', '2025-04-16 20:53:28'),
 (19, 1000000033, 'Miscellaneous', 'This will guide me in my miscellaneous spendings', 140, '2025-04-01 00:59:00', '2025-04-23 02:00:00', '#55a595', 'Active', '2025-04-01 21:55:26', '2025-04-11 21:17:52'),
 (20, 1000000033, 'Drinks', 'Budget on drinking', 140, '2025-04-01 21:56:00', '2025-04-17 21:56:00', '#48934a', 'Active', '2025-04-01 21:56:52', '2025-04-11 21:17:35'),
-(21, 1000000034, 'Tolu', 'Budget category associated with the SafeLock', 100, '2025-04-11 20:42:00', '2025-04-11 20:42:00', '#000000', 'Active', '2025-04-11 20:42:53', '2025-04-13 22:40:44'),
+(21, 1000000034, 'Savings', 'Budget category associated with the SafeLock', 100, '2025-04-11 20:42:00', '2025-04-21 20:42:00', '#000000', 'Active', '2025-04-11 20:42:53', '2025-04-16 20:53:36'),
 (22, 1000000035, 'Savings', 'Budget category associated with the SafeLock', 0, '2025-04-11 21:26:00', '2025-04-30 21:26:00', '#000000', 'Active', '2025-04-11 21:26:35', '2025-04-11 21:37:31'),
 (23, 1000000036, 'Savings', 'Budget category associated with the SafeLock', 0, '2025-04-13 20:48:00', '2025-05-13 20:48:00', '#000000', 'Active', '2025-04-13 20:48:27', '2025-04-13 20:50:59'),
 (24, 1000000037, 'Savings', 'Budget category associated with the SafeLock', 0, '2025-04-13 21:05:00', '2025-05-13 21:05:00', '#FB23231F', 'Active', '2025-04-13 21:05:26', NULL),
@@ -606,7 +610,12 @@ INSERT INTO `budget_categories` (`category_id`, `account_id`, `category_name`, `
 (26, 1000000038, 'Rent', 'Budget for my rent', 500, '2025-04-11 21:14:00', '2025-04-30 21:14:00', '#79ecc9', 'Active', '2025-04-13 21:15:48', '2025-04-13 21:17:45'),
 (27, 1000000034, 'Travel/Vacations', 'Travel ', 123, '2025-04-26 22:25:00', '2025-04-30 22:25:00', '#d0ecd0', 'Active', '2025-04-13 22:25:53', NULL),
 (28, 1000000034, 'Housing/Mortgage', 'Housing', 305, '2025-04-03 22:27:00', '2025-04-27 22:27:00', '#700a0a', 'Active', '2025-04-13 22:27:49', NULL),
-(29, 1000000034, 'Food/Groceries', 'Food', 230, '2025-04-03 22:28:00', '2025-04-27 22:28:00', '#a3981f', 'Active', '2025-04-13 22:28:22', NULL);
+(29, 1000000034, 'Food/Groceries', 'Food', 230, '2025-04-03 22:28:00', '2025-04-27 22:28:00', '#a3981f', 'Active', '2025-04-13 22:28:22', NULL),
+(30, 1000000039, 'Savings', 'Budget category associated with the SafeLock', 0, '2025-04-16 20:04:00', '2025-05-16 20:04:00', '#FB23231F', 'Active', '2025-04-16 20:04:59', NULL),
+(31, 1000000040, 'Savings', 'Budget category associated with the SafeLock', 0, '2025-04-16 20:08:00', '2025-05-16 20:08:00', '#FB23231F', 'Active', '2025-04-16 20:08:42', NULL),
+(32, 1000000041, 'Savings', 'Budget category associated with the SafeLock', 0, '2025-04-16 20:12:00', '2025-05-16 20:12:00', '#FB23231F', 'Active', '2025-04-16 20:12:32', NULL),
+(33, 1000000042, 'Savings', 'Budget category associated with the SafeLock', 0, '2025-04-16 20:19:00', '2025-05-16 20:19:00', '#000000', 'Active', '2025-04-16 20:19:08', '2025-04-16 20:29:13'),
+(34, 1000000042, 'Investments', 'Investment category', 121, '2025-04-01 20:30:00', '2025-04-26 20:30:00', '#1c3b63', 'Active', '2025-04-16 20:30:32', NULL);
 
 --
 -- Triggers `budget_categories`
@@ -662,7 +671,7 @@ CREATE TABLE `cards` (
   `expiry_date` date NOT NULL,
   `card_type` enum('CREDIT','DEBIT') NOT NULL,
   `issue_date` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ;
 
 --
 -- Dumping data for table `cards`
@@ -676,7 +685,11 @@ INSERT INTO `cards` (`card_id`, `account_id`, `card_number`, `expiry_date`, `car
 (36, 1000000035, '4698144911529412', '2029-04-11', 'DEBIT', '2025-04-11 21:26:35'),
 (37, 1000000036, '1562105485842760', '2029-04-13', 'DEBIT', '2025-04-13 20:48:27'),
 (38, 1000000037, '3716215776383717', '2029-04-13', 'DEBIT', '2025-04-13 21:05:26'),
-(39, 1000000038, '1097477916061690', '2029-04-13', 'DEBIT', '2025-04-13 21:08:44');
+(39, 1000000038, '1097477916061690', '2029-04-13', 'DEBIT', '2025-04-13 21:08:44'),
+(40, 1000000039, '1761917936127526', '2029-04-16', 'DEBIT', '2025-04-16 20:04:59'),
+(41, 1000000040, '8202900114005996', '2029-04-16', 'DEBIT', '2025-04-16 20:08:42'),
+(42, 1000000041, '9174289639571099', '2029-04-16', 'DEBIT', '2025-04-16 20:12:32'),
+(43, 1000000042, '7807326298892660', '2029-04-16', 'DEBIT', '2025-04-16 20:19:08');
 
 -- --------------------------------------------------------
 
@@ -712,7 +725,7 @@ CREATE TABLE `notifications` (
   `notification_status` enum('Read','Unread') NOT NULL DEFAULT 'Unread',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ;
 
 --
 -- Dumping data for table `notifications`
@@ -905,7 +918,27 @@ INSERT INTO `notifications` (`notification_id`, `user_id`, `title`, `message`, `
 (184, 43, 'Budget Category Updated', 'Budget Category updated successfully', 'Unread', '2025-04-13 22:37:00', NULL),
 (185, 43, 'Budget Category Updated', 'Budget Category updated successfully', 'Unread', '2025-04-13 22:37:16', NULL),
 (186, 43, 'Budget Category Updated', 'Budget Category updated successfully', 'Unread', '2025-04-13 22:40:34', NULL),
-(187, 43, 'Budget Category Updated', 'Budget Category updated successfully', 'Unread', '2025-04-13 22:40:44', NULL);
+(187, 43, 'Budget Category Updated', 'Budget Category updated successfully', 'Unread', '2025-04-13 22:40:44', NULL),
+(188, 22, 'Login Successful', 'Welcome onboard Mike Mayers', 'Unread', '2025-04-16 18:51:06', NULL),
+(189, 43, 'Login Successful', 'Welcome onboard Laura Hills', 'Unread', '2025-04-16 18:51:31', NULL),
+(190, 43, 'Password Update', 'Password update was successful', 'Unread', '2025-04-16 19:21:56', NULL),
+(191, 43, 'Pin Update', 'Transaction Pin update was successful', 'Unread', '2025-04-16 19:28:08', NULL),
+(192, 43, 'Debit Alert', 'Your account has been debited with $100', 'Unread', '2025-04-16 19:49:30', NULL),
+(193, 43, 'Credit Alert', 'Your account has been credited with $100', 'Unread', '2025-04-16 19:49:30', NULL),
+(194, 23, 'Login Successful', 'Welcome onboard John Woo', 'Unread', '2025-04-16 19:51:16', NULL),
+(195, 23, 'Account Update', 'Account updated successfully', 'Unread', '2025-04-16 19:52:27', NULL),
+(196, 23, 'Password Update', 'Password update was successful', 'Unread', '2025-04-16 19:55:28', NULL),
+(197, 49, 'Account Verification', 'An account verification email has been sent to udoigweuchechukwu@gmail.com', 'Unread', '2025-04-16 20:05:02', NULL),
+(198, 49, 'Budget Categories', 'Setup budget categories to track spending', 'Unread', '2025-04-16 20:05:02', NULL),
+(199, 50, 'Account Verification', 'An account verification email has been sent to udoigweuchechukwu@gmail.com', 'Unread', '2025-04-16 20:08:47', NULL),
+(200, 50, 'Budget Categories', 'Setup budget categories to track spending', 'Unread', '2025-04-16 20:08:47', NULL),
+(201, 51, 'Account Verification', 'An account verification email has been sent to udoigweuchechukwu@gmail.com', 'Unread', '2025-04-16 20:12:36', NULL),
+(202, 51, 'Budget Categories', 'Setup budget categories to track spending', 'Unread', '2025-04-16 20:12:36', NULL),
+(203, 52, 'Account Verification', 'An account verification email has been sent to udoigweuchechukwu@gmail.com', 'Unread', '2025-04-16 20:19:12', NULL),
+(204, 52, 'Budget Categories', 'Setup budget categories to track spending', 'Unread', '2025-04-16 20:19:12', NULL),
+(205, 52, 'Login Successful', 'Welcome onboard Love Iheanacho', 'Unread', '2025-04-16 20:21:26', NULL),
+(206, 52, 'Budget Category Updated', 'Budget Category updated successfully', 'Unread', '2025-04-16 20:29:13', NULL),
+(207, 52, 'Budget Category Created', 'Budget Category created successfully', 'Unread', '2025-04-16 20:30:32', NULL);
 
 --
 -- Triggers `notifications`
@@ -950,7 +983,7 @@ CREATE TABLE `otp` (
   `otp` int(6) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `expires_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ;
 
 -- --------------------------------------------------------
 
@@ -984,21 +1017,25 @@ CREATE TABLE `safe_lock` (
   `lock_end_time` timestamp NOT NULL DEFAULT current_timestamp(),
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ;
 
 --
 -- Dumping data for table `safe_lock`
 --
 
 INSERT INTO `safe_lock` (`safe_lock_id`, `account_id`, `balance`, `lock_start_time`, `lock_end_time`, `created_at`, `updated_at`) VALUES
-(3, 1000000029, 0, '2025-03-31 22:12:43', '2025-03-31 22:42:43', '2025-03-31 22:12:43', NULL),
-(6, 1000000032, 0, '2025-04-01 05:47:17', '2025-04-01 06:17:17', '2025-04-01 05:47:17', NULL),
+(3, 1000000029, 0, '2025-03-31 22:12:00', '2025-04-29 22:42:00', '2025-03-31 22:12:43', '2025-04-16 21:12:28'),
+(6, 1000000032, 0, '2025-04-01 05:47:17', '2025-04-23 06:17:17', '2025-04-01 05:47:17', '2025-04-16 21:12:07'),
 (7, 1000000033, 336.95, '2025-04-01 21:48:00', '2025-04-29 21:48:00', '2025-04-01 21:48:19', '2025-04-05 23:12:16'),
-(8, 1000000034, 0, '2025-04-11 20:42:00', '2025-04-11 20:42:00', '2025-04-11 20:42:53', '2025-04-13 22:37:16'),
+(8, 1000000034, 100, '2025-04-11 20:42:00', '2025-04-21 20:42:00', '2025-04-11 20:42:53', '2025-04-16 21:11:51'),
 (9, 1000000035, 32, '2025-04-11 21:26:00', '2025-04-30 21:26:00', '2025-04-11 21:26:35', '2025-04-11 21:42:23'),
 (10, 1000000036, 0, '2025-04-13 20:48:00', '2025-05-13 20:48:00', '2025-04-13 20:48:27', '2025-04-13 20:50:59'),
-(11, 1000000037, 0, '2025-04-13 21:05:26', '2025-04-13 21:35:26', '2025-04-13 21:05:26', NULL),
-(12, 1000000038, 62.2, '2025-04-13 21:08:00', '2025-05-29 21:08:00', '2025-04-13 21:08:44', '2025-04-13 21:58:24');
+(11, 1000000037, 0, '2025-04-13 21:05:26', '2025-04-26 21:35:26', '2025-04-13 21:05:26', '2025-04-16 21:11:29'),
+(12, 1000000038, 62.2, '2025-04-13 21:08:00', '2025-05-29 21:08:00', '2025-04-13 21:08:44', '2025-04-13 21:58:24'),
+(13, 1000000039, 0, '2025-04-16 20:04:59', '2025-04-16 20:34:59', '2025-04-16 20:04:59', NULL),
+(14, 1000000040, 0, '2025-04-16 20:08:00', '2025-04-16 20:38:42', '2025-04-16 20:08:42', '2025-04-16 21:10:35'),
+(15, 1000000041, 0, '2025-04-16 20:12:00', '2025-04-30 20:42:00', '2025-04-16 20:12:32', '2025-04-16 21:10:25'),
+(16, 1000000042, 0, '2025-04-16 20:19:00', '2025-05-16 20:19:00', '2025-04-16 20:19:08', '2025-04-16 20:29:13');
 
 --
 -- Triggers `safe_lock`
@@ -1053,7 +1090,7 @@ CREATE TABLE `transactions` (
   `transaction_source` enum('Main Account','Safe Lock') NOT NULL DEFAULT 'Main Account',
   `transaction_destination` enum('Main Account','Safe Lock') NOT NULL DEFAULT 'Main Account',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ;
 
 --
 -- Dumping data for table `transactions`
@@ -1097,7 +1134,9 @@ INSERT INTO `transactions` (`transaction_id`, `account_id`, `sender_account_id`,
 (54, 1000000038, NULL, 25, 'Debit', 121, 0, 747, 'Within Budget', 'Funds Transfer', 'Main Account', 'Safe Lock', '2025-04-13 21:54:26'),
 (55, 1000000038, 1000000038, NULL, 'Credit', 121, 0, 121, NULL, 'Funds Received', 'Main Account', 'Safe Lock', '2025-04-13 21:54:26'),
 (56, 1000000038, NULL, 26, 'Debit', 56, 2.8, 62.2, 'Exceeds Budget', 'Funds Transfer', 'Safe Lock', 'Main Account', '2025-04-13 21:58:24'),
-(57, 1000000033, 1000000038, NULL, 'Credit', 56, 0, 1014.18, NULL, 'Funds Received', 'Safe Lock', 'Safe Lock', '2025-04-13 21:58:24');
+(57, 1000000033, 1000000038, NULL, 'Credit', 56, 0, 1014.18, NULL, 'Funds Received', 'Safe Lock', 'Safe Lock', '2025-04-13 21:58:24'),
+(58, 1000000034, NULL, 21, 'Debit', 100, 0, 1400, 'Within Budget', 'Funds Transfer', 'Main Account', 'Safe Lock', '2025-04-16 19:49:19'),
+(59, 1000000034, 1000000034, NULL, 'Credit', 100, 0, 100, NULL, 'Funds Received', 'Main Account', 'Safe Lock', '2025-04-16 19:49:19');
 
 -- --------------------------------------------------------
 
@@ -1164,8 +1203,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `first_name`, `last_name`, `gender`, `dob`, `address`, `phone`, `email`, `identification`, `identification_number`, `role`, `password`, `hash`, `hash_time`, `last_seen`, `account_status`, `created_at`, `updated_at`) VALUES
-(22, 'Mike', 'Mayers', 'Male', '1972-03-22', 'Texas ', '09089098789', 'admin@finhive.com', 'Drivers License', '1234554232', 'Admin', '$2y$10$mGQNHY/ZVeHmemgScw8NXOwcKb/5hA7hoB9qI/FDRPeGXX3vgc3aC', 'd707329bece455a462b58ce00d1194c9', '2025-04-13 22:10:48', '2025-04-13 22:10:48', 'Active', '2025-03-17 23:22:15', '2025-04-13 22:10:48'),
-(23, 'John', 'Woo', 'Male', '1969-03-02', 'Texas', '09089098788', 'john@gmail.com', 'Drivers License', '12321232', 'Account Officer', '$2y$10$mGQNHY/ZVeHmemgScw8NXOwcKb/5hA7hoB9qI/FDRPeGXX3vgc3aC', '647bba344396e7c8170902bcf2e15551', '2025-04-11 20:55:13', '2025-04-11 20:55:13', 'Active', '2025-03-19 00:15:14', '2025-04-11 20:55:13'),
+(22, 'Mike', 'Mayers', 'Male', '1972-03-22', 'Texas ', '09089098789', 'admin@finhive.com', 'Drivers License', '1234554232', 'Admin', '$2y$10$mGQNHY/ZVeHmemgScw8NXOwcKb/5hA7hoB9qI/FDRPeGXX3vgc3aC', 'd707329bece455a462b58ce00d1194c9', '2025-04-16 18:51:06', '2025-04-16 18:51:06', 'Active', '2025-03-17 23:22:15', '2025-04-16 18:51:06'),
+(23, 'John', 'Woo', 'Male', '1969-03-02', 'Texas', '09089098788', 'john@gmail.com', 'Drivers License', '12321232', 'Account Officer', '$2y$10$PZWcytRX5E/F6/zkOrwnS.oRa1tP.1g031mOCSHf.AShCmqZfQ2nW', '647bba344396e7c8170902bcf2e15551', '2025-04-16 19:55:28', '2025-04-16 19:51:16', 'Active', '2025-03-19 00:15:14', '2025-04-16 19:55:28'),
 (24, 'Wilson', 'Gihon', 'Male', '1981-09-10', 'State House, Winsconsin', '+1-2910-10291', 'gihon@finhive.com', 'Drivers License', '1110192019', 'Account Officer', '$2y$10$mGQNHY/ZVeHmemgScw8NXOwcKb/5hA7hoB9qI/FDRPeGXX3vgc3aC', NULL, '2025-04-11 20:25:27', NULL, 'Active', '2025-03-30 00:41:44', '2025-04-11 20:25:27'),
 (26, 'James', 'Earl', 'Male', '2001-03-30', 'Washington DC', '+1-902-01992', 'james-earl@gmail.com', 'SSN', '238923-298923', 'Account Officer', '$2y$10$mGQNHY/ZVeHmemgScw8NXOwcKb/5hA7hoB9qI/FDRPeGXX3vgc3aC', NULL, '2025-04-11 20:25:31', NULL, 'Active', '2025-03-30 01:34:07', '2025-04-11 20:25:31'),
 (27, 'China', 'Aduino', 'Female', '2001-03-30', 'Texas Houston', '090817291', 'china@finhive.com', 'Drivers License', '12112121', 'Account Officer', '$2y$10$mGQNHY/ZVeHmemgScw8NXOwcKb/5hA7hoB9qI/FDRPeGXX3vgc3aC', NULL, '2025-04-11 20:25:34', NULL, 'Active', '2025-03-30 01:35:59', '2025-04-11 20:25:34'),
@@ -1178,12 +1217,16 @@ INSERT INTO `users` (`user_id`, `first_name`, `last_name`, `gender`, `dob`, `add
 (39, 'Jazmine', 'Yaz', 'Female', '2000-02-10', 'Main Street Kansas City', '+1 2345 1121', 'yazmine@gmail.com', 'Drivers License', '1234554422', 'Account Officer', '$2y$10$mGQNHY/ZVeHmemgScw8NXOwcKb/5hA7hoB9qI/FDRPeGXX3vgc3aC', NULL, '2025-04-11 20:26:03', NULL, 'Active', '2025-04-10 19:57:50', '2025-04-11 20:26:03'),
 (40, 'Melvine', 'Heinz', 'Female', '1999-09-10', 'Main Street Califonia', '+1291 19281 821', 'heinz@gmail.com', 'SSN', '123212321', 'Account Officer', '$2y$10$mGQNHY/ZVeHmemgScw8NXOwcKb/5hA7hoB9qI/FDRPeGXX3vgc3aC', NULL, '2025-04-11 20:26:06', '2025-04-11 19:47:49', 'Active', '2025-04-10 20:05:18', '2025-04-11 20:26:06'),
 (42, 'Tom', 'Halland', 'Male', '2003-03-10', 'Main Street North Jakorta', '+1 909 8019 192', 'udoigweuchechukwu5@gmail.com', 'Drivers License', '12343212', 'Admin', '$2y$10$mGQNHY/ZVeHmemgScw8NXOwcKb/5hA7hoB9qI/FDRPeGXX3vgc3aC', NULL, '2025-04-11 20:41:24', NULL, 'Inactive', '2025-04-10 20:16:54', '2025-04-11 20:41:24'),
-(43, 'Laura', 'Hills', 'Female', '1984-02-11', 'Portland Oregon', '+1 9829 8192 81', 'udoigweuchechukwu6@gmail.com', 'Drivers License', '1234321', 'Customer', '$2y$10$JyyLXWWoaDAhq0Vihy.2OO/kQnwEKDBa61gGJQcSSPQPE8peU9X0a', '6ea2ef7311b482724a9b7b0bc0dd85c6', '2025-04-13 22:25:07', '2025-04-13 22:25:07', 'Active', '2025-04-11 20:42:53', '2025-04-13 22:25:07'),
+(43, 'Laura', 'Hills', 'Female', '1984-02-11', 'Portland Oregon', '+1 9829 8192 81', 'udoigweuchechukwu6@gmail.com', 'Drivers License', '1234321', 'Customer', '$2y$10$NsaTYnhXgiUmF0QX2THrEuQNqRsABO0L.8z9ADX4lX...8nkzDxjq', '6ea2ef7311b482724a9b7b0bc0dd85c6', '2025-04-16 19:21:56', '2025-04-16 18:51:31', 'Active', '2025-04-11 20:42:53', '2025-04-16 19:21:56'),
 (44, 'Harission', 'Ford', 'Male', '1985-12-31', 'New Hamshire', '+1 234 019 1029', 'udoigweuchechukwu7@gmail.com', 'Drivers License', '178123212', 'Customer', '$2y$10$OcQtDArRXkdS3D7J/PxaG.pSiD1IohzrqOEA15P182PK2fp7BKnje', '84117275be999ff55a987b9381e01f96', '2025-04-13 20:47:03', '2025-04-11 21:27:18', 'Active', '2025-04-11 21:26:35', '2025-04-13 20:47:03'),
 (45, 'James', 'Earl', 'Male', '1986-06-11', 'Montreal', '+1 2343 1221 12', 'udoigweuchechukwu8@gmail.com', 'Drivers License', '123456', 'Customer', '$2y$10$52TFK7yCbKGjtG432dp0le1r6SgEcPOJT4LHOS4NISZHXrzbN.N1O', '65658fde58ab3c2b6e5132a39fae7cb9', '2025-04-13 21:03:58', '2025-04-13 20:49:02', 'Active', '2025-04-13 20:48:27', '2025-04-13 21:03:58'),
 (46, 'Michael', 'Jackson', 'Male', '2000-04-03', 'Neverland Ranch', '+1 1233 1212 121', 'udoigweuchechukwu9@gmail.com', 'Drivers License', '1234344', 'Customer', '$2y$10$5wDHgpgMIoM3bg5MZu41H..yvZkp0yX6LPK/CIQqO0EbYIw8s7pK2', '061412e4a03c02f9902576ec55ebbe77', '2025-04-13 21:07:38', '2025-04-13 21:06:10', 'Active', '2025-04-13 21:05:26', '2025-04-13 21:07:38'),
 (47, 'Helena', 'Kane', 'Female', '2002-02-13', 'Massachusets', '+ 1232 12123', 'udoigweuchechukwu9@gmail.com', 'Drivers License', '1234', 'Customer', '$2y$10$ATNHH..LvMZeuGj9FCfJZug8FdC.h4n31GBCaLiozC/DTyse3jA5y', '182be0c5cdcd5072bb1864cdee4d3d6e', '2025-04-13 22:06:45', '2025-04-13 21:09:34', 'Active', '2025-04-13 21:08:44', '2025-04-13 22:06:45'),
-(48, 'John', 'Cena', 'Male', '1963-03-13', 'New Mexico', '+1 1231 1211', 'udoigweuchechukwu@gmail.com', 'Drivers License', '143235234525', 'Account Officer', 'finhive', NULL, '2025-04-13 22:09:50', NULL, 'Inactive', '2025-04-13 22:08:04', '2025-04-13 22:09:50');
+(48, 'John', 'Cena', 'Male', '1963-03-13', 'New Mexico', '+1 1231 1211', 'udoigweuchechukwu10@gmail.com', 'Drivers License', '143235234525', 'Account Officer', '$2y$10$ATNHH..LvMZeuGj9FCfJZug8FdC.h4n31GBCaLiozC/DTyse3jA5y', NULL, '2025-04-16 20:02:14', NULL, 'Inactive', '2025-04-13 22:08:04', '2025-04-16 20:02:14'),
+(49, 'Malika', 'Lisa', 'Female', '1991-03-16', 'North Carolina', '+1 1239 9182 91', 'udoigweuchechukwu11@gmail.com', 'Drivers License', '224353', 'Customer', '$2y$10$2XOXpuXbTXHAi209QIpV8eW58MzJIyr7YcdNAI.fUxRnYrJkEQdoy', 'b5dc4e5d9b495d0196f61d45b26ef33e', '2025-04-16 20:07:05', NULL, 'Inactive', '2025-04-16 20:04:59', '2025-04-16 20:07:05'),
+(50, 'Lax', 'Onomeous', 'Male', '2000-03-16', 'New York', '+1 2928 918291', 'udoigweuchechukwu12@gmail.com', 'Drivers License', 'e33434', 'Customer', '$2y$10$KojCb7Nt7S8qgt2H.jbFr.aiUQlEQKCyH7yV0fm.vdvoopQPntDuG', '30ef30b64204a3088a26bc2e6ecf7602', '2025-04-16 20:10:44', NULL, 'Inactive', '2025-04-16 20:08:42', '2025-04-16 20:10:44'),
+(51, 'Iron', 'Man', 'Male', '1990-02-16', 'New York', '+1 324 1213 2424', 'udoigweuchechukwu13@gmail.com', 'Drivers License', '123431212', 'Customer', '$2y$10$nkHthAHB3WUaQfhKP9gJPOtjgo7Jfs21yR2.QukSvmC3VHAjRLPEu', 'a666587afda6e89aec274a3657558a27', '2025-04-16 20:16:56', NULL, 'Inactive', '2025-04-16 20:12:32', '2025-04-16 20:16:56'),
+(52, 'Love', 'Iheanacho', 'Male', '2002-02-16', 'South Carolina', '+1 2343 1234 12', 'udoigweuchechukwu@gmail.com', 'Drivers License', '23224242', 'Customer', '$2y$10$.w1Ss9nyiRTWYHHcNNFXd.yA2MwIoL.hs/dcA1tuzNjk70H9wneK2', '1be3bc32e6564055d5ca3e5a354acbef', '2025-04-16 20:21:26', '2025-04-16 20:21:26', 'Active', '2025-04-16 20:19:08', '2025-04-16 20:21:26');
 
 --
 -- Triggers `users`
@@ -1318,6 +1361,7 @@ ALTER TABLE `budget_categories`
 --
 ALTER TABLE `cards`
   ADD PRIMARY KEY (`card_id`),
+  ADD UNIQUE KEY `card_number` (`card_number`),
   ADD KEY `account_id` (`account_id`);
 
 --
@@ -1363,49 +1407,49 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `account`
 --
 ALTER TABLE `account`
-  MODIFY `account_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1000000039;
+  MODIFY `account_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `budget_categories`
 --
 ALTER TABLE `budget_categories`
-  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `cards`
 --
 ALTER TABLE `cards`
-  MODIFY `card_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `card_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `notifications`
 --
 ALTER TABLE `notifications`
-  MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=188;
+  MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `otp`
 --
 ALTER TABLE `otp`
-  MODIFY `otp_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `otp_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `safe_lock`
 --
 ALTER TABLE `safe_lock`
-  MODIFY `safe_lock_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `safe_lock_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `transactions`
 --
 ALTER TABLE `transactions`
-  MODIFY `transaction_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
+  MODIFY `transaction_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
 
 --
 -- Constraints for dumped tables

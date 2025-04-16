@@ -402,8 +402,14 @@ try {
             $result = $stmt->get_result();
 
             if ($result->num_rows === 0) {
-                throw new Exception('Current password is incorrect');
+                throw new Exception('No stored password found is incorrect');
             }
+            $storedPassword = $result->fetch_assoc()['password'];
+
+            if (!password_verify($currentPassword, $storedPassword)) {
+                throw new Exception('Current password does not match your stored password');
+            }
+
             $stmt->close();
             $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT, ['cost' => 10]);
 
@@ -449,9 +455,14 @@ try {
             $result = $stmt->get_result();
 
             if ($result->num_rows === 0) {
-                throw new Exception('Current pin is incorrect');
+                throw new Exception('No pin found');
             }
+            $pin = $result->fetch_assoc()['pin'];
             $stmt->close();
+
+            if ($pin != $currentPin) {
+                throw new Exception('Current pin does not match your stored pin');
+            }
 
             // update pin
             $stmt = $mysqli->prepare("UPDATE account SET pin = ? WHERE user_id = ?");

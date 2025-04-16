@@ -80,6 +80,7 @@ function accountVerificationHTML($recipient, $salt, $account)
                             Account Officer Phone Number: <b>' . $account['account_officer_phone'] . '</b><br/>
                             Account Officer Email: <b>' . $account['account_officer_email'] . '</b><br/>
                             Current Account Balance: <b>$' . $account['balance'] . '</b><br/><br/>
+                            For security purposes, please ensure your account transaction pin is changed immediately you login.
                             It might also interest you to know that we have automatically created a <b>SAVINGS</b> budget category for you as this is required before any funds transfer happens. We want to help you achieve financial success with this approach. <br/><br/>
                             You’ve entered <b>' . $recipient . '</b> as the email address for your account. Please verify email address by clicking the link below
                         </p>
@@ -879,10 +880,10 @@ function supportResponseHTML($subject, $message)
                 <tr>
                     <td colspan="3" style="text-align: center; padding-top: 30px; letter-spacing: 1px;">
                         <h3 style="font-weight: 600; font-size: 20px; font-style: normal; line-height: 30px;">
-                            '. $subject .'
+                            ' . $subject . '
                         </h3>
                         <p style="font-weight: 400; font-size: 12px; font-style: normal; padding-top: 30px; line-height: 18px;">
-                            '.$message.'
+                            ' . $message . '
                         </p>
                     </td>
                 </tr>

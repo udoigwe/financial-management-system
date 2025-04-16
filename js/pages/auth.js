@@ -177,6 +177,10 @@ $(function () {
 								"success"
 							);
 							form.get(0).reset();
+
+							setTimeout(() => {
+								window.location.href = "/finhive";
+							}, 1000);
 						} else {
 							unblockUI();
 							//alert(response.message);

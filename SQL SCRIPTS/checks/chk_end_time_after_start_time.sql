@@ -1,0 +1,3 @@
+ALTER TABLE budget_categories
+ADD CONSTRAINT chk_end_time_after_start_time
+CHECK (budget_limit_end_time > budget_limit_start_time);

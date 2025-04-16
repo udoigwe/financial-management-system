@@ -38,10 +38,9 @@ $(function () {
 		);
 
 		$(".logged-user-account-number").text(
-			`${moment(payloadClaim(token, "account_id")).format(
-				"Do MMMM, YYYY"
-			)}`
+			payloadClaim(token, "account_id")
 		);
+
 		$(".logged-user-account-officer").text(
 			`${payloadClaim(
 				token,

@@ -107,6 +107,21 @@ try {
             $accountID = payloadClaim($token, 'account_id');
             $userID = payloadClaim($token, 'user_id');
 
+            // Check if category exists
+            $stmt = $mysqli->prepare("SELECT * FROM budget_categories WHERE account_id = ? AND category_id = ? LIMIT 1");
+            if (!$stmt) {
+                throw new Exception('Database error: ' . $mysqli->error);
+            }
+            $stmt->bind_param('ii', $accountID, $categoryID);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            if ($result->num_rows === 0) {
+                throw new Exception('Category does not exist');
+            }
+            $existingCategoryName = $result->fetch_assoc()['category_name'];
+            $stmt->close();
+
             // Check if name already exists for the user
             $stmt = $mysqli->prepare("SELECT * FROM budget_categories WHERE account_id = ? AND category_name = ? AND category_id != ? LIMIT 1");
             if (!$stmt) {
@@ -115,7 +130,6 @@ try {
             $stmt->bind_param('isi', $accountID, $categoryName, $categoryID);
             $stmt->execute();
             $result = $stmt->get_result();
-            //$category = $result->fetch_assoc();
 
             if ($result->num_rows > 0) {
                 throw new Exception('Category name already exists');
@@ -126,9 +140,9 @@ try {
             $mysqli->autocommit(false);
             $mysqli->begin_transaction();
 
-            /* if ($category['category_name'] === "Savings" && $categoryName !== "Savings") {
-                throw new Exception('Sorry!!! You are not allowed to change the savings category');
-            } */
+            if ($existingCategoryName === "Savings" && $categoryName !== "Savings") {
+                throw new Exception('Sorry!!! You are not allowed to change the savings category name');
+            }
 
             // update budget category
             $stmt = $mysqli->prepare("UPDATE budget_categories SET `category_name` = ?, `category_description` = ?, `budget_limit` = ?, `budget_limit_start_time` = ?, `budget_limit_end_time` = ?, `color_code` = ?, `budget_category_status` = ? WHERE category_id = ?");
