@@ -352,7 +352,6 @@ $(function () {
 			type: "GET",
 			url: `${API_URL_ROOT}/dashboards?call=admin_dashboard&token=${token}`,
 			dataType: "json",
-			headers: { "x-access-token": token },
 			success: function (response) {
 				if (response.error == false) {
 					var dashboard = response.dashboard;

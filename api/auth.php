@@ -1,4 +1,5 @@
 <?php
+require_once './cors.php';
 
 //database connect
 require_once './DB_CONNECT.php';

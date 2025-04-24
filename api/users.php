@@ -1,4 +1,6 @@
 <?php
+require_once './cors.php';
+
 //database connect
 require_once './DB_CONNECT.php';
 
@@ -359,7 +361,7 @@ try {
             $response['message'] = $successMessage;
 
             break;
-        
+
         case 'send_support_response_email':
             if (!checkAvailability(array('to', 'subject', 'message', 'user_id', 'token'))) {
                 throw new Exception('Invalid request: All fields are required');
@@ -395,7 +397,7 @@ try {
             $stmt = $mysqli->prepare("CALL storeNotification($userId, 'Support Email Sent', '$successMessage')");
             $stmt->execute();
             $stmt->close();
-            
+
             //record this success message
             $stmt = $mysqli->prepare("CALL storeNotification($user_id, 'Support Email Received', '$successMessage2')");
             $stmt->execute();

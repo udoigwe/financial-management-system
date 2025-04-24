@@ -96,7 +96,7 @@
     ***********************************-->
     <!-- Required vendors -->
     <?php include('includes/scripts.php'); ?>
-    <script src="js/pages/auth.js"></script>
+    <script src="js/pages/auth.js?v=2"></script>
 
 </body>
 

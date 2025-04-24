@@ -1,8 +1,4 @@
 <?php
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type, Authorization");
-
 date_default_timezone_set("Africa/Lagos");
 
 const DB_HOST = 'localhost';
@@ -24,9 +20,13 @@ define('ROOT_PATH', realpath(dirname(__FILE__)));
 
 //connect to database
 $mysqli = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+$db_error = null;
 
 //Check Connection
 if ($mysqli->connect_errno) {
-    echo "<p>MySQL error no{$mysqli->connect_errno}:{$mysqli->connect_error}</p>";
+    //echo "<p>MySQL error no{$mysqli->connect_errno}:{$mysqli->connect_error}</p>";
+    $db_error = json_encode(['error' => true, 'message' => 'Failed to connect to the database. Please check your connection details']);
+    http_response_code(500);
+    echo $db_error;
     exit();
 }
