@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 16, 2025 at 11:51 PM
+-- Generation Time: May 01, 2025 at 11:04 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -945,7 +945,10 @@ INSERT INTO `notifications` (`notification_id`, `user_id`, `title`, `message`, `
 (208, 44, 'Login Successful', 'Welcome onboard Harission Ford', 'Unread', '2025-04-16 21:38:26', NULL),
 (209, 53, 'Account Verification', 'An account verification email has been sent to udoigweuchechukwu@gmail.com', 'Unread', '2025-04-16 21:49:24', NULL),
 (210, 53, 'Budget Categories', 'Setup budget categories to track spending', 'Unread', '2025-04-16 21:49:24', NULL),
-(211, 53, 'Login Successful', 'Welcome onboard Lawrence Fishborne', 'Unread', '2025-04-16 21:49:41', NULL);
+(211, 53, 'Login Successful', 'Welcome onboard Lawrence Fishborne', 'Unread', '2025-04-16 21:49:41', NULL),
+(212, 22, 'Login Successful', 'Welcome onboard Mike Mayers', 'Unread', '2025-04-18 19:39:07', NULL),
+(213, 22, 'Login Successful', 'Welcome onboard Mike Mayers', 'Unread', '2025-04-18 19:40:43', NULL),
+(214, 22, 'Login Successful', 'Welcome onboard Mike Mayers', 'Unread', '2025-04-19 10:37:11', NULL);
 
 --
 -- Triggers `notifications`
@@ -1211,7 +1214,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `first_name`, `last_name`, `gender`, `dob`, `address`, `phone`, `email`, `identification`, `identification_number`, `role`, `password`, `hash`, `hash_time`, `last_seen`, `account_status`, `created_at`, `updated_at`) VALUES
-(22, 'Mike', 'Mayers', 'Male', '1972-03-22', 'Texas ', '09089098789', 'admin@finhive.com', 'Drivers License', '1234554232', 'Admin', '$2y$10$mGQNHY/ZVeHmemgScw8NXOwcKb/5hA7hoB9qI/FDRPeGXX3vgc3aC', 'd707329bece455a462b58ce00d1194c9', '2025-04-16 18:51:06', '2025-04-16 18:51:06', 'Active', '2025-03-17 23:22:15', '2025-04-16 18:51:06'),
+(22, 'Mike', 'Mayers', 'Male', '1972-03-22', 'Texas ', '09089098789', 'admin@finhive.com', 'Drivers License', '1234554232', 'Admin', '$2y$10$mGQNHY/ZVeHmemgScw8NXOwcKb/5hA7hoB9qI/FDRPeGXX3vgc3aC', 'd707329bece455a462b58ce00d1194c9', '2025-04-19 10:37:11', '2025-04-19 10:37:11', 'Active', '2025-03-17 23:22:15', '2025-04-19 10:37:11'),
 (23, 'John', 'Woo', 'Male', '1969-03-02', 'Texas', '09089098788', 'john@gmail.com', 'Drivers License', '12321232', 'Account Officer', '$2y$10$PZWcytRX5E/F6/zkOrwnS.oRa1tP.1g031mOCSHf.AShCmqZfQ2nW', '647bba344396e7c8170902bcf2e15551', '2025-04-16 19:55:28', '2025-04-16 19:51:16', 'Active', '2025-03-19 00:15:14', '2025-04-16 19:55:28'),
 (24, 'Wilson', 'Gihon', 'Male', '1981-09-10', 'State House, Winsconsin', '+1-2910-10291', 'gihon@finhive.com', 'Drivers License', '1110192019', 'Account Officer', '$2y$10$mGQNHY/ZVeHmemgScw8NXOwcKb/5hA7hoB9qI/FDRPeGXX3vgc3aC', NULL, '2025-04-11 20:25:27', NULL, 'Active', '2025-03-30 00:41:44', '2025-04-11 20:25:27'),
 (26, 'James', 'Earl', 'Male', '2001-03-30', 'Washington DC', '+1-902-01992', 'james-earl@gmail.com', 'SSN', '238923-298923', 'Account Officer', '$2y$10$mGQNHY/ZVeHmemgScw8NXOwcKb/5hA7hoB9qI/FDRPeGXX3vgc3aC', NULL, '2025-04-11 20:25:31', NULL, 'Active', '2025-03-30 01:34:07', '2025-04-11 20:25:31'),
